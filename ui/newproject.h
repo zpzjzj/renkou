@@ -19,12 +19,11 @@ class NewProject : public QDialog, public UiItem
     Q_OBJECT
 
 public:
-    explicit NewProject(QWidget *parent = 0);
+    explicit NewProject(QWidget *parent = nullptr);
     ~NewProject();
 
 private:
     Ui::NewProject *ui;
-    UiManager *uiManager;
 
 private slots:
     void projectNameEdited(QString _filename);

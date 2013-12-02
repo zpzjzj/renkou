@@ -111,4 +111,3 @@ void UiManager::makeFront(UiManager::page uiPage)
 {
     get_ui(uiPage)->exec();
 }
-

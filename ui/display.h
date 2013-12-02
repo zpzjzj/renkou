@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::Display *ui;
+
+//private slots:
+//    void cancelButtonClicked();
 };
 
 #endif // DISPLAY_H

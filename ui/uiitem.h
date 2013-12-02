@@ -1,6 +1,7 @@
 #ifndef UIITEM_H
 #define UIITEM_H
 #include "uimanager.h"
+
 /** the parent of all ui
   * manage the handle to the uiManager
   */
