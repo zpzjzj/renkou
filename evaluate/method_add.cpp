@@ -65,7 +65,9 @@ namespace METHOD_ADD { // decl
 	// 一次解决主要是为了效率，理论上，等到使用的时候，我会把 buffer 调大到 150, 这样一个 Buffer 占 15mb
 	// 而一个地区的方案大约只有 120 吧, 不存在不停 load 的问题
 	// 无量纲化
-	/* @params: scheme lists. the indicator list to be processed
+    /* @params:
+     *      scheme lists. List of Schemes to be processed
+     *      the indicator list to be processed
 	 * @return: the list of scheme pointer with all the processed indicators
 	 * @impl: the default remove dimension function, with original data input
 	 */
@@ -220,8 +222,12 @@ namespace METHOD_ADD { // decl
 using namespace METHOD_ADD;
 
 //------------------- main function start here ---------------------------
-// @params: the second vector is the number of schemes,
-// 			the first stores renkougaiyao & fufuzinv 
+/**
+ * @brief method_add
+ *      this is the function to calc add method
+ * @param schemes
+ * @return
+ */
 evaluate_result* method_add(const std::vector<std::vector<SchemePtr>>& schemes) {
 	// first : renkougaiyao & fufuzinv
 	// second: each schemes
@@ -327,12 +333,14 @@ evaluate_result* method_add(const std::vector<std::vector<SchemePtr>>& schemes) 
 	return result;
 }
 
-// @params: the second vector is the number of schemes,
-// 			the first stores renkougaiyao & fufuzinv
+/** @params: the second vector is the number of schemes,
+  * 		the first stores renkougaiyao & fufuzinv
+  */
 evaluate_result* method_multi(const std::vector<std::vector<SchemePtr>>& schemes) {
-    // first : renkougaiyao & fufuzinv
-    // second: each schemes
-    // a scheme shall be score[0][i] + score[1][i];
+    /** first : renkougaiyao & fufuzinv
+      * second: each schemes
+      * a scheme shall be score[0][i] + score[1][i];
+      */
     /*
     struct scheme_dimension { // schemePtr & the values with dimension removed
         QVector<indicator_layer_score> score;
@@ -346,22 +354,26 @@ evaluate_result* method_multi(const std::vector<std::vector<SchemePtr>>& schemes
     scores[1].resize(schemes[1].size());
     chayixishu_scores.resize(schemes[0].size());
     // renkougaiyao
-    remove_dimension<schDouble>(scores[0], schemes[0], {3, false});
-    remove_dimension<schDouble>(scores[0], schemes[0], {115, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {116, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {22, true});
+    /**
+      * 无量纲化:
+      *
+      */
+    remove_dimension<schDouble>(scores[0], schemes[0], {3, false}); // 总人口
+    remove_dimension<schDouble>(scores[0], schemes[0], {115, true}); // 人均水资源
+    remove_dimension<schDouble>(scores[0], schemes[0], {116, true}); // 人均耕地
+    remove_dimension<schDouble>(scores[0], schemes[0], {22, true}); // 自增率，取绝对值
     // gao 7
-    prepare_chayixishu<schDouble>(chayixishu_scores, schemes[0], {7, false});
-    remove_dimension<schDouble>(scores[0], schemes[0], {99, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {100, false});
-    remove_dimension<schDouble>(scores[0], schemes[0], {102, false});
-    remove_dimension<schDouble>(scores[0], schemes[0], {103, false});
-    remove_dimension<schDouble>(scores[0], schemes[0], {104, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {105, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {101, true});
-    remove_dimension<schDouble>(scores[0], schemes[0], {81, false});
-    remove_dimension<schInt>(scores[1], schemes[1], {64, false});
-    remove_dimension<schInt>(scores[1], schemes[1], {67, false});
+    prepare_chayixishu<schDouble>(chayixishu_scores, schemes[0], {7, false}); // 出生差异系数
+    remove_dimension<schDouble>(scores[0], schemes[0], {99, true}); // 国际老年比
+    remove_dimension<schDouble>(scores[0], schemes[0], {100, false}); // 国际老少比
+    remove_dimension<schDouble>(scores[0], schemes[0], {102, false}); // 国际负老
+    remove_dimension<schDouble>(scores[0], schemes[0], {103, false}); // 国际负少
+    remove_dimension<schDouble>(scores[0], schemes[0], {104, true}); // 国际劳年 B
+    remove_dimension<schDouble>(scores[0], schemes[0], {105, true}); // 国际青劳 A
+    remove_dimension<schDouble>(scores[0], schemes[0], {101, true}); // 国际视窗82
+    remove_dimension<schDouble>(scores[0], schemes[0], {81, false}); // 年龄差异度
+    remove_dimension<schInt>(scores[1], schemes[1], {64, false}); // 一孩父母
+    remove_dimension<schInt>(scores[1], schemes[1], {67, false}); // 特扶
 
     evaluate_result* result=nullptr;
     // scheme size

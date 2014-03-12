@@ -49,6 +49,9 @@ namespace METHOD_ADD {
 
 	template <typename T>
 		score_type gao_avg(SchemePtr scheme, size_t index, bool posi, bool std, score_type pz) ;
+     /**
+      * remove dimension of a single value
+      */
 	template <typename T>
 		indicator_layer_score do_remove_dimension(SchemePtr scheme, const remove_dimension_para& , T max, T min);
 	template <typename T>
