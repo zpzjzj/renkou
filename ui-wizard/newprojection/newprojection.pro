@@ -12,15 +12,19 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     newprojectionwizard.cpp \
-    datamanager.cpp \
     xmlmanager.cpp \
-    dataitem.cpp
+    datatreewidget.cpp \
+    datatreewidgetitem.cpp \
+    datatreewidgetleaf.cpp \
+    datatreewidgetinner.cpp
 
 HEADERS  += \
     newprojectionwizard.hpp \
-    datamanager.hpp \
     xmlmanager.hpp \
-    dataitem.hpp
+    datatreewidget.h \
+    datatreewidgetitem.h \
+    datatreewidgetleaf.h \
+    datatreewidgetinner.h
 CONFIG += c++11
 
 RESOURCES += \

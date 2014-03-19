@@ -3,8 +3,9 @@
 
 ///
 /// \brief xml_manager
-/// load the data items from 'dataItem.xml'
+/// load the data items from any xml file
 ///
+#include <QXmlStreamReader>
 class QString;
 class QStringList;
 class QList;
@@ -34,14 +35,20 @@ public:
     XMLManager(QWidget *widget);
     int size() const;
     bool read(QIODevice *device);
+    bool read(QString& _filename);
+    bool read(QFile& _file);
     QString errorString() const;
 private:
-    void readXML();
+    bool readXML();
+
     /*read title, and single attribute*/
     void readTitle(DataItem* item);
     void readSeparator();
     void readSubTitle(DataItem* item);
-    QList<title*>* titleList;
+
+    DataManager* dataManager;
+    QXmlStreamReader xml;
+    //QList<title*>* titleList;
 };
 
 #endif // XMLMANAGER_HPP

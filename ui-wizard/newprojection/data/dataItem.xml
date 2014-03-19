@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
+<extension>xml</extension>
 <dataitems>
     <title>
         <value>分性别年龄独生子女</value>
@@ -6,7 +7,6 @@
         <subtitles>
             <text>城镇农业人口分性别年龄独生子女和非独生子女</text>
             <text>城镇非农业人口分性别年龄独生子女和非独生子女</text>
-            <text></text>
         </subtitles>
     <title>
     
