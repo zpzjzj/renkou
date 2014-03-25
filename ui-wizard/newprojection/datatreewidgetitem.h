@@ -13,6 +13,7 @@ class DataTreeWidgetItem
 public:
     DataTreeWidgetItem();
     virtual ~DataTreeWidgetItem();
+    void setText(QString& text);
 
 private:
     /*whether leaf node or not*/

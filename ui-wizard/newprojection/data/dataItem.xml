@@ -1,21 +1,25 @@
 <?xml version='1.0' encoding='utf-8'?>
-<extension>xml</extension>
-<dataitems>
-    <title>
-        <value>分性别年龄独生子女</value>
-        <subtitle_count>4</subtitle_count>
-        <subtitles>
-            <text>城镇农业人口分性别年龄独生子女和非独生子女</text>
-            <text>城镇非农业人口分性别年龄独生子女和非独生子女</text>
-        </subtitles>
-    <title>
-    
-    <title single="true">
-        <value>生育水平现状评估基础数据</value>
-        <subtitle_count>2</subtitle_count>
-        <subtitles>
-            <text>近期分年份实际总和生育率数据</text>
-            <text>近期分年份出生率、死亡率、迁移率数据</text>
-        </subtitles>
-    </title>
-</dataitems>
+<importdata>
+	<extension>xml</extension>
+	<dataitems>
+		<title>
+			<value>分性别年龄独生子女</value>
+			<title>
+				<value>城镇农业人口分性别年龄独生子女和非独生子女</value>
+			</title>
+			<title>
+				<value>城镇非农业人口分性别年龄独生子女和非独生子女</value>
+			</title>
+		</title>
+		
+		<title exclusive="1">
+			<value>生育水平现状评估基础数据</value>
+			<title>
+				<value>近期分年份实际总和生育率数据</value>
+			</title>
+			<title>
+				<value>近期分年份出生率、死亡率、迁移率数据</value>
+			</title>
+		</title>
+	</dataitems>
+</importdata>

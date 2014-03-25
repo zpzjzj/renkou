@@ -9,7 +9,8 @@
 class QString;
 class QStringList;
 class QList;
-class DataItem;
+class DataTreeWidgetItem;
+class DataTreeWidget;
 
 class title{
 private:
@@ -32,22 +33,34 @@ public:
 class XMLManager
 {
 public:
-    XMLManager(QWidget *widget);
+    XMLManager(DataTreeWidget *widget, QString& filetype);
     int size() const;
+
     bool read(QIODevice *device);
-    bool read(QString& _filename);
-    bool read(QFile& _file);
+
     QString errorString() const;
 private:
-    bool readXML();
 
+
+    void readXML();
     /*read title, and single attribute*/
-    void readTitle(DataItem* item);
-    void readSeparator();
-    void readSubTitle(DataItem* item);
+    void readTitle(DataTreeWidgetItem* item);
+    void readSeparator(DataTreeWidgetItem* item);
+    void readSubTitles(DataTreeWidgetItem* item);
 
-    DataManager* dataManager;
+    void readExtension();
+    DataTreeWidgetItem *createChildItem(DataTreeWidgetItem *item);
+    DataTreeWidget* treeWidget;
     QXmlStreamReader xml;
+
+    ///data or parameters
+    /// data -- <ImportData>
+    /// parameters -- <ImportParameters>
+    /// etc...
+    QString* filetype;
+
+    ///extension name, e.g: xml, xls
+    QString* extension;
     //QList<title*>* titleList;
 };
 
