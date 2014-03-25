@@ -5,54 +5,29 @@
 /// \brief xml_manager
 /// load the data items from any xml file
 ///
-#include <QXmlStreamReader>
-class QString;
-class QStringList;
-class QList;
-class DataTreeWidgetItem;
+#include <QDomDocument>
 class DataTreeWidget;
+class DataTreeWidgetItem;
 
-class title{
-private:
-    QString* value;
-    int subtitle_count;
-    bool single;
-    QStringList* subtitles;
-
-public:
-    bool isSingle() const{
-        return single;
-    }
-    int getSubCount() const{
-        return subtitle_count;
-    }
-    QString& getSubtitleAt(int index) const;
-
-};
-
-class XMLManager
-{
+class XMLManager{
+    Q_OBJECT
 public:
     XMLManager(DataTreeWidget *widget, QString& filetype);
-    int size() const;
 
     bool read(QIODevice *device);
+    bool write(QIODevice *device);
 
-    QString errorString() const;
 private:
-
-
-    void readXML();
-    /*read title, and single attribute*/
-    void readTitle(DataTreeWidgetItem* item);
-    void readSeparator(DataTreeWidgetItem* item);
-    void readSubTitles(DataTreeWidgetItem* item);
+    void parseTitleElement(const QDomElement &element,
+                           DataTreeWidgetItem *parentItem = nullptr);
 
     void readExtension();
     DataTreeWidgetItem *createChildItem(DataTreeWidgetItem *item);
-    DataTreeWidget* treeWidget;
-    QXmlStreamReader xml;
 
+private:
+    DataTreeWidget* treeWidget;
+
+    QDomDocument domDocument;
     ///data or parameters
     /// data -- <ImportData>
     /// parameters -- <ImportParameters>
@@ -61,7 +36,7 @@ private:
 
     ///extension name, e.g: xml, xls
     QString* extension;
-    //QList<title*>* titleList;
+
 };
 
 #endif // XMLMANAGER_HPP
