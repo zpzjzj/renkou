@@ -1,7 +1,19 @@
 #include "datatreewidgetitem.h"
 #include <QWidget>
-DataTreeWidgetItem::DataTreeWidgetItem()
+DataTreeWidgetItem::DataTreeWidgetItem(DataTreeWidget *parent)
+    :m_treeWidget(parent)
 {
+
+}
+
+DataTreeWidgetItem::DataTreeWidgetItem(DataTreeWidgetItem *parent)
+    :m_parent(parent)
+{
+}
+
+DataTreeWidgetItem::~DataTreeWidgetItem()
+{
+
 }
 
 void DataTreeWidgetItem::setText(QString &text){

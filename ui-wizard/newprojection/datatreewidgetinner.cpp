@@ -1,5 +1,9 @@
 #include "datatreewidgetinner.h"
 
-DataTreeWidgetInner::DataTreeWidgetInner()
+
+
+
+DataTreeWidgetInner::~DataTreeWidgetInner()
 {
+
 }

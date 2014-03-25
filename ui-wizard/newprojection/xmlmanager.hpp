@@ -10,7 +10,6 @@ class DataTreeWidget;
 class DataTreeWidgetItem;
 
 class XMLManager{
-    Q_OBJECT
 public:
     XMLManager(DataTreeWidget *widget, QString& filetype);
 
@@ -22,7 +21,7 @@ private:
                            DataTreeWidgetItem *parentItem = nullptr);
 
     void readExtension();
-    DataTreeWidgetItem *createChildItem(DataTreeWidgetItem *item);
+    DataTreeWidgetItem *createChildItem(const QDomElement &element, DataTreeWidgetItem *parentItem);
 
 private:
     DataTreeWidget* treeWidget;
@@ -32,10 +31,10 @@ private:
     /// data -- <ImportData>
     /// parameters -- <ImportParameters>
     /// etc...
-    QString* filetype;
+    QString filetype;
 
     ///extension name, e.g: xml, xls
-    QString* extension;
+    QString extension;
 
 };
 

@@ -2,13 +2,13 @@
 #define DATATREEWIDGETINNER_H
 
 #include "datatreewidgetitem.h"
-
-class QList;
+#include <QList>
 
 class DataTreeWidgetInner:public DataTreeWidgetItem
 {
 public:
     DataTreeWidgetInner();
+    ~DataTreeWidgetInner();
 private:
     QList<DataTreeWidgetItem*> *m_children;
 };
