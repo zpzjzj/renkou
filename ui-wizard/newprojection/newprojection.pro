@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     datatreewidget.cpp \
     datatreewidgetitem.cpp \
     datatreewidgetleaf.cpp \
-    datatreewidgetinner.cpp
+    datatreewidgetinner.cpp \
+    datapage.cpp
 
 HEADERS  += \
     newprojectionwizard.hpp \
@@ -24,7 +25,9 @@ HEADERS  += \
     datatreewidget.h \
     datatreewidgetitem.h \
     datatreewidgetleaf.h \
-    datatreewidgetinner.h
+    datatreewidgetinner.h \
+    datapage.h \
+    wizardpages.h
 CONFIG += c++11
 
 RESOURCES += \

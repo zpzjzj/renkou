@@ -1,4 +1,5 @@
 #include "newprojectionwizard.hpp"
+#include "wizardpages.h"
 #include "ui_newprojectionwizard.h"
 #include <QDebug>
 #include <QWidget>
@@ -24,7 +25,7 @@ NewProjectionWizard::NewProjectionWizard(QWidget *parent) :
     }
     //!icon init
 
-
+    addPage(new DataPage);
     connect(ui->dataPageBox, SIGNAL(currentChanged(int)), this, SLOT(pageChecked(int)));
 }
 

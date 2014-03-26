@@ -4,12 +4,13 @@
 /// \brief The DataTreeWidgetItem class
 /// manage the widget item
 ///
-
+#include <QTreeWidgetItem>
 class DataTreeWidget;
 class QString;
 class QCheckBox;
+class QLabel;
 
-class DataTreeWidgetItem
+class DataTreeWidgetItem:public QTreeWidgetItem
 {
 public:
     DataTreeWidgetItem(DataTreeWidget* parent);
@@ -17,26 +18,27 @@ public:
     virtual ~DataTreeWidgetItem();
     void setText(QString& text);
 
-private:
+protected:
     /*whether leaf node or not*/
     bool leaf;
 
     DataTreeWidget* m_treeWidget;
     DataTreeWidgetItem* m_parent;
+    QLabel* m_titleLabel;
     QString* m_text;
     QCheckBox* m_checkbox;
-    bool exclusive;
+    bool m_exclusive;
 public:
     bool isLeaf()const{
         return leaf;
     }
 
     void setExclusive(bool ex){
-        exclusive = ex;
+        m_exclusive = ex;
     }
 
     bool isExclusive(){
-        return exclusive;
+        return m_exclusive;
     }
 };
 
