@@ -12,7 +12,6 @@ DataTreeWidgetLeaf::DataTreeWidgetLeaf(DataTreeWidget* parent)
     layout->addWidget(m_path);
     layout->addWidget(m_importBtn);
 
-    QWidget::setLayout(layout);
 
 }
 

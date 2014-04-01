@@ -2,26 +2,27 @@
 #define DATAPAGE_H
 
 #include <QWizardPage>
-class QCheckBox;
-class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QRadioButton;
+class DataTreeWidget;
+
 class DataPage : public QWizardPage
 {
     Q_OBJECT
 public:
     explicit DataPage(QWidget *parent = 0);
 private:
-    QLabel *classNameLabel;
-    QLabel *baseClassLabel;
-    QLineEdit *classNameLineEdit;
-    QLineEdit *baseClassLineEdit;
+    DataTreeWidget *treeWidget;
 
+    QAction *openAct;
+    QAction *saveAsAct;
+    QPushButton *testLoad;
 signals:
 
 public slots:
-
+    void open();
+    void saveAs(int index);
+private:
+    void savePath(int year, const QString &area);
+    void createActions();
 };
 
 #endif // DATAPAGE_H

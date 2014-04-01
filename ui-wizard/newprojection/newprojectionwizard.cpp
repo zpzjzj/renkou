@@ -9,6 +9,7 @@ NewProjectionWizard::NewProjectionWizard(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    addPage(new DataPage);
     //!icon init
     QImage image(":/icon/Checkbox empty 16x16.png");
     iconOff->addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::Off);
@@ -20,13 +21,7 @@ NewProjectionWizard::NewProjectionWizard(QWidget *parent) :
     iconOn->addPixmap(QPixmap::fromImage(image), QIcon::Active, QIcon::Off);
     iconOn->addPixmap(QPixmap::fromImage(image), QIcon::Selected, QIcon::Off);
 
-    for (int i=0; i<ui->dataPageBox->count(); i++){
-        ui->dataPageBox->setItemIcon(i, *iconOff);
-    }
-    //!icon init
 
-    addPage(new DataPage);
-    connect(ui->dataPageBox, SIGNAL(currentChanged(int)), this, SLOT(pageChecked(int)));
 }
 
 NewProjectionWizard::~NewProjectionWizard()
@@ -37,5 +32,5 @@ NewProjectionWizard::~NewProjectionWizard()
 }
 
 void NewProjectionWizard::pageChecked(int index){
-    ui->dataPageBox->setItemIcon(index, *iconOn);
+
 }
