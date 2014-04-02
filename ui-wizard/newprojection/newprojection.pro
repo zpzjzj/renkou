@@ -30,9 +30,10 @@ HEADERS  += \
     datatreewidgetinner.h \
     datapage.h \
     wizardpages.h \
-    EnumClass.h \
     objectlist.h \
-    studyobject.h
+    studyobject.h \
+    EnumClass.h
+
 CONFIG += c++11
 
 RESOURCES += \

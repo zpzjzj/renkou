@@ -3,6 +3,7 @@
 
 #include <QWizardPage>
 class DataTreeWidget;
+class ObjectList;
 
 class DataPage : public QWizardPage
 {
@@ -11,6 +12,7 @@ public:
     explicit DataPage(QWidget *parent = 0);
 private:
     DataTreeWidget *treeWidget;
+    ObjectList *objectList;
 
     QAction *openAct;
     QAction *saveAsAct;

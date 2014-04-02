@@ -1,9 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
 <importdata>
-	<extension>xml</extension>
+        <extension>xlsx</extension>
 	<items>
 		<h1>
 			<value>分性别年龄独生子女</value>
+                        <h2>
+                            <value>可能存在的二级标题</value>
+                            <leaf>二级标题嵌套内容</leaf>
+                        </h2>
 			<leaf>城镇农业人口分性别年龄独生子女和非独生子女</leaf>
 			<leaf>城镇非农业人口分性别年龄独生子女和非独生子女</leaf>
 		</h1>

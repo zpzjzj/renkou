@@ -21,7 +21,7 @@ NewProjectionWizard::NewProjectionWizard(QWidget *parent) :
     iconOn->addPixmap(QPixmap::fromImage(image), QIcon::Active, QIcon::Off);
     iconOn->addPixmap(QPixmap::fromImage(image), QIcon::Selected, QIcon::Off);
 
-
+    resize(1000, 620);
 }
 
 NewProjectionWizard::~NewProjectionWizard()

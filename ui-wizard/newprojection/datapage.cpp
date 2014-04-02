@@ -1,5 +1,6 @@
 #include<QtWidgets>
 #include"datapage.h"
+#include "objectlist.h"
 #include "datatreewidget.h"
 #include "datatreewidgetleaf.h"
 DataPage::DataPage(QWidget *parent)
@@ -7,11 +8,16 @@ DataPage::DataPage(QWidget *parent)
 {
 
     treeWidget = new DataTreeWidget();
+    objectList = new ObjectList();
 
     QGridLayout *layout = new QGridLayout();
     layout->addWidget(treeWidget, 0, 1);
-    testLoad = new QPushButton("Load");
-    layout->addWidget(testLoad, 0, 0);
+    //testLoad = new QPushButton("Load");
+    //layout->addWidget(testLoad, 0, 0);
+    layout->addWidget(objectList, 0, 0);
+
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 3);
     createActions();
 
     setLayout(layout);
