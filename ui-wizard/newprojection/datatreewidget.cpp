@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "datatreewidget.h"
-
+#include "studyobject.h"
+#include "EnumClass.h"
 DataTreeWidget::DataTreeWidget(QWidget *parent)
     :QTreeWidget(parent), MAX_LEVEL(5)
 {
@@ -24,10 +25,12 @@ DataTreeWidget::DataTreeWidget(QWidget *parent)
             this, SLOT(importBtnClicked(const QString&)));
 }
 
-bool DataTreeWidget::read(QIODevice *device, QString &type){
+bool DataTreeWidget::read(QIODevice *device, QString &type, StudyObject *obejct){
     QString errorStr;
     int errorLine;
     int errorColumn;
+
+    this->object = obejct;
 
     if (!domDocument.setContent(device, true, &errorStr, &errorLine, &errorColumn)){
         QMessageBox::information(window(), tr("请检查xml文件"),
@@ -71,27 +74,39 @@ bool DataTreeWidget::read(QIODevice *device, QString &type){
 }
 
 bool DataTreeWidget::write(QIODevice *device){
+    const int IndentSize = 4;
 
+    QTextStream out(device);
+    domDocument.save(out, IndentSize);
+    return true;
 }
 
 void DataTreeWidget::updateDomElement(QTreeWidgetItem *item, int column){
     QDomElement element = domElementForItem.value(item);
     if (!element.isNull()) {
-//        if (column == 0) {
-//            QDomElement oldTitleElement = element.firstChildElement("title");
-//            QDomElement newTitleElement = domDocument.createElement("title");
+        if (column == 1) {
+            if (element.tagName() == "leaf"){
 
-//            QDomText newTitleText = domDocument.createTextNode(item->text(0));
-//            newTitleElement.appendChild(newTitleText);
-
-//            element.replaceChild(newTitleElement, oldTitleElement);
-//        } else {
-//            if (element.tagName() == "bookmark")
-//                element.setAttribute("href", item->text(1));
-//        }
+                element.setAttribute("href", item->text(1));
+                qDebug()<<element.attribute("href");
+            }
+        }
     }
+    //update tmp file
+    writeTmpFile();
 }
-
+bool DataTreeWidget::writeTmpFile(){
+    QString fileName = EnumClass::PREFIX+object->getTmpXmlFilename();
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr("SAX Bookmarks"),
+                             tr("Cannot write file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return false;
+    }
+    return write(&file);
+}
 void DataTreeWidget::importBtnClicked(const QString &string){
     QTreeWidgetItem *item = valueForItem.value(string);
     ///TODO
