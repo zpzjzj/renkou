@@ -10,13 +10,18 @@ DataTreeWidget::DataTreeWidget(QWidget *parent)
     QStringList labels;
     labels << tr("导入项目") << tr("路径") << tr("操作");
 
-    header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+
     setHeaderLabels(labels);
 
     toImportIcon.addPixmap(QPixmap(":/res/icon/Checkbox empty 16x16.png"));
     ImportedIcon.addPixmap(QPixmap(":/res/icon/Checkbox 16x16.png"));
 
-    resizeColumnToContents(2);
+    //resizeColumnToContents(2);
+
+    signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(importBtnClicked(const QString&)));
 }
 
 bool DataTreeWidget::read(QIODevice *device, QString &type){
@@ -87,6 +92,20 @@ void DataTreeWidget::updateDomElement(QTreeWidgetItem *item, int column){
     }
 }
 
+void DataTreeWidget::importBtnClicked(const QString &string){
+    QTreeWidgetItem *item = valueForItem.value(string);
+    ///TODO
+    ///
+    QString caption = tr("Open %1 Files").arg(extensionType);
+    QString dir = "../";
+    QString filter = 0;
+    QString path = QFileDialog::getOpenFileName(this, caption, dir,filter);
+    if (! path.isEmpty()){
+        item->setText(1, path);
+        item->setIcon(0, ImportedIcon);
+    }
+}
+
 void DataTreeWidget::parseHeaderElement(const QDomElement &element,
                                         QTreeWidgetItem *parentItem,
                                         int level){
@@ -97,7 +116,6 @@ void DataTreeWidget::parseHeaderElement(const QDomElement &element,
         value = headLabels.at(level);
     }
 
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
     item->setIcon(0, toImportIcon);
     item->setText(0, value);
 
@@ -112,19 +130,23 @@ void DataTreeWidget::parseHeaderElement(const QDomElement &element,
         else if (child.tagName() == "leaf") {
             QTreeWidgetItem *childItem = createItem(child, item);
 
-            QString value = element.firstChildElement("value").text();
+            QString value = child.text();
             if (value.isEmpty()) {
                 value = headLabels.at(level);
             }
 
-            childItem->setFlags(item->flags() | Qt::ItemIsEditable);
+            //childItem->setFlags(item->flags() | Qt::ItemIsEditable);
             childItem->setIcon(0, toImportIcon);
             childItem->setText(0, value);
             childItem->setText(1, child.attribute("href"));
 
             QPushButton* pbt = new QPushButton("导入");
             pbt->setMaximumWidth(40);
-            pbtnForItem.insert(pbt, childItem);
+
+
+            signalMapper->setMapping(pbt, value);
+            connect(pbt, SIGNAL(clicked()), signalMapper, SLOT(map()));
+            valueForItem.insert(value, childItem);
             setItemWidget(childItem, 2, pbt);
         }
         child = child.nextSiblingElement();

@@ -5,7 +5,7 @@
 #include <QHash>
 #include <QIcon>
 class QPushButton;
-
+class QSignalMapper;
 class DataTreeWidget
         :public QTreeWidget
 {
@@ -18,8 +18,8 @@ public:
     bool write(QIODevice *device);
 
 private slots:
- void updateDomElement(QTreeWidgetItem *item, int column);
-
+    void updateDomElement(QTreeWidgetItem *item, int column);
+    void importBtnClicked(const QString &string);
 private:
     void parseHeaderElement(const QDomElement &element,
                             QTreeWidgetItem *parentItem = 0,
@@ -31,7 +31,7 @@ private:
     QDomDocument domDocument;
     QHash<QTreeWidgetItem *, QDomElement> domElementForItem;
 
-    QHash<QPushButton*, QTreeWidgetItem*> pbtnForItem;
+    QHash<QString, QTreeWidgetItem*> valueForItem;
     QIcon toImportIcon;
     QIcon ImportedIcon;
 
@@ -39,6 +39,7 @@ private:
     QString extensionType;
     const int MAX_LEVEL;
     //const QString importType;
+    QSignalMapper *signalMapper;
 };
 
 #endif // DATATREEWIDGET_H

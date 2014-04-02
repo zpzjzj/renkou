@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     datatreewidgetleaf.cpp \
     datatreewidgetinner.cpp \
     datapage.cpp \
-    datatreemodel.cpp
+    objectlist.cpp \
+    studyobject.cpp
 
 HEADERS  += \
     newprojectionwizard.hpp \
@@ -29,7 +30,9 @@ HEADERS  += \
     datatreewidgetinner.h \
     datapage.h \
     wizardpages.h \
-    datatreemodel.h
+    objectlist.h \
+    studyobject.h \
+    EnumClass.h
 CONFIG += c++11
 
 RESOURCES += \
