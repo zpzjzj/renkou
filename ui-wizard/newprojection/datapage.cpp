@@ -2,7 +2,6 @@
 #include"datapage.h"
 #include "datatreewidget.h"
 #include "datatreewidgetleaf.h"
-#include "datatreemodel.h"
 DataPage::DataPage(QWidget *parent)
     :QWizardPage(parent)
 {
