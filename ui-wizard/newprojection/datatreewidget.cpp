@@ -42,7 +42,7 @@ bool DataTreeWidget::read(QIODevice *device, QString &type, StudyObject *obejct)
     }
 
     QDomElement root = domDocument.documentElement();
-    qDebug()<<root.tagName() << type;
+//    qDebug()<<root.tagName() << type;
     if (root.tagName().compare(type) != 0){
         QMessageBox::information(window(), tr("文件内容不匹配"),
                                  tr("Please check if the type is match.\n"));
@@ -55,14 +55,11 @@ bool DataTreeWidget::read(QIODevice *device, QString &type, StudyObject *obejct)
 
     QDomElement child = root.firstChildElement("extension");
     extensionType = child.text();
-    qDebug()<<child.tagName();
 
     int level = 0;
     child = child.nextSiblingElement("items")
             .firstChildElement(headLabels.at(level));
-    qDebug()<<child.tagName() << endl;
 
-    QDomElement head;
     while (!child.isNull()){
         parseHeaderElement(child);
         child = child.nextSiblingElement(headLabels.at(level));
@@ -99,7 +96,7 @@ bool DataTreeWidget::writeTmpFile(){
     QString fileName = EnumClass::PREFIX+object->getTmpXmlFilename();
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("SAX Bookmarks"),
+        QMessageBox::warning(this, tr("Xml File"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -112,7 +109,7 @@ void DataTreeWidget::importBtnClicked(const QString &string){
     ///TODO
     ///
     QString caption = tr("Open %1 Files").arg(extensionType);
-    QString dir = "../";
+    QString dir = EnumClass::PREFIX;
     QString filter = 0;
     QString path = QFileDialog::getOpenFileName(this, caption, dir,filter);
     if (! path.isEmpty()){
@@ -171,6 +168,10 @@ void DataTreeWidget::parseHeaderElement(const QDomElement &element,
 QTreeWidgetItem *DataTreeWidget::createItem(const QDomElement &element,
                                             QTreeWidgetItem *parentItem,
                                             int level){
+    qDebug()<<tr("DataTreeWidget::createItem(QDomeElement %1, QTreeWidgetItem %2, %3")
+              .arg(element.text())
+              .arg(parentItem->text(0))
+               .arg(level);
     QTreeWidgetItem *item;
     if (parentItem){
         item = new QTreeWidgetItem(parentItem);

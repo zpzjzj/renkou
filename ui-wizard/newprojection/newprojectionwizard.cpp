@@ -5,7 +5,7 @@
 #include <QWidget>
 NewProjectionWizard::NewProjectionWizard(QWidget *parent) :
     QWizard(parent),
-    ui(new Ui::NewProjectionWizard), iconOn(new QIcon), iconOff(new QIcon)
+    ui(new Ui::NewProjectionWizard), iconOff(new QIcon), iconOn(new QIcon)
 {
     ui->setupUi(this);
 
@@ -32,5 +32,5 @@ NewProjectionWizard::~NewProjectionWizard()
 }
 
 void NewProjectionWizard::pageChecked(int index){
-
+    qDebug()<<tr("NewProjectionWizard::pageChecked(int %1)").arg(index);
 }

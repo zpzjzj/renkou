@@ -20,8 +20,11 @@ ObjectList::ObjectList(QWidget *parent) :
 
     setLayout(v_layout);
 
+    connect(objectListWidget, SIGNAL(itemChanged(QListWidgetItem*)),
+            this,SLOT(emitListItemChanged(QListWidgetItem*)));
     connect(objectListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-                                     this, SLOT(emitListItemClicked(QListWidgetItem*)));
+            this, SLOT(emitListItemClicked(QListWidgetItem*)));
+
     connect(addBtn, SIGNAL(clicked()), this, SLOT(addBtnClicked()));
     connect(removeBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
 }
@@ -44,16 +47,16 @@ void ObjectList::addBtnClicked() {
             StudyObject *object = new StudyObject(year.toInt(), EnumClass::NameMap.key(area));
 
 
-           // if (objects.indexOf(*object) < 0){
-                //objects.append(*object);
+            // if (objects.indexOf(*object) < 0){
+            //objects.append(*object);
 
-                QListWidgetItem* item = new QListWidgetItem;
-                QString text = year + " " + area;
-                item->setText(text);
-                objectForItem.insert(object, item);
-                objectListWidget->addItem(item);
+            QListWidgetItem* item = new QListWidgetItem;
+            QString text = year + " " + area;
+            item->setText(text);
+            objectForItem.insert(object, item);
+            objectListWidget->addItem(item);
             //} else {
-                //already have
+            //already have
             //}
         }
     } else {
@@ -72,7 +75,11 @@ void ObjectList::removeBtnClicked(){
     qDebug()<<objectListWidget->currentRow();
 }
 
+void ObjectList::emitListItemChanged(QListWidgetItem *item){
+    qDebug()<<tr("ObjectList::emitListItemChanged(QListWidgetItem %1)").arg(item->text());
+    emit itemChanged(objectForItem.key(item));
+}
 void ObjectList::emitListItemClicked(QListWidgetItem *item){
-    qDebug()<<"emit the signal";
+    qDebug()<<tr("ObjectList::emitListItemClicked(QListWidgetItem %1)").arg(item->text());
     emit itemClicked(objectForItem.key(item));
 }
