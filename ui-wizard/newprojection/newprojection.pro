@@ -33,6 +33,7 @@ HEADERS  += \
     objectlist.h \
     studyobject.h \
     EnumClass.h
+
 CONFIG += c++11
 
 RESOURCES += \
@@ -41,3 +42,5 @@ RESOURCES += \
 
 FORMS += \
     newprojectionwizard.ui
+
+OTHER_FILES +=

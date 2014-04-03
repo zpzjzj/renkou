@@ -3,7 +3,7 @@
 
 #include <QHash>
 #include <QWidget>
-
+#include "studyobject.h"
 class StudyObject;
 class QListWidget;
 class QListWidgetItem;
@@ -13,20 +13,18 @@ class ObjectList : public QWidget
     Q_OBJECT
 public:
     explicit ObjectList(QWidget *parent = 0);
-    enum {
-
-    } Distrct;
 
 signals:
-
+    void itemClicked(StudyObject *object);
 public slots:
 private slots:
     void addBtnClicked();
     void removeBtnClicked();
+    void emitListItemClicked(QListWidgetItem *item);
 private:
-    QListWidget* objectList;
-    QHash<QListWidgetItem*, StudyObject*> objectForItem;
-
+    QListWidget* objectListWidget;
+    QHash<StudyObject*, QListWidgetItem*> objectForItem;
+    //QList<StudyObject> objects;
     QPushButton* addBtn;
     QPushButton* removeBtn;
 };

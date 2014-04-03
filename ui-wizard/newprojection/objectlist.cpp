@@ -1,12 +1,13 @@
-#include "objectlist.h"
-#include "EnumClass.h"
-#include "studyobject.h"
 
+#include "objectlist.h"
+#include <QList>
 #include <QtWidgets>
+
+#include "EnumClass.h"
 ObjectList::ObjectList(QWidget *parent) :
     QWidget(parent)
 {
-    objectList = new QListWidget;
+    objectListWidget = new QListWidget;
     addBtn = new QPushButton(tr("添加"));
     removeBtn = new QPushButton(tr("移除"));
     QHBoxLayout *h_layout = new QHBoxLayout;
@@ -14,11 +15,13 @@ ObjectList::ObjectList(QWidget *parent) :
     h_layout->addWidget(removeBtn);
 
     QVBoxLayout *v_layout = new QVBoxLayout;
-    v_layout->addWidget(objectList);
+    v_layout->addWidget(objectListWidget);
     v_layout->addLayout(h_layout);
 
     setLayout(v_layout);
 
+    connect(objectListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+                                     this, SLOT(emitListItemClicked(QListWidgetItem*)));
     connect(addBtn, SIGNAL(clicked()), this, SLOT(addBtnClicked()));
     connect(removeBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
 }
@@ -38,24 +41,38 @@ void ObjectList::addBtnClicked() {
                                      tr("年份: %1\n地区").arg(year),
                                      EnumClass::ProvinceList, 0,false, &ok);
         if (ok && !area.isEmpty()){
-            StudyObject* object = new StudyObject(year.toInt(), area);
+            StudyObject *object = new StudyObject(year.toInt(), EnumClass::NameMap.key(area));
 
-            QListWidgetItem* item = new QListWidgetItem;
 
-            QString text = year + " " + area;
-            item->setText(text);
-            objectList->addItem(item);
-            objectForItem.insert(item, object);
+           // if (objects.indexOf(*object) < 0){
+                //objects.append(*object);
+
+                QListWidgetItem* item = new QListWidgetItem;
+                QString text = year + " " + area;
+                item->setText(text);
+                objectForItem.insert(object, item);
+                objectListWidget->addItem(item);
+            //} else {
+                //already have
+            //}
         }
     } else {
 
     }
-
-
 }
 
 void ObjectList::removeBtnClicked(){
-    QListWidgetItem *item = objectList->currentItem();
+    QListWidgetItem *item = objectListWidget->currentItem();
+    int ret = QMessageBox::question(this,
+                                    tr("确认移除"),
+                                    tr("确认移除研究对象 %1").arg(item->text()));
+    if (ret == QMessageBox::Yes){
+        objectListWidget->takeItem(objectListWidget->currentRow());
+    }
+    qDebug()<<objectListWidget->currentRow();
+}
 
-    qDebug()<<objectList->currentRow();
+void ObjectList::emitListItemClicked(QListWidgetItem *item){
+    qDebug()<<"emit the signal";
+    emit itemClicked(objectForItem.key(item));
 }

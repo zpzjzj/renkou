@@ -8,7 +8,8 @@ class StudyObject : public QObject
     Q_OBJECT
 public:
     explicit StudyObject(QObject *parent = 0);
-    StudyObject(int year, QString& area, QObject *parent=0);
+    StudyObject(int year,const QString& area, QObject *parent=0);
+    StudyObject(const StudyObject& other);
     ~StudyObject();
 
     int getYear() const;
@@ -19,7 +20,12 @@ public:
 
     QString getXmlFilename();
     QString getTmpXmlFilename();
+
+    StudyObject& operator=(const StudyObject&);
+
+    bool operator==(const StudyObject &rhs);
 signals:
+
 
 public slots:
 
@@ -30,5 +36,4 @@ private:
     QString* tmpXmlFilename;
     QString* xmlFilename;
 };
-
 #endif // STUDYOBJECT_H
