@@ -20,10 +20,8 @@ ObjectList::ObjectList(QWidget *parent) :
 
     setLayout(v_layout);
 
-    connect(objectListWidget, SIGNAL(itemChanged(QListWidgetItem*)),
-            this,SLOT(emitListItemChanged(QListWidgetItem*)));
-    connect(objectListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(emitListItemClicked(QListWidgetItem*)));
+    connect(objectListWidget, SIGNAL(currentRowChanged(int)),
+            this, SLOT(emitRowChanged(int)));
 
     connect(addBtn, SIGNAL(clicked()), this, SLOT(addBtnClicked()));
     connect(removeBtn, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
@@ -82,4 +80,9 @@ void ObjectList::emitListItemChanged(QListWidgetItem *item){
 void ObjectList::emitListItemClicked(QListWidgetItem *item){
     qDebug()<<tr("ObjectList::emitListItemClicked(QListWidgetItem %1)").arg(item->text());
     emit itemClicked(objectForItem.key(item));
+}
+
+void ObjectList::emitRowChanged(int i){
+    qDebug()<<tr("ObjectList::emitRowChanged(%1)").arg(i);
+    emit rowChanged(objectForItem.key(objectListWidget->item(i)));
 }

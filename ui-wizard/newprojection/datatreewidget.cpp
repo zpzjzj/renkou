@@ -42,7 +42,7 @@ bool DataTreeWidget::read(QIODevice *device, QString &type, StudyObject *obejct)
     }
 
     QDomElement root = domDocument.documentElement();
-//    qDebug()<<root.tagName() << type;
+    //    qDebug()<<root.tagName() << type;
     if (root.tagName().compare(type) != 0){
         QMessageBox::information(window(), tr("文件内容不匹配"),
                                  tr("Please check if the type is match.\n"));
@@ -66,7 +66,7 @@ bool DataTreeWidget::read(QIODevice *device, QString &type, StudyObject *obejct)
     }
 
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
-               this, SLOT(updateDomElement(QTreeWidgetItem*,int)));
+            this, SLOT(updateDomElement(QTreeWidgetItem*,int)));
     return true;
 }
 
@@ -83,9 +83,7 @@ void DataTreeWidget::updateDomElement(QTreeWidgetItem *item, int column){
     if (!element.isNull()) {
         if (column == 1) {
             if (element.tagName() == "leaf"){
-
                 element.setAttribute("href", item->text(1));
-                qDebug()<<element.attribute("href");
             }
         }
     }
@@ -94,6 +92,7 @@ void DataTreeWidget::updateDomElement(QTreeWidgetItem *item, int column){
 }
 bool DataTreeWidget::writeTmpFile(){
     QString fileName = EnumClass::PREFIX+object->getTmpXmlFilename();
+    qDebug()<<"DataTreeWidget::writeTmpFile() "<<fileName;
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Xml File"),
@@ -121,6 +120,7 @@ void DataTreeWidget::importBtnClicked(const QString &string){
 void DataTreeWidget::parseHeaderElement(const QDomElement &element,
                                         QTreeWidgetItem *parentItem,
                                         int level){
+    qDebug()<<"DataTreeWidget::parseHeaderElement";
     QTreeWidgetItem *item = createItem(element, parentItem);
 
     QString value = element.firstChildElement("value").text();
@@ -147,10 +147,14 @@ void DataTreeWidget::parseHeaderElement(const QDomElement &element,
                 value = headLabels.at(level);
             }
 
-            //childItem->setFlags(item->flags() | Qt::ItemIsEditable);
+            childItem->setFlags(item->flags() | Qt::ItemIsUserCheckable);
             childItem->setIcon(0, toImportIcon);
             childItem->setText(0, value);
             childItem->setText(1, child.attribute("href"));
+            if (! childItem->text(1).isEmpty()){
+                childItem->setIcon(0, ImportedIcon);
+                //childItem->setCheckState(1, Qt::Unchecked);
+            }
 
             QPushButton* pbt = new QPushButton("导入");
             pbt->setMaximumWidth(40);
@@ -168,10 +172,7 @@ void DataTreeWidget::parseHeaderElement(const QDomElement &element,
 QTreeWidgetItem *DataTreeWidget::createItem(const QDomElement &element,
                                             QTreeWidgetItem *parentItem,
                                             int level){
-    qDebug()<<tr("DataTreeWidget::createItem(QDomeElement %1, QTreeWidgetItem %2, %3")
-              .arg(element.text())
-              .arg(parentItem->text(0))
-               .arg(level);
+    qDebug()<<tr("DataTreeWidget::createItem()");
     QTreeWidgetItem *item;
     if (parentItem){
         item = new QTreeWidgetItem(parentItem);

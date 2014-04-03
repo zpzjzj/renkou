@@ -26,18 +26,39 @@ DataPage::DataPage(QWidget *parent)
 
 
 void DataPage::open(StudyObject* object){
+    /*first try, load tmp file*/
     QString fileName(EnumClass::PREFIX+object->getTmpXmlFilename());
-
+    qDebug()<<"DataPage::open("<<fileName<<")";
 
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)){
-        /*past-time files*/
+        qDebug()<<"FAILED";
+
+        /*second try, load past-time file*/
         fileName = EnumClass::PREFIX+object->getXmlFilename();
         file.setFileName(fileName);
 
-        if (!file.open(QFile::ReadOnly | QFile::Text)){
+        qDebug()<<"DataPage::open("<<fileName<<")";
 
-            return ;
+        if (!file.open(QFile::ReadOnly | QFile::Text)){
+            qDebug()<<"FAILED";
+
+            /*third try, load default config file;
+             * DO NOT write to this file
+             */
+            fileName = tr(":/res/data/dataItem.xml");
+            file.setFileName(fileName);
+
+            qDebug()<<"DataPage::open("<<fileName<<")";
+            if (!file.open(QFile::ReadOnly | QFile::Text)){
+                qDebug()<<"FAILED";
+                return ;
+            } else{
+                qDebug()<<"SUCCESS";
+            }
+
+        } else {
+            qDebug()<<"SUCCESS";
         }
     }
 
@@ -50,20 +71,20 @@ void DataPage::open(StudyObject* object){
     treeForObject.insert(object, treeWidget);
     if (treeWidget->read(&file, type, object)){
         //file loaded
-        //statusBar()->showMessage(tr("File loaded"), 2000);
         emit fileLoaded(object);
     }
 }
 
 void DataPage::saveAs(StudyObject *object){
     QString fileName(EnumClass::PREFIX+object->getXmlFilename());
+    qDebug()<<tr("DataPage::saveAs() ") << fileName;
 
     if (fileName.isEmpty())
         return;
 
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("SAX Bookmarks"),
+        QMessageBox::warning(this, tr("XML Files"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -76,12 +97,9 @@ void DataPage::saveAs(StudyObject *object){
 
 void DataPage::createActions(){
     connect(this, SIGNAL(completeChanged()), this, SLOT(clear()));
-    connect(objectList, SIGNAL(itemClicked(StudyObject*)),
-            this, SLOT(open(StudyObject*)));
 
-//    connect(this, SIGNAL(fileLoaded(StudyObject*)),
-//            this, SLOT(saveAs(StudyObject*)));
-    //openAct = new Action(tr("&Open..."), this);
+    connect(objectList, SIGNAL(rowChanged(StudyObject*)),
+            this, SLOT(open(StudyObject*)));
 
 }
 

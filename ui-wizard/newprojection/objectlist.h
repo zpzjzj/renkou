@@ -17,12 +17,14 @@ public:
 signals:
     void itemChanged(StudyObject *object);
     void itemClicked(StudyObject *object);
+    void rowChanged(StudyObject *object);
 public slots:
 private slots:
     void addBtnClicked();
     void removeBtnClicked();
     void emitListItemChanged(QListWidgetItem *item);
-    void emitlistItemClicked(QListWidgetItem *item);
+    void emitListItemClicked(QListWidgetItem *item);
+    void emitRowChanged(int i);
 private:
     QListWidget* objectListWidget;
     QHash<StudyObject*, QListWidgetItem*> objectForItem;
