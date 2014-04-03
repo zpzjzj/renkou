@@ -8,7 +8,6 @@ const QString WIN_PREFIX = "D:\\";
 const QString MACOS_PREFIX= "/Users/nearc/";
 const QString PREFIX = MACOS_PREFIX;
 
-
 const QList<QString> ProvinceList={
   "北京市", "天津市", "河北省", "陕西省", "内蒙古", "辽宁省", "吉林省",
     "黑龙江"
