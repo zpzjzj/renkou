@@ -25,7 +25,9 @@ HEADERS += \
     exceptions/InstanceIndexOutOfRange.hpp \
     exceptions/IndicatorIndexOutOfRange.hpp \
     exceptions/ExceptionNoParaName.hpp \
-    exceptions/ColumnNotExist.hpp
+    exceptions/ColumnNotExist.hpp \
+    para.h \
+    transfromPara.hpp
 
 SOURCES += \
     SchemeParameter.cpp \
@@ -37,4 +39,6 @@ SOURCES += \
     paraholder.cpp \
     metadataItem.cpp \
     ConfigMan.cpp \
-    AbstractScheme.cpp
+    AbstractScheme.cpp \
+    para.cpp \
+    transfromPara.cpp

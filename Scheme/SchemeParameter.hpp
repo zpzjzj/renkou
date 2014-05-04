@@ -13,19 +13,20 @@
  * note: 为了保证以后可能从文件中读取参数，该类必须是运行时多态的。so you are not permitted to use a template. don't you
  *       this class shall be runtime-Polymorphism to ensure the ability to read parameters from the config file
  */
+
 class SchemeParameter : public ParaSetter {
     public:
-        /* @desc: the non-virtual function for call
-         * @impl: calls do_generate and some extra, common work(if any)
+        /** @desc: the non-virtual function for call
+         *  @impl: calls do_generate and some extra, common work(if any)
          */
         SchemeParameter(std::shared_ptr<ParaHolder> hd) :ParaSetter(hd) {}
         virtual ~SchemeParameter() {}
         QString generate(schememetadataPtr meta) const ;
     private:
-        /* @desc: the pure-virtual function than does the real thing
-         * @params: the parameters input, the metadata
-         * @return: the internal scheme name (used by Abstract Scheme)
-         * @note: the full name of a scheme will be determined by the metadata
+        /** @desc: the pure-virtual function than does the real thing
+         *  @params: the parameters input, the metadata
+         *  @return: the internal scheme name (used by Abstract Scheme)
+         *  @note: the full name of a scheme will be determined by the metadata
          */
         virtual QString do_generate(schememetadataPtr meta) const = 0;
 };

@@ -12,13 +12,16 @@ TARGET = evaluate
 TMEPLATE = app
 QMAKE_CXXFLAGS += "-std=c++0x"
 # config += exceptions
-INCLUDEPATH += K:\renkou\Scheme
-INCLUDEPATH += F:\boost_1_54_0\
+INCLUDEPATH += D:\renkou\Scheme
+INCLUDEPATH += D:\boost_1_55_0\
 DEPENDPATH += ..\Scheme
 PRE_TARGETDEPS += ..\lib\libscheme.a
 
-LIBS += -LK:\renkou\lib -LF:\boost_1_54_0\stage\lib
-LIBS += -lScheme -lboost_filesystem-mgw48-mt-1_54 -lboost_system-mgw48-mt-1_54
+LIBS += -LD:\renkou\lib -LD:\boost_1_55_0\stage\lib
+# LIBS += -lScheme -lboost_filesystem-mgw48-mt-1_55 -lboost_system-mgw48-mt-1_55
+LIBS += "D:\boost_1_55_0\stage\lib\libboost_filesystem-mgw47-mt-1_55.a"
+LIBS += "D:\boost_1_55_0\stage\lib\libboost_system-mgw47-mt-1_55.a"
+LIBS += -lScheme
 
 SOURCES += evaluate.cpp \
 		method_add.cpp \

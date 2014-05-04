@@ -1,0 +1,18 @@
+.DS_Store
+*.obj
+*.moc
+Makefile*
+*.o
+*.swp
+
+#Visual Studio files
+*.sln
+*.vcproj
+*.suo
+*.user
+
+#QtCreator project files
+*.pro.user
+======
+*.pro.user*
+
