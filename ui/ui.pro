@@ -6,7 +6,7 @@
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-QT       += core gui
+QT       += core gui xml
 CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -25,7 +25,16 @@ SOURCES += main.cpp \
     entercalculate.cpp \
     evaluate.cpp \
     display.cpp \
-    uiitem.cpp
+    uiitem.cpp \
+    datapage.cpp \
+    datatreewidget.cpp \
+    datatreewidgetinner.cpp \
+    datatreewidgetitem.cpp \
+    datatreewidgetleaf.cpp \
+    newprojectionwizard.cpp \
+    objectlist.cpp \
+    studyobject.cpp \
+    xmlmanager.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -38,7 +47,18 @@ HEADERS  += \
     entercalculate.h \
     evaluate.h \
     display.h \
-    uiitem.h
+    uiitem.h \
+    datapage.h \
+    datatreewidget.h \
+    datatreewidgetinner.h \
+    datatreewidgetitem.h \
+    datatreewidgetleaf.h \
+    EnumClass.h \
+    newprojectionwizard.hpp \
+    objectlist.h \
+    studyobject.h \
+    wizardpages.h \
+    xmlmanager.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -56,4 +76,19 @@ FORMS += \
     newproject.ui \
     openProject.ui \
     progress_bar.ui \
-    searchobject.ui
+    searchobject.ui \
+    custommadearea.ui \
+    newprojectionwizard.ui
+
+OTHER_FILES += \
+    qt_zh_CN.qm \
+    .gitignore \
+    newprojection.pro.user \
+    ui.pro.user
+
+SUBDIRS += \
+    newprojection.pro
+
+RESOURCES += \
+    resources.qrc \
+    translator.qrc

@@ -73,7 +73,9 @@ void MainWindow::enableActions(){
 }
 void MainWindow::addProjectActionTriggered()
 {
-    getUiManager()->active(UiManager::newProject);
+//    getUiManager()->active(UiManager::newProject);
+//    this->enableActions();
+    getUiManager()->active(UiManager::newprojectionwizard);
     this->enableActions();
 }
 
