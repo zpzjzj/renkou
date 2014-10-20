@@ -16,7 +16,6 @@ class NewFileWizard :
 
 public:
     explicit NewFileWizard(QWidget *parent = 0);
-    explicit NewFileWizard(UiManager * const uiManager=0, QWidget *parent = 0);
     ~NewFileWizard();
 
 //    int nextId() const;

@@ -1,8 +1,8 @@
 #include "selectwizardpage.h"
 #include "ui_selectwizardpage.h"
 
-#include "newobjectlistmodel.h"
-#include "projectionlistmodel.h"
+#include "model/newobjectlistmodel.h"
+#include "model/projectionlistmodel.h"
 
 #include "newfilewizard.h"
 

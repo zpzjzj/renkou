@@ -1,0 +1,21 @@
+﻿[
+    {
+        "name"  : "婚配模式参数",
+        "option" : [
+            {
+                "name":"夫妻婚配模式地区",
+                "option":[
+                    {
+                        "name":"value 1"
+                    },
+                    {
+                        "name":"value 2"
+                    }
+                   ]
+            },
+            {
+                "name":"subparam 2"
+            }
+        ]
+    }
+]

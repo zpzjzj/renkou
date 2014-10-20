@@ -34,7 +34,20 @@ SOURCES += main.cpp \
     newprojectionwizard.cpp \
     objectlist.cpp \
     studyobject.cpp \
-    xmlmanager.cpp
+    xmlmanager.cpp \
+    controller/objectlistmanager.cpp \
+    model/areaitemmodel.cpp \
+    model/demoobject.cpp \
+    model/listviewmodel.cpp \
+    model/newobjectlistmodel.cpp \
+    model/objectlistmodel.cpp \
+    model/projectionlistmodel.cpp \
+    model/yearitemmodel.cpp \
+    view/newfilewizard.cpp \
+    view/newobjectwizardpage.cpp \
+    view/newprojectionwizardpage.cpp \
+    view/selectwizardpage.cpp \
+    view/mainwindowrightwidget.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -58,7 +71,21 @@ HEADERS  += \
     objectlist.h \
     studyobject.h \
     wizardpages.h \
-    xmlmanager.hpp
+    xmlmanager.hpp \
+    controller/objectlistmanager.h \
+    model/areaitemmodel.h \
+    model/demoobject.h \
+    model/listviewmodel.h \
+    model/newobjectlistmodel.h \
+    model/objectlistmodel.h \
+    model/projectionlistmodel.h \
+    model/yearitemmodel.h \
+    view/newfilewizard.h \
+    view/newobjectwizardpage.h \
+    view/newprojectionwizardpage.h \
+    view/selectwizardpage.h \
+    view/wizardpages.h \
+    view/mainwindowrightwidget.h
 
 FORMS += \
     customMadeArea.ui \
@@ -78,7 +105,11 @@ FORMS += \
     progress_bar.ui \
     searchobject.ui \
     custommadearea.ui \
-    newprojectionwizard.ui
+    newprojectionwizard.ui \
+    ui_wizard/newfilewizard.ui \
+    ui_wizard/newobjectwizardpage.ui \
+    ui_wizard/newprojectionwizardpage.ui \
+    ui_wizard/selectwizardpage.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \
@@ -90,5 +121,5 @@ SUBDIRS += \
     newprojection.pro
 
 RESOURCES += \
-    resources.qrc \
-    translator.qrc
+    translator.qrc \
+    resource.qrc

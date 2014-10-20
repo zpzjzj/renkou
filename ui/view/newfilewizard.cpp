@@ -9,15 +9,6 @@ NewFileWizard::NewFileWizard(QWidget *parent) :
     init();
 }
 
-NewFileWizard::NewFileWizard(UiManager *const uiManager, QWidget *parent)
-    : QWizard(parent),
-      UiItem(uiManager),
-      ui(new Ui::NewFileWizard)
-
-{
-    init();
-}
-
 NewFileWizard::~NewFileWizard()
 {
     delete ui;

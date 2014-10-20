@@ -2,7 +2,7 @@
 #define OBJECTLISTMANAGER_H
 
 #include <QList>
-#include "demoobject.h"
+#include "model/demoobject.h"
 
 class ObjectListManager
 {

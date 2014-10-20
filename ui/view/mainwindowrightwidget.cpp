@@ -21,8 +21,8 @@ void MainWindowRightWidget::init() {
 
     QGridLayout *gridLayout = new QGridLayout();
 
-    QPushButton *button1 = new QPushButton("button1");
-    gridLayout->addWidget(button1);
+//    QPushButton *button1 = new QPushButton("button1");
+//    gridLayout->addWidget(button1);
     if (!loadJsonDocument(_PARAM_JSON_FILE_PATH)){
 //        list.clear();
     }

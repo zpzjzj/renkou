@@ -1,6 +1,7 @@
 #include "demoobject.h"
 #include "objectlistmodel.h"
-#include "objectlistmanager.h"
+#include "controller/objectlistmanager.h"
+
 ObjectListModel::ObjectListModel()
 {
     this->objManager = ObjectListManager::getInstance();

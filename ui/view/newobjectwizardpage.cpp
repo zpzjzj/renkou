@@ -1,12 +1,12 @@
 #include "newobjectwizardpage.h"
 #include "ui_newobjectwizardpage.h"
 
-#include "yearitemmodel.h"
-#include "areaitemmodel.h"
+#include "model/yearitemmodel.h"
+#include "model/areaitemmodel.h"
 
-#include "demoobject.h"
+#include "model/demoobject.h"
 
-#include "objectlistmanager.h"
+#include "controller/objectlistmanager.h"
 
 #include "uimanager.h"
 
