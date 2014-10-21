@@ -18,22 +18,6 @@
 #include <Qtwidgets/QTableView>
 #include <Qtwidgets/QHeaderView>
 
-<<<<<<< HEAD
-namespace Ui {
-    class MainWindow;
-}
-
-class MainWindow : public QMainWindow {
-public:
-    MainWindow(QWidget* parent = NULL);
-    ~MainWindow();
-private:
-    Ui::MainWindow* ui;
-};
-
-QT_END_NAMESPACE
-
-=======
 #include <QColor>
 #include <QStandardItemModel>
 #include <QPalette>
@@ -90,5 +74,4 @@ private:
 //    void initLeftListView();
 };
 
->>>>>>> f7bbdfeec132428a546966e8f5919d9479f7f366
 #endif // MAINWINDOW_H

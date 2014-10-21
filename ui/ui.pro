@@ -109,7 +109,8 @@ FORMS += \
     ui_wizard/newfilewizard.ui \
     ui_wizard/newobjectwizardpage.ui \
     ui_wizard/newprojectionwizardpage.ui \
-    ui_wizard/selectwizardpage.ui
+    ui_wizard/selectwizardpage.ui \
+    openProject.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \
