@@ -17,10 +17,10 @@
 class TestTest : public QObject
 {
         Q_OBJECT
-        
+
     public:
         TestTest();
-        
+
     private Q_SLOTS:
         void initTestCase();
         void cleanupTestCase();
@@ -211,6 +211,5 @@ void TestTest::testScheme() {
     }
 }
 
-QTEST_MAIN(TestTest)
 
 #include "tst_testtest.moc"

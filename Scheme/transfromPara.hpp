@@ -1,7 +1,7 @@
 #ifndef TRANSFROMPARA_HPP
 #define TRANSFROMPARA_HPP
 
-# include "para.h"
+# include "Para.hpp"
 # include "SchemeParameter.hpp"
 # include <list>
 # include <memory>

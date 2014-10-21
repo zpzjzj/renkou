@@ -14,9 +14,10 @@ QMAKE_CXXFLAGS += "-std=c++0x"
 TEMPLATE = app
 
 
-SOURCES += tst_testtest.cpp
+SOURCES += tst_testtest.cpp \
+    paraTest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
-INCLUDEPATH += K:\renkou\Scheme
-LIBS += -LK:\renkou\lib -lScheme
+INCLUDEPATH += E:\code\renkou\Scheme
+LIBS += -LE:\code\renkou\lib -lScheme
 DEPENDPATH += ..\Scheme
 PRE_TARGETDEPS += ..\lib\libscheme.a

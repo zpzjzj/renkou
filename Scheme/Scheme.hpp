@@ -53,7 +53,7 @@ class Scheme : public std::enable_shared_from_this<Scheme> {
         Scheme(schememetadataPtr metadata, SchemeBufferPtr buffer, const QString& scheme_name) :meta(metadata), buf(buffer), name(scheme_name) {
             // check existance
         }
-        std::shared_ptr<Scheme> that() {
+        std::shared_ptr<Scheme> that() {//no use now
             return shared_from_this();
         }
         SchemeBufferPtr getBuffer(void) const {return buf;}
