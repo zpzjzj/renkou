@@ -43,8 +43,9 @@ namespace Ui {
     class MainWindow;
 }
 
-//class MainWindow : public QMainWindow, public UiItem
-//{
+class MainWindowRightWidget;
+class ObjectListModel;
+class QListView;
 
 class MainWindow : public QMainWindow, public UiItem {
     Q_OBJECT
@@ -77,9 +78,16 @@ private slots:
 
     //enable some actions after a project opened
 
+    void newFileWizardFinished();
+
 private:
     Ui::MainWindow* ui;
     void enableActions();
+
+    QListView *leftListView;
+    ObjectListModel *objListModel;
+    MainWindowRightWidget *rightWidget;
+//    void initLeftListView();
 };
 
 >>>>>>> f7bbdfeec132428a546966e8f5919d9479f7f366

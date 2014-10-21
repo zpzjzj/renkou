@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/json">
+        <file>config/area.json</file>
+        <file>config/param.json</file>
+    </qresource>
+</RCC>

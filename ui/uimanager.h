@@ -28,6 +28,7 @@ public:
         openProject,
 //        progress_bar,
         searchObject,
+        newprojectionwizard,
         PAGE_SIZE
     };
 public:

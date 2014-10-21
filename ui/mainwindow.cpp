@@ -1,24 +1,26 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "model/objectlistmodel.h"
+#include "model/newobjectlistmodel.h"
+#include "model/projectionlistmodel.h"
+
+#include "view/newfilewizard.h"
+#include "view/mainwindowrightwidget.h"
+
+#include <QHBoxLayout>
+#include <QListView>
+
+#include <QtDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
     //test widget
-    QPalette *palette = new QPalette();
-    ui->showWidget->setAutoFillBackground(true);
 
-    palette->setColor(QPalette::Background, QColor(255, 255, 255));
-    ui->showWidget->setPalette(*palette);
-    ui->addObjectGroup->setVisible(false);
 
-    QStringList yearList;
-    for (int i = 1980; i<=2010; i++){
-        yearList.push_back(QString::number(i));
-    }
-    ui->yearComboBox->addItems(yearList);
+    //MENU
     //project menu
     connect(ui->NewProject, SIGNAL(triggered()), this, SLOT(addProjectActionTriggered()));
     connect(ui->OpenProject, SIGNAL(triggered()), this, SLOT(openProjectActionTriggered()));
@@ -41,18 +43,26 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //connect(this, SIGNAL(projectOpened()), this, SLOT(enableActions()));
 
-    //object table
+    //init layout
+//    QGridLayout *layout = new QGridLayout;
+    QHBoxLayout *hLayout = ui->hLayout;
 
-    QStandardItemModel *objectModel = new QStandardItemModel();
-    objectModel->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("研究对象")));
-    objectModel->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("当前数据集")));
-    objectModel->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("数据状态")));
-    objectModel->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("仿真结果状态")));
-    ui->objectTable->setModel(objectModel);
-    ui->objectTable->horizontalHeader()->setStretchLastSection(true);
+    //left list view
+    this->leftListView = new QListView(this);
+    this->objListModel = new ObjectListModel;
+    this->leftListView->setModel(objListModel);
 
+    //right widget
+    this->rightWidget = new MainWindowRightWidget(this);
 
+    hLayout->addWidget(leftListView);
+    hLayout->addWidget(rightWidget);
+    //set left:right = 1:3
+    hLayout->setStretch(0, 1);
+    hLayout->setStretch(1, 3);
 
+//    layout->addLayout(hLayout, 0, 0);
+//    this->setLayout(layout);
 }
 
 MainWindow::~MainWindow()
@@ -71,10 +81,21 @@ void MainWindow::enableActions(){
     ui->EvaluateSim->setEnabled(true);
 
 }
+
+
+
 void MainWindow::addProjectActionTriggered()
 {
-    getUiManager()->active(UiManager::newProject);
-    this->enableActions();
+//    getUiManager()->active(UiManager::newprojectionwizard);
+//    this->enableActions();
+
+    //    uiManager->active(UiManager::Page::NewFileWizard);
+        NewFileWizard *newFileWizard = new NewFileWizard(this);
+    //    newFileWizard
+        connect(newFileWizard, SIGNAL(accepted()), this, SLOT(newFileWizardFinished()));
+
+        newFileWizard->setModal(true);
+        newFileWizard->show();
 }
 
 void MainWindow::openProjectActionTriggered()
@@ -89,7 +110,7 @@ void MainWindow::searchObjectActionTriggered()
 }
 
 void MainWindow::addObjectAcionTriggered(){
-    ui->addObjectGroup->setVisible(true);
+//    ui->addObjectGroup->setVisible(true);
 }
 
 void MainWindow::quitActionTriggered(){
@@ -126,6 +147,15 @@ void MainWindow::aboutActionTriggered()
 
 }
 
+void MainWindow::newFileWizardFinished()
+{
+
+    qDebug()<<"New File Wizard Finished";
+
+    ObjectListModel *tmpModel = (ObjectListModel*)this->leftListView->model();
+    tmpModel->refrushModel();
+    this->update();
+}
 
 
 
