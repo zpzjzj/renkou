@@ -15,6 +15,7 @@ public:
     enum page {
 //        customMadeArea,
         display,
+        selDispCombo,
 //        dia_accu_linetype1,
 //        dia_accu_linetype2,
 //        linetype1,

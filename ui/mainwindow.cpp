@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-	ui->setupUi(this);
+    ui->setupUi(this);
     //test widget
 
 
@@ -134,7 +134,8 @@ void MainWindow::calculateSimActionTriggered()
 
 void MainWindow::showSimActionTriggered()
 {
-    getUiManager()->active(UiManager::display);
+//    getUiManager()->active(UiManager::display);
+    getUiManager()->active(UiManager::selDispCombo);
 }
 
 void MainWindow::evaluateSimActionTriggered()

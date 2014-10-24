@@ -8,8 +8,9 @@
  *
  */
 
-scheme::Para::Para():name(""), key(""), val(""),
-    andParas(Para::ParaSet()), orParas(Para::ParaSet()){
+scheme::Para::Para():mName(""), mKey(""), mVal(""),
+    mAndParas(Para::ParaSet()), mOrParas(Para::ParaSet()),
+    mSelectedType(NONE){
 
 }
 
@@ -17,19 +18,17 @@ scheme::Para::Para(const QString& name,
                    const QString& key,
                    const QString& val,
                    const Para::ParaSet& andParas,
-                   const Para::ParaSet& orParas)
-    :name(name), key(key), val(val), andParas(andParas), orParas(orParas){}
+                   const Para::ParaSet& orParas,
+                   const SelectedType& selectedType)
+    :mName(name), mKey(key), mVal(val), mAndParas(andParas), mOrParas(orParas), mSelectedType(selectedType){}
 
 scheme::Para::Para(Para&& para) :
-    name(std::move(para.name)),
-    key(std::move(para.key)),
-    val(std::move(para.val)),
-    andParas(std::move(andParas)),
-    orParas(std::move(orParas)){}
-
-scheme::Para::~Para(){
-
-}
+    mName(std::move(para.mName)),
+    mKey(std::move(para.mKey)),
+    mVal(std::move(para.mVal)),
+    mAndParas(std::move(mAndParas)),
+    mOrParas(std::move(mOrParas)),
+    mSelectedType(para.mSelectedType){}
 
 namespace{
 void addPara(const scheme::Para::ParaPtr& para, scheme::Para::ParaSet& paraSet){
@@ -38,58 +37,58 @@ void addPara(const scheme::Para::ParaPtr& para, scheme::Para::ParaSet& paraSet){
 }
 
 void scheme::Para::addAndPara(const scheme::Para::ParaPtr& para) {
-    addPara(para, andParas);
+    addPara(para, mAndParas);
 }
 
 void scheme::Para::addOrPara(const scheme::Para::ParaPtr& para) {
-    addPara(para, orParas);
+    addPara(para, mOrParas);
 }
 
 void scheme::Para::rmOrPara(const QString& name) {
-    std::remove_if(orParas.begin(), orParas.end(),
+    std::remove_if(mOrParas.begin(), mOrParas.end(),
                    [&name](const ParaPtr& paraPtr){
         return paraPtr->getName() == name;}
     );
 }
 
 void scheme::Para::read(const QJsonObject &json) {
-    name = json["name"].toString();
-    key = json["key"].toString();
-    val = json["val"].toString();
-    andParas = readParas(json["andParas"].toArray());
-    orParas = readParas(json["orParas"].toArray());
+    mName = json["name"].toString();
+    mKey = json["key"].toString();
+    mVal = json["val"].toString();
+    mAndParas = readParas(json["andParas"].toArray());
+    mOrParas = readParas(json["orParas"].toArray());
 }
 
 void scheme::Para::write(QJsonObject &json) const {
-    json["name"] = name;
-    json["key"] = key;
-    json["val"] = val;
-    json["andParas"] = writeParas(andParas);
-    json["orParas"] = writeParas(orParas);
+    json["name"] = mName;
+    json["key"] = mKey;
+    json["val"] = mVal;
+    json["andParas"] = writeParas(mAndParas);
+    json["orParas"] = writeParas(mOrParas);
 }
 
 void scheme::Para::setAndParas(const ParaSet& paras) {
-    andParas = paras;
+    mAndParas = paras;
 }
 
 const scheme::Para::ParaSet &scheme::Para::getAndParas() const {
-    return andParas;
+    return mAndParas;
 }
 
 scheme::Para::ParaSet &scheme::Para::getAndParas() {
-    return andParas;
+    return mAndParas;
 }
 
 void scheme::Para::setOrParas(const ParaSet& paras) {
-    orParas = paras;
+    mOrParas = paras;
 }
 
 const scheme::Para::ParaSet &scheme::Para::getOrParas() const {
-    return orParas;
+    return mOrParas;
 }
 
 scheme::Para::ParaSet &scheme::Para::getOrParas() {
-    return orParas;
+    return mOrParas;
 }
 
 scheme::Para::ParaSet scheme::Para::readParas(const QJsonArray &jsonArray) {

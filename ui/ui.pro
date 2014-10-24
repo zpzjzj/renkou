@@ -47,7 +47,10 @@ SOURCES += main.cpp \
     view/newobjectwizardpage.cpp \
     view/newprojectionwizardpage.cpp \
     view/selectwizardpage.cpp \
-    view/mainwindowrightwidget.cpp
+    view/mainwindowrightwidget.cpp \
+    ParasManager.cpp \
+    UiGenerator.cpp \
+    SelDispCombo.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -85,7 +88,10 @@ HEADERS  += \
     view/newprojectionwizardpage.h \
     view/selectwizardpage.h \
     view/wizardpages.h \
-    view/mainwindowrightwidget.h
+    view/mainwindowrightwidget.h \
+    ParasManager.hpp \
+    UiGenerator.hpp \
+    SelDispCombo.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -110,7 +116,8 @@ FORMS += \
     ui_wizard/newobjectwizardpage.ui \
     ui_wizard/newprojectionwizardpage.ui \
     ui_wizard/selectwizardpage.ui \
-    openProject.ui
+    openProject.ui \
+    SelDispCombo.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \
@@ -124,3 +131,8 @@ SUBDIRS += \
 RESOURCES += \
     translator.qrc \
     resource.qrc
+
+INCLUDEPATH += E:\code\renkou\Scheme
+LIBS += -LE:\code\renkou\lib -lScheme
+DEPENDPATH += ..\Scheme
+PRE_TARGETDEPS += ..\lib\libscheme.a

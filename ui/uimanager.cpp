@@ -1,18 +1,35 @@
-#include <QApplication>
 #include <algorithm>
-#include "uimanager.h"
+#include <memory>
+#include <QApplication>
 #include "display.h"
 #include "entercalculate.h"
 #include "evaluate.h"
 #include "importbasicdata.h"
 #include "importbasicpara.h"
 #include "newproject.h"
-#include "openproject.h"
-#include "searchobject.h"
 #include "newprojectionwizard.hpp"
+#include "openproject.h"
+#include "ParasManager.hpp"
+#include "searchobject.h"
+#include "SelDispCombo.hpp"
+#include "uimanager.h"
+#include "UiGenerator.hpp"
+
 UiManager::UiManager()
 {
     ptrCollection.fill(nullptr);
+}
+
+namespace {
+    QDialog* createSelDispCombo(UiManager* uiManager) {
+        auto derived_ptr = new SelDispCombo();
+        derived_ptr->setUiManager(uiManager);
+        auto parasManagerPtr = new ParasManager();
+        parasManagerPtr->read();
+        auto uiGenerator = new UiGenerator(UiGenerator::PanelPtr(derived_ptr), parasManagerPtr);
+        uiGenerator->generateUi();
+        return derived_ptr;
+    }
 }
 
 /** suppose the uiPage not existed before
@@ -24,29 +41,14 @@ UiManager::uiPtr UiManager::create_ui(page uiPage){
     //create the ui object according to page value
     //TODO: the ctors of all ui need refining
     switch (uiPage) {
-    //        case customMadeArea :
-    //            ptr = make_shared<CustomMadeArea>(CustomMadeArea());
-    //            break;
     case display :{
         auto derived_ptr = new Display();
         derived_ptr->setUiManager(this);
         ptr = uiPtr(derived_ptr);}
         break;
-        //        case dia_accu_linetype1:
-        //            ptr = make_shared<Dia_accu_linetype1>(Dia_accu_linetype1());
-        //            break;
-        //        case dis_accu_linetype2:
-        //            ptr = make_shared<Dia_accu_linetype2>(Dia_accu_linetype2());
-        //            break;
-        //        case linetype1:
-        //            ptr = make_shared<Linetype1>(Linetype1());
-        //            break;
-        //        case linetype2:
-        //            ptr = make_shared<Linetype2>(Linetype2());
-        //            break;
-        //        case doingCalcProgress:
-        //            ptr = make_shared<DoingCalcProgress>(DoingCalcProgress());
-        //            break;
+    case selDispCombo:
+        ptr = uiPtr(createSelDispCombo(this));
+        break;
     case enterCalculate:{
         auto derived_ptr = new EnterCalculate();
         derived_ptr->setUiManager(this);
@@ -77,9 +79,6 @@ UiManager::uiPtr UiManager::create_ui(page uiPage){
         derived_ptr->setUiManager(this);
         ptr = uiPtr(derived_ptr);}
         break;
-        //        case progress_bar:
-        //            ptr = make_shared<Progress_bar>(Progress_bar());
-        //            break;
     case searchObject:{
         auto derived_ptr = new SearchObject();
         derived_ptr->setUiManager(this);
