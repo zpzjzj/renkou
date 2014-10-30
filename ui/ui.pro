@@ -130,7 +130,8 @@ SUBDIRS += \
 
 RESOURCES += \
     translator.qrc \
-    resource.qrc
+    resource.qrc \
+    image.qrc
 
 INCLUDEPATH += E:\code\renkou\Scheme
 LIBS += -LE:\code\renkou\lib -lScheme

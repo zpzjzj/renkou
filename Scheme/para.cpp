@@ -8,9 +8,27 @@
  *
  */
 
+QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
+    using SelectedType = scheme::Para::SelectedType;
+    switch (type) {
+    case SelectedType::INCOMPLETE :
+        out << "incomplete";
+        break;
+    case SelectedType::SINGLE :
+        out << "single";
+        break;
+    case SelectedType::MULTIPLE :
+        out << "multiple";
+        break;
+    default:
+        break;
+    }
+    return out;
+}
+
 scheme::Para::Para():mName(""), mKey(""), mVal(""),
     mAndParas(Para::ParaSet()), mOrParas(Para::ParaSet()),
-    mSelectedType(NONE){
+    mSelectedType(SelectedType::INCOMPLETE){
 
 }
 

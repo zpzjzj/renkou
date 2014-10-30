@@ -1,12 +1,18 @@
 #include "UiGenerator.hpp"
+#include <QButtonGroup>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QTableWidget>
 #include <QVBoxLayout>
+#include <map>
 #include <numeric>
+#include <utility>
 
 UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     mPanel(panel), mParasManager(ptr){
+    QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
+                     this, SLOT(changeIcon(const scheme::Para*)));
+    QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
+                     this, SLOT(changeParasExclusive(const scheme::Para*)));
 }
 
 namespace{
@@ -28,16 +34,26 @@ namespace{
             return x && isLeaf(*y);
         });
     }
+}
 
-    QGroupBox* createCheckBoxGroup(const scheme::Para& para) {
-        auto groupBoxPtr = new QGroupBox();
-        QVBoxLayout *vbox = new QVBoxLayout();
-        for(const auto& paraPtr : para.getOrParas()) {
-            vbox->addWidget(new QCheckBox(paraPtr->getName()));
-        }
-        groupBoxPtr->setLayout(vbox);
-        return groupBoxPtr;
+QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, const scheme::Para* rootParaPtr, QWidget* parent) {
+    QVBoxLayout* vbox = new QVBoxLayout(parent);
+    auto buttonGroupPtr = new QButtonGroup(parent);
+    buttonGroupPtr->setExclusive(false);
+    mButtonGroupMap.insert(rootParaPtr, buttonGroupPtr);
+    for(auto paraPtr : para.getOrParas()) {
+        auto button = new QCheckBox(paraPtr->getName(), parent);
+        auto ptr = paraPtr.get();
+        QObject::connect(button, &QCheckBox::stateChanged, [this, ptr](bool val){
+            this->mParasManager->setVal(val, ptr);
+        });
+        buttonGroupPtr->addButton(button);
+        vbox->addWidget(button);
     }
+    vbox->addStretch();
+    auto groupBoxPtr = new QGroupBox(para.getName(), parent);
+    groupBoxPtr->setLayout(vbox);
+    return groupBoxPtr;
 }
 
 void UiGenerator::generateUi() {
@@ -47,8 +63,34 @@ void UiGenerator::generateUi() {
     for(const auto& paraPtr : mParasManager->getParaSet()) {
         const auto& para = *paraPtr;
         if(isCheckBoxGroup(para)) {
-            stackedViewPtr->addWidget(createCheckBoxGroup(para));
+            stackedViewPtr->addWidget(createCheckBoxGroup(para, paraPtr.get(), mPanel.get()));
             paraListWidgetPtr->addItem(para.getName());
         }
     }
+}
+
+//TODO
+void UiGenerator::changeIcon(const scheme::Para* changedPara) {
+    qDebug() << "para changed:" << changedPara->getKey();
+    qDebug() << "now state:" << changedPara->getSelectedType();
+}
+void UiGenerator::changeParasExclusive(const scheme::Para* multiPara) {
+    qDebug() << "changeParasExclusive() slot" << "multipara" << multiPara;
+    static const scheme::Para* lastMultiPara = nullptr;
+    for(const auto& paraPtr : mParasManager->getParaSet()) {
+        if(paraPtr.get() != multiPara) {
+            for(auto groupBox : mButtonGroupMap.values(paraPtr.get())) {
+                /**
+                  * when multiPara is nullptr, means multi is some -> null
+                  *     then all paras exclusive = false
+                  * when multiPara is not null, means null -> some
+                  *     then all other paras exclusive = true
+                  */
+                groupBox->setExclusive(multiPara != nullptr);
+            }
+
+        }
+    }
+    changeIcon(lastMultiPara != nullptr ? lastMultiPara : multiPara);
+    lastMultiPara = multiPara;
 }

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/gif">
+        <file>image/lampGrey.gif</file>
+        <file>image/lampMulti.gif</file>
+        <file>image/lampYellow.gif</file>
+    </qresource>
+</RCC>

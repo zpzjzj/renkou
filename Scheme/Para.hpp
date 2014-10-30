@@ -16,7 +16,8 @@ namespace scheme {
     public:
         typedef std::shared_ptr<Para> ParaPtr;
         typedef std::vector<ParaPtr> ParaSet;
-        enum SelectedType{NONE, SINGLE, MULTIPLE};
+        enum class SelectedType{INCOMPLETE, SINGLE, MULTIPLE};
+        //!<for leaf para, INCOMPLETE means not selected
     public:
         Para(); //!<provide default value for members
         Para(Para&& para);
@@ -25,7 +26,7 @@ namespace scheme {
                       const QString& val = "",
                       const ParaSet& andParas = ParaSet(),
                       const ParaSet& orParas = ParaSet(),
-                      const SelectedType& selectedType = NONE);
+                      const SelectedType& selectedType = SelectedType::INCOMPLETE);
 
         friend QDebug operator<<(QDebug dbg, const Para &para) {
             dbg << "{\n";
@@ -57,6 +58,9 @@ namespace scheme {
         const QString& getKey() const{return mKey;}
         const QString& getVal() const{return mVal;}
 
+        SelectedType getSelectedType() const{return mSelectedType;}
+        void setSelectedType(SelectedType type) {mSelectedType = type;}
+
         void read(const QJsonObject &json);
         void write(QJsonObject &json) const;
 
@@ -72,4 +76,7 @@ namespace scheme {
         SelectedType mSelectedType;//!<select status for UI
     };
 }
+
+QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type);
+
 #endif // PARA_HPP
