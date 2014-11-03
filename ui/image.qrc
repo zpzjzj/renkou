@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/gif">
+    <qresource prefix="/">
         <file>image/lampGrey.gif</file>
         <file>image/lampMulti.gif</file>
         <file>image/lampYellow.gif</file>

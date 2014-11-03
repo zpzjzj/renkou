@@ -1,14 +1,27 @@
 #include "UiGenerator.hpp"
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QFile>
+#include <QIcon>
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <map>
 #include <numeric>
 #include <utility>
 
+const QString ICON_PATH = ":/image/";
+const QString ICOMPLETE_ICON_NAME = "lampGrey.gif";
+const QString COMPLETE_ICON_NAME = "lampYellow.gif";
+const QString MULTIPLE_SELECTED_ICON_NAME = "lampMulti.gif";
+
 UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
-    mPanel(panel), mParasManager(ptr){
+    mPanel(panel), mParasManager(ptr), mIconMapOwner([](){
+        return SelectedTypeIconMap{
+            std::make_pair(scheme::Para::SelectedType::INCOMPLETE, new QIcon(ICON_PATH + ICOMPLETE_ICON_NAME)),
+            std::make_pair(scheme::Para::SelectedType::SINGLE, new QIcon(ICON_PATH + COMPLETE_ICON_NAME)),
+            std::make_pair(scheme::Para::SelectedType::MULTIPLE, new QIcon(ICON_PATH + MULTIPLE_SELECTED_ICON_NAME))
+        };
+    }){
     QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
                      this, SLOT(changeIcon(const scheme::Para*)));
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
@@ -56,6 +69,14 @@ QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, const sche
     return groupBoxPtr;
 }
 
+QListWidgetItem* UiGenerator::createListWidgetItem(const scheme::Para &para, QListWidget* parent) {
+    QIcon* icon = mIconMapOwner.getInstance()[para.getSelectedType()];
+    qDebug() << "icon:" << icon;
+    auto res = new QListWidgetItem(*icon, para.getName(), parent);
+    mListWidgetItemMap.insert(&para, res);
+    return res;
+}
+
 void UiGenerator::generateUi() {
     auto paraListWidgetPtr = mPanel->getParaListWidget();
     auto stackedViewPtr = mPanel->getStackedWidget();
@@ -64,15 +85,14 @@ void UiGenerator::generateUi() {
         const auto& para = *paraPtr;
         if(isCheckBoxGroup(para)) {
             stackedViewPtr->addWidget(createCheckBoxGroup(para, paraPtr.get(), mPanel.get()));
-            paraListWidgetPtr->addItem(para.getName());
+            paraListWidgetPtr->addItem(createListWidgetItem(para, paraListWidgetPtr));
         }
     }
 }
 
-//TODO
 void UiGenerator::changeIcon(const scheme::Para* changedPara) {
-    qDebug() << "para changed:" << changedPara->getKey();
-    qDebug() << "now state:" << changedPara->getSelectedType();
+    QListWidgetItem* item = mListWidgetItemMap[changedPara];
+    item->setIcon(*mIconMapOwner.getInstance()[changedPara->getSelectedType()]);
 }
 void UiGenerator::changeParasExclusive(const scheme::Para* multiPara) {
     qDebug() << "changeParasExclusive() slot" << "multipara" << multiPara;

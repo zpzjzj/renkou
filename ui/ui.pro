@@ -91,7 +91,8 @@ HEADERS  += \
     view/mainwindowrightwidget.h \
     ParasManager.hpp \
     UiGenerator.hpp \
-    SelDispCombo.hpp
+    SelDispCombo.hpp \
+    Singleton.hpp
 
 FORMS += \
     customMadeArea.ui \
