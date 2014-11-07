@@ -3,6 +3,7 @@
 #include <QCheckBox>
 #include <QFile>
 #include <QIcon>
+#include <QToolBox>
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <map>
@@ -43,17 +44,18 @@ namespace{
      */
     bool isCheckBoxGroup(const scheme::Para& para) {
         const auto &orParas = para.getOrParas();
-        return std::accumulate(orParas.begin(), orParas.end(), para.getAndParas().empty(), [](bool x, const scheme::Para::ParaPtr y){
+        return std::accumulate(orParas.begin(), orParas.end(),
+                               para.getAndParas().empty(), [](bool x, const scheme::Para::ParaPtr y){
             return x && isLeaf(*y);
         });
     }
 }
 
-QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, const scheme::Para* rootParaPtr, QWidget* parent) {
+QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, QWidget* parent) {
     QVBoxLayout* vbox = new QVBoxLayout(parent);
     auto buttonGroupPtr = new QButtonGroup(parent);
     buttonGroupPtr->setExclusive(false);
-    mButtonGroupMap.insert(rootParaPtr, buttonGroupPtr);
+    mButtonGroupMap.insert(&para, buttonGroupPtr);
     for(auto paraPtr : para.getOrParas()) {
         auto button = new QCheckBox(paraPtr->getName(), parent);
         auto ptr = paraPtr.get();
@@ -70,21 +72,65 @@ QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, const sche
 }
 
 QListWidgetItem* UiGenerator::createListWidgetItem(const scheme::Para &para, QListWidget* parent) {
-    QIcon* icon = mIconMapOwner.getInstance()[para.getSelectedType()];
-    qDebug() << "icon:" << icon;
+    auto icon = mIconMapOwner.getInstance()[para.getSelectedType()];
     auto res = new QListWidgetItem(*icon, para.getName(), parent);
     mListWidgetItemMap.insert(&para, res);
+    return res;
+}
+
+QWidget* UiGenerator::createSpecialParaWidget(const scheme::Para& para, QWidget* parent) {
+    QWidget* res = nullptr;
+    const auto& name = para.getName();
+    if(name == QObject::tr("方案选择")) {
+        //TODO
+        res = parent;
+    } else if(name == QObject::tr("基本参数选择")) {
+        //TODO
+        res = parent;
+    }
+    return res;
+}
+
+QToolBox* UiGenerator::createToolBox(
+        const scheme::Para& para,
+        QWidget* parent) {
+    QToolBox* res = new QToolBox();
+    auto buttonGroupPtr = new QButtonGroup(parent);
+    buttonGroupPtr->setExclusive(false);
+    mButtonGroupMap.insert(&para, buttonGroupPtr);
+    for(const auto& paraPtr : para.getOrParas()) {
+        QWidget* page = generateUi(*paraPtr, parent);
+        res->addItem(page, paraPtr->getName());
+        // add child buttons to button group
+        for(auto &btn : mButtonGroupMap[paraPtr.get()]->buttons()) {
+            buttonGroupPtr->addButton(btn);
+        }
+    }
+    return res;
+}
+
+QWidget* UiGenerator::generateUi(const scheme::Para& para, QWidget* parent) {
+    QWidget* res = nullptr;
+    if(isCheckBoxGroup(para)) {
+        res = createCheckBoxGroup(para, parent);
+    } else if(!para.getOrParas().empty()){
+        res = createToolBox(para, parent);
+    }
     return res;
 }
 
 void UiGenerator::generateUi() {
     auto paraListWidgetPtr = mPanel->getParaListWidget();
     auto stackedViewPtr = mPanel->getStackedWidget();
+    auto parent = mPanel.get();
 
     for(const auto& paraPtr : mParasManager->getParaSet()) {
         const auto& para = *paraPtr;
-        if(isCheckBoxGroup(para)) {
-            stackedViewPtr->addWidget(createCheckBoxGroup(para, paraPtr.get(), mPanel.get()));
+        QWidget* specialWidget = createSpecialParaWidget(para, parent);
+        if(specialWidget != nullptr) {
+
+        } else {
+            stackedViewPtr->addWidget(generateUi(para, parent));
             paraListWidgetPtr->addItem(createListWidgetItem(para, paraListWidgetPtr));
         }
     }
@@ -95,7 +141,6 @@ void UiGenerator::changeIcon(const scheme::Para* changedPara) {
     item->setIcon(*mIconMapOwner.getInstance()[changedPara->getSelectedType()]);
 }
 void UiGenerator::changeParasExclusive(const scheme::Para* multiPara) {
-    qDebug() << "changeParasExclusive() slot" << "multipara" << multiPara;
     static const scheme::Para* lastMultiPara = nullptr;
     for(const auto& paraPtr : mParasManager->getParaSet()) {
         if(paraPtr.get() != multiPara) {

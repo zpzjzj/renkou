@@ -9,6 +9,7 @@
 #include <QListWidgetItem>
 #include <QMap>
 #include <QMultiMap>
+#include <QToolBox>
 
 class UiGenerator : public QObject
 {
@@ -20,14 +21,17 @@ public:
     void generateUi();
 private:
     typedef QMap<const scheme::Para*, QListWidgetItem*> ListWidgetItemMap;
-    typedef QMap<scheme::Para::SelectedType, QIcon*> SelectedTypeIconMap;
-    typedef QMultiMap<const scheme::Para*, QButtonGroup*> ButtonGroupMap;
+    typedef QMap<scheme::Para::SelectedType, const QIcon*> SelectedTypeIconMap;
+    typedef QMap<const scheme::Para*, QButtonGroup*> ButtonGroupMap;
 private slots:
     void changeIcon(const scheme::Para* changedPara);
     void changeParasExclusive(const scheme::Para* multiPara);
 private:
-    QGroupBox* createCheckBoxGroup(const scheme::Para &para, const scheme::Para *rootParaPtr, QWidget* parent);
+    QWidget* generateUi(const scheme::Para& para, QWidget* parent);//<!dispatcher
+    QGroupBox* createCheckBoxGroup(const scheme::Para &para, QWidget* parent);
     QListWidgetItem* createListWidgetItem(const scheme::Para &para, QListWidget *parent);
+    QToolBox* createToolBox(const scheme::Para& para, QWidget* parent);
+    QWidget* createSpecialParaWidget(const scheme::Para& para, QWidget* parent);//<!generate special para's UI
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;
