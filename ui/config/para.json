@@ -1,0 +1,300 @@
+{
+  "paras": [
+    {
+      "name": "地区选择",
+      "key": "diqu",
+      "orParas": [
+        {
+          "name": "省份",
+          "orParas": [
+            {
+              "name": "citys"
+            }
+          ]
+        },
+        {
+          "name": "全国",
+          "orParas": [
+            {
+              "name": "全国（整体）"
+            },
+            {
+              "name": "全国（分省合计）"
+            }
+          ]
+        },
+        {
+          "name": "按地带三分法",
+          "orParas": [
+            {
+              "name": "东部（三分法）"
+            },
+            {
+              "name": "中部（三分法）"
+            },
+            {
+              "name": "西部（三分法）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "调整对象户籍选择",
+      "key": "huji",
+      "orParas": [
+        {
+          "name": "农业",
+          "val": "农业"
+        },
+        {
+          "name": "城镇",
+          "val": "城镇"
+        },
+        {
+          "name": "非农业",
+          "val": "非农"
+        },
+        {
+          "name": "农村",
+          "val": "农村"
+        },
+        {
+          "name": "合计",
+          "val": "合计"
+        }
+      ]
+    },
+    {
+      "name": "迁移强度选择",
+      "key": "qianyi",
+      "orParas": [
+        {
+          "name": "无迁移",
+          "val": "w"
+        },
+        {
+          "name": "低迁移",
+          "val": "d"
+        },
+        {
+          "name": "中迁移",
+          "val": "z"
+        },
+        {
+          "name": "高迁移",
+          "val": "g"
+        }
+      ]
+    },
+    {
+      "name": "堆积释放模式选择",
+      "key": "duiji",
+      "orParas": [
+        {
+          "name": "意愿模式",
+          "val": "意愿"
+        },
+        {
+          "name": "分释模式",
+          "val": "分释"
+        },
+        {
+          "name": "缓释模式",
+          "val": "缓释"
+        },
+        {
+          "name": "突释模式",
+          "val": "突释"
+        },
+        {
+          "name": "正常模式",
+          "val": "正常"
+        }
+      ]
+    },
+    {
+      "name": "政策实现程度估计法选择",
+      "key": "shixian",
+      "orParas": [
+        {
+          "name": "政策生育",
+          "val": "政策"
+        },
+        {
+          "name": "回归估计",
+          "val": "回归"
+        },
+        {
+          "name": "意愿生育",
+          "val": "意愿"
+        }
+      ]
+    },
+    {
+      "name": "方案选择",
+      "key": "koujinplusshiji",
+      "andParas": [
+        {
+          "name": "农业",
+          "val": "农",
+          "orParas": [
+            {
+              "name": "现行",
+              "val": "x"
+            },
+            {
+              "name": "一步走",
+              "andParas": [
+                {
+                  "name": "时机",
+                  "andParas": [
+                    {
+                      "orParas": [
+                        {
+                          "name": "单独",
+                          "val": "d"
+                        },
+                        {
+                          "name": "单独后",
+                          "val": "ddh"
+                        },
+                        {
+                          "name": "普二",
+                          "val": "p"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "unsigned"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "两步走",
+              "andParas": [
+                {
+                  "name": "时机 第一次",
+                  "andParas": [
+                    {
+                      "orParas": [
+                        {
+                          "name": "单独",
+                          "val": "d"
+                        },
+                        {
+                          "name": "单独后",
+                          "val": "ddh"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "unsigned"
+                    }
+                  ]
+                },
+                {
+                  "name": "时机 第二次",
+                  "andParas": [
+                    {
+                      "orParas": [
+                        {
+                          "name": "普二",
+                          "val": "p"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "unsigned"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "非农业",
+          "orParas": [
+            {
+              "name": "现行",
+              "val": "x"
+            },
+            {
+              "name": "一步走",
+              "andParas": [
+                {
+                  "name": "时机",
+                  "andParas": [
+                    {
+                      "orParas": [
+                        {
+                          "name": "单独",
+                          "val": "d"
+                        },
+                        {
+                          "name": "单独后",
+                          "val": "ddh"
+                        },
+                        {
+                          "name": "普二",
+                          "val": "p"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "unsigned"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "两步走",
+              "andParas": [
+                {
+                  "name": "时机 第一次",
+                  "andParas": [
+                    {
+                      "orParas": [
+                        {
+                          "name": "单独",
+                          "val": "d"
+                        },
+                        {
+                          "name": "单独后",
+                          "val": "ddh"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "unsigned"
+                    }
+                  ]
+                },
+                {
+                  "name": "时机 第二次",
+                  "andParas": [
+                    {
+                      "name": "unsigned"
+                    },
+                    {
+                      "orParas": [
+                        {
+                          "name": "普二",
+                          "val": "p"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

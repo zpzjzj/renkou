@@ -3,4 +3,7 @@
         <file>config/area.json</file>
         <file>config/param.json</file>
     </qresource>
+    <qresource prefix="/display">
+        <file>config/para.json</file>
+    </qresource>
 </RCC>

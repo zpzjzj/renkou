@@ -19,7 +19,12 @@ class metadataItem
 public:
     enum TYPE {NONE, STRING, INT, DOUBLE};
 
-    metadataItem(QString,QString,int,int,int,QString);
+    metadataItem(QString fname = "",
+                 QString ftype = "",
+                 int flen = 0,
+                 int fdec = 0,
+                 int findex = 0,
+                 QString findicator = "");
     //字段名 类型 长度 小数 指标index 指标描述 起始年份 结束年份
     inline QString getfield_name() const {return field_name;}
     inline TYPE getfield_type() 	const {return field_type;}

@@ -10,7 +10,6 @@
 #include <QStringList>
 #include <QDebug>
 #include <QTextCodec>
-#include <windows.h>
 #include <utility> // std::swap
 // #define _DEBUG_
 #ifdef _DEBUG_
@@ -265,7 +264,7 @@ bool SchemeBuffer::Buffer::setData(const QString& name, schememetadataPtr meta) 
     }
     QTextStream in(&fs);
     // csv (comma sep)
-    for (unsigned i = 0; i < meta->rowCount(); ++i) {
+    for (size_t i = 0; i < meta->rowCount(); ++i) {
         processLine(in, buffer+i*meta->rowSize(), meta, i);
     }
     fs.close();

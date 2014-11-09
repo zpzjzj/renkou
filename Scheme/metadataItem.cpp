@@ -1,13 +1,8 @@
 #include "metadataItem.h"
 #include "schemeDef.hpp"
 #include <string>
-metadataItem::metadataItem(QString fname = "",
-            QString ftype = "",
-            int flen = 0,
-            int fdec = 0,
-            int findex = 0,
-            QString findicator = ""
-            )
+metadataItem::metadataItem(QString fname, QString ftype, int flen,
+            int fdec, int findex, QString findicator)
         :field_name(fname),
             field_dec(fdec),
         index(findex)

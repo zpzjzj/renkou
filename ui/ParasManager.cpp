@@ -1,4 +1,5 @@
 #include "ParasManager.hpp"
+#include <numeric>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -6,7 +7,7 @@
 #include <QDebug>
 #include <utility>
 
-const QString ParasManager::PARA_PATH = "E:\\lab\\mine\\para.json";
+const QString ParasManager::PARA_PATH = ":/display/config/para.json";
 
 ParasManager::ParasManager() : mMultiSelPara(nullptr)
 {
