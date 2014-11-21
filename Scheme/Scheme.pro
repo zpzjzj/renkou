@@ -1,7 +1,7 @@
 CONFIG += staticlib
 TEMPLATE  = lib
 TARGET = Scheme
-QMAKE_CXXFLAGS += "-std=c++0x -Wall -O0"
+QMAKE_CXXFLAGS += "-arch x86_64 -x c++ -std=c++1y -stdlib=libc++ -Wall -O0"
 QT += core
 DESTDIR = ..\lib
 
@@ -39,6 +39,5 @@ SOURCES += \
     paraholder.cpp \
     metadataItem.cpp \
     ConfigMan.cpp \
-    AbstractScheme.cpp \
     transfromPara.cpp \
     Para.cpp

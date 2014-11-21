@@ -1,0 +1,163 @@
+{
+  "andParas": [
+    {
+      "name": "农业",
+      "val": "农",
+      "orParas": [
+        {
+          "name": "现行",
+          "val": "x"
+        },
+        {
+          "name": "一步走",
+          "andParas": [
+            {
+              "name": "时机",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "单独",
+                      "val": "d"
+                    },
+                    {
+                      "name": "单独后",
+                      "val": "ddh"
+                    },
+                    {
+                      "name": "普二",
+                      "val": "p"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "两步走",
+          "andParas": [
+            {
+              "name": "时机 第一次",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "单独",
+                      "val": "d"
+                    },
+                    {
+                      "name": "单独后",
+                      "val": "ddh"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            },
+            {
+              "name": "时机 第二次",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "普二",
+                      "val": "p"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "非农业",
+      "orParas": [
+        {
+          "name": "现行",
+          "val": "x"
+        },
+        {
+          "name": "一步走",
+          "andParas": [
+            {
+              "name": "时机",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "单独",
+                      "val": "d"
+                    },
+                    {
+                      "name": "单独后",
+                      "val": "ddh"
+                    },
+                    {
+                      "name": "普二",
+                      "val": "p"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "两步走",
+          "andParas": [
+            {
+              "name": "时机 第一次",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "单独",
+                      "val": "d"
+                    },
+                    {
+                      "name": "单独后",
+                      "val": "ddh"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            },
+            {
+              "name": "时机 第二次",
+              "andParas": [
+                {
+                  "orParas": [
+                    {
+                      "name": "普二",
+                      "val": "p"
+                    }
+                  ]
+                },
+                {
+                  "name": "unsigned"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

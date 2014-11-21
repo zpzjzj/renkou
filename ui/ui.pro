@@ -50,7 +50,9 @@ SOURCES += main.cpp \
     view/mainwindowrightwidget.cpp \
     ParasManager.cpp \
     UiGenerator.cpp \
-    SelDispCombo.cpp
+    SelDispCombo.cpp \
+    SchemeSel.cpp \
+    Scheme.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -92,7 +94,10 @@ HEADERS  += \
     ParasManager.hpp \
     UiGenerator.hpp \
     SelDispCombo.hpp \
-    Singleton.hpp
+    Singleton.hpp \
+    SchemeSel.hpp \
+    Scheme.hpp \
+    Select.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -118,7 +123,8 @@ FORMS += \
     ui_wizard/newprojectionwizardpage.ui \
     ui_wizard/selectwizardpage.ui \
     openProject.ui \
-    SelDispCombo.ui
+    SelDispCombo.ui \
+    SchemeSel.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \
@@ -135,6 +141,6 @@ RESOURCES += \
     image.qrc
 
 INCLUDEPATH += E:\code\renkou\Scheme
-LIBS += -LE:\code\renkou\lib -lScheme
+LIBS += -L../lib -lScheme
 DEPENDPATH += ..\Scheme
 PRE_TARGETDEPS += ..\lib\libscheme.a

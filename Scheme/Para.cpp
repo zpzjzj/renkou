@@ -46,12 +46,26 @@ scheme::Para::Para(Para&& para) :
     mVal(std::move(para.mVal)),
     mAndParas(std::move(mAndParas)),
     mOrParas(std::move(mOrParas)),
-    mSelectedType(para.mSelectedType){}
+    mSelectedType(para.mSelectedType) {}
 
 namespace{
 void addPara(const scheme::Para::ParaPtr& para, scheme::Para::ParaSet& paraSet){
     paraSet.push_back(para);
 }
+
+scheme::Para::ParaSet clone(scheme::Para::ParaSet set) {
+    scheme::Para::ParaSet res(set.size());
+    std::transform(set.begin(), set.end(), res.begin(), [](scheme::Para::ParaPtr ptr){
+        return std::make_shared<scheme::Para>(*ptr);
+    });
+    return res;
+}
+}
+
+scheme::Para::Para(const Para &para)
+    :mName(para.mName), mKey(para.mKey), mVal(para.mVal), mSelectedType(para.mSelectedType){
+    mAndParas = clone(para.mAndParas);
+    mOrParas = clone(para.mOrParas);
 }
 
 void scheme::Para::addAndPara(const scheme::Para::ParaPtr& para) {

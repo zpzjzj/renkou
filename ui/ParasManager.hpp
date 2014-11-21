@@ -13,6 +13,7 @@ public:
     const scheme::Para::ParaSet& getParaSet() const {return mParaSet;}
     const scheme::Para* getMultiSelPara() const {return mMultiSelPara;}
     void setVal(bool val, scheme::Para* dest);
+    scheme::Para* addOrPara(scheme::Para* para, const scheme::Para& orPara);
 signals:
     void paraStateChanged(const scheme::Para*);
     void multiParaChanged(const scheme::Para*);

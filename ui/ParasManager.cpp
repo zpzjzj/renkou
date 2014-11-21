@@ -98,6 +98,14 @@ namespace {
     }
 }
 
+scheme::Para* ParasManager::addOrPara(scheme::Para* para, const scheme::Para& orPara) {
+    auto schemePtr = std::make_shared<scheme::Para>(orPara);
+    para->addOrPara(schemePtr);
+    auto ptr = schemePtr.get();
+    mParentMap.insert(ptr, para);
+    return ptr;
+}
+
 void ParasManager::setVal(bool val, scheme::Para* dest) {
     bool isSelectionTypeChanged = setValue(val, *dest);
     auto nextIter = mParentMap.find(dest);

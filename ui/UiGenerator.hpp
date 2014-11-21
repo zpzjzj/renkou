@@ -2,6 +2,7 @@
 #define UIGENERATOR_HPP
 #include "ParasManager.hpp"
 #include "SelDispCombo.hpp"
+#include "SchemeSel.hpp"
 #include "Singleton.hpp"
 #include <memory>
 #include <QButtonGroup>
@@ -31,7 +32,8 @@ private:
     QGroupBox* createCheckBoxGroup(const scheme::Para &para, QWidget* parent);
     QListWidgetItem* createListWidgetItem(const scheme::Para &para, QListWidget *parent);
     QToolBox* createToolBox(const scheme::Para& para, QWidget* parent);
-    QWidget* createSpecialParaWidget(const scheme::Para& para, QWidget* parent);//<!generate special para's UI
+    QWidget* createSpecialParaWidget(scheme::Para &para, QWidget* parent);//<!generate special para's UI
+    SchemeSel* createSchemeSelWidget(scheme::Para &para, QWidget* parent);
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;

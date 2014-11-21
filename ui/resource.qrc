@@ -4,6 +4,7 @@
         <file>config/param.json</file>
     </qresource>
     <qresource prefix="/display">
+        <file>config/scheme.json</file>
         <file>config/para.json</file>
     </qresource>
 </RCC>

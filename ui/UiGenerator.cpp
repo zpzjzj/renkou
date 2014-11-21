@@ -1,3 +1,5 @@
+#include "SchemeSel.hpp"
+#include "Select.hpp"
 #include "UiGenerator.hpp"
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -60,7 +62,7 @@ QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, QWidget* p
         auto button = new QCheckBox(paraPtr->getName(), parent);
         auto ptr = paraPtr.get();
         QObject::connect(button, &QCheckBox::stateChanged, [this, ptr](bool val){
-            this->mParasManager->setVal(val, ptr);
+            mParasManager->setVal(val, ptr);
         });
         buttonGroupPtr->addButton(button);
         vbox->addWidget(button);
@@ -78,15 +80,32 @@ QListWidgetItem* UiGenerator::createListWidgetItem(const scheme::Para &para, QLi
     return res;
 }
 
-QWidget* UiGenerator::createSpecialParaWidget(const scheme::Para& para, QWidget* parent) {
+SchemeSel* UiGenerator::createSchemeSelWidget(scheme::Para& para, QWidget* parent) {
+    auto schemeSel = new SchemeSel(parent);
+    schemeSel->build();
+    auto buttonGroupPtr = new QButtonGroup(parent);
+    buttonGroupPtr->setExclusive(false);
+    mButtonGroupMap.insert(&para, buttonGroupPtr);
+
+    QObject::connect(schemeSel, Select<const scheme::Para&,
+                     SchemeSel::SchemeWidgetPtr>::overload_of(&SchemeSel::addScheme),
+                     [this, &para, buttonGroupPtr](const scheme::Para& scheme, SchemeSel::SchemeWidgetPtr btnPtr){
+                        auto ptr = mParasManager->addOrPara(&para, scheme);
+                        buttonGroupPtr->addButton(btnPtr);
+                        QObject::connect(btnPtr, &QCheckBox::stateChanged, [this, ptr](bool val){
+                            mParasManager->setVal(val, ptr);
+                        });
+    });
+    return schemeSel;
+}
+
+QWidget* UiGenerator::createSpecialParaWidget(scheme::Para& para, QWidget* parent) {
     QWidget* res = nullptr;
     const auto& name = para.getName();
     if(name == QObject::tr("方案选择")) {
-        //TODO
-        res = parent;
+        res = createSchemeSelWidget(para, parent);
     } else if(name == QObject::tr("基本参数选择")) {
-        //TODO
-        res = parent;
+        res = new SchemeSel(parent);
     }
     return res;
 }
@@ -124,15 +143,15 @@ void UiGenerator::generateUi() {
     auto stackedViewPtr = mPanel->getStackedWidget();
     auto parent = mPanel.get();
 
-    for(const auto& paraPtr : mParasManager->getParaSet()) {
-        const auto& para = *paraPtr;
+    for(auto& paraPtr : mParasManager->getParaSet()) {
+        auto& para = *paraPtr;
         QWidget* specialWidget = createSpecialParaWidget(para, parent);
         if(specialWidget != nullptr) {
-
+            stackedViewPtr->addWidget(specialWidget);
         } else {
             stackedViewPtr->addWidget(generateUi(para, parent));
-            paraListWidgetPtr->addItem(createListWidgetItem(para, paraListWidgetPtr));
         }
+        paraListWidgetPtr->addItem(createListWidgetItem(para, paraListWidgetPtr));
     }
 }
 

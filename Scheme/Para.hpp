@@ -21,6 +21,7 @@ namespace scheme {
     public:
         Para(); //!<provide default value for members
         Para(Para&& para);
+        Para(const Para& para);
         explicit Para(const QString& name,
                       const QString& key = "",
                       const QString& val = "",
