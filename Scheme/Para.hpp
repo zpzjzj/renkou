@@ -1,6 +1,6 @@
 #ifndef PARA_HPP
 #define PARA_HPP
-
+#include "Singleton.hpp"
 #include <vector>
 #include <memory>
 #include <QString>
@@ -16,6 +16,7 @@ namespace scheme {
     public:
         typedef std::shared_ptr<Para> ParaPtr;
         typedef std::vector<ParaPtr> ParaSet;
+        typedef QMap<QString, ParaSet> ParaMap;
         enum class SelectedType{INCOMPLETE, SINGLE, MULTIPLE};
         //!<for leaf para, INCOMPLETE means not selected
     public:
@@ -62,12 +63,13 @@ namespace scheme {
         SelectedType getSelectedType() const{return mSelectedType;}
         void setSelectedType(SelectedType type) {mSelectedType = type;}
 
-        void read(const QJsonObject &json);
+        void read(const QJsonObject &json, bool hasAlias = false);
         void write(QJsonObject &json) const;
 
-        static ParaSet readParas(const QJsonArray &jsonArray);
+        static ParaSet readParas(const QJsonArray &jsonArray, bool hasAlias = false);
         static QJsonArray writeParas(const ParaSet &paraSet);
 
+        static const ParaMap& getParaMap();//!<factory function for unique map
     private:
         QString mName;//!<field displayed on UI
         QString mKey;

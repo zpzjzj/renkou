@@ -1,3 +1,4 @@
+#include "jsonUtil.hpp"
 #include "Para.hpp"
 #include <QJsonObject>
 #include <QJsonArray>
@@ -26,10 +27,33 @@ QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
     return out;
 }
 
+inline void initResource() {
+    Q_INIT_RESOURCE(config);
+}
+
+namespace {
+    const QString SPECIAL_PARA_PATH = ":/json/config/special_paras.json";
+    scheme::Para::ParaMap buildParaMap() {
+        initResource();
+        scheme::Para::ParaMap res;
+        QJsonArray jsonArray = jsonUtil::readFile(SPECIAL_PARA_PATH).array();
+        for(const auto& objectJson : jsonArray) {
+            QJsonObject object = objectJson.toObject();
+            res.insert(object["key"].toString(), scheme::Para::readParas(object["val"].toArray()));
+            qDebug() << "buildParaMap()" << object["key"].toString();
+        }
+        return res;
+    }
+}
+
+const scheme::Para::ParaMap& scheme::Para::getParaMap() {
+    static const scheme::Para::ParaMap paraMap = buildParaMap();
+    return paraMap;
+}
+
 scheme::Para::Para():mName(""), mKey(""), mVal(""),
     mAndParas(Para::ParaSet()), mOrParas(Para::ParaSet()),
     mSelectedType(SelectedType::INCOMPLETE){
-
 }
 
 scheme::Para::Para(const QString& name,
@@ -83,12 +107,12 @@ void scheme::Para::rmOrPara(const QString& name) {
     );
 }
 
-void scheme::Para::read(const QJsonObject &json) {
+void scheme::Para::read(const QJsonObject &json, bool hasAlias) {
     mName = json["name"].toString();
     mKey = json["key"].toString();
     mVal = json["val"].toString();
-    mAndParas = readParas(json["andParas"].toArray());
-    mOrParas = readParas(json["orParas"].toArray());
+    mAndParas = readParas(json["andParas"].toArray(), hasAlias);
+    mOrParas = readParas(json["orParas"].toArray(), hasAlias);
 }
 
 void scheme::Para::write(QJsonObject &json) const {
@@ -123,13 +147,18 @@ scheme::Para::ParaSet &scheme::Para::getOrParas() {
     return mOrParas;
 }
 
-scheme::Para::ParaSet scheme::Para::readParas(const QJsonArray &jsonArray) {
+scheme::Para::ParaSet scheme::Para::readParas(const QJsonArray &jsonArray, bool hasAlias) {
     ParaSet res;
     for (const auto& paraJson : jsonArray) {
         QJsonObject paraObject = paraJson.toObject();
         ParaPtr paraPtr(new Para());
-        paraPtr->read(paraObject);
-        res.push_back(paraPtr);
+        paraPtr->read(paraObject, hasAlias);
+        if(hasAlias && getParaMap().contains(paraPtr->getName())) {
+            qDebug() << "scheme::Para::readParas" << "hasAlias" << paraPtr->getName();
+            auto &paras = getParaMap()[paraPtr->getName()];
+            res.insert(res.end(), paras.begin(), paras.end());
+        } else
+            res.push_back(paraPtr);
     }
     return res;
 }

@@ -74,10 +74,10 @@ void SchemeSel::build() {
     buildScheme();
     bind();
     QObject::connect(ui->mAddSchemeButton, SIGNAL(clicked()), this, SLOT(addScheme()));
+    QObject::connect(ui->mSyncButton, SIGNAL(clicked()), this, SLOT(synchronizeScheme()));
 }
 
 void SchemeSel::addScheme() {
-    qDebug() << "SchemeSel::addScheme()";
     QString val = toString(mCurrScheme);
     if(std::none_of(mSchemeList.begin(), mSchemeList.end(),
                    [val](QCheckBox* ptr){
@@ -90,7 +90,6 @@ void SchemeSel::addScheme() {
 }
 
 void SchemeSel::read() {
-    qDebug() << "SchemeSel::read()";
     QFile file(SCHEME_PATH);
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open para file");
@@ -137,4 +136,9 @@ void SchemeSel::bind() {
             mNonAgriScheme.bind(paraPtr.get(), this);
         }
     }
+}
+
+void SchemeSel::synchronizeScheme() {
+    qDebug() << "SchemeSel::synchronizeScheme()";
+    mNonAgriScheme.setVal(mAgriScheme);
 }

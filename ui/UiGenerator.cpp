@@ -1,3 +1,4 @@
+#include "paraUtil.hpp"
 #include "SchemeSel.hpp"
 #include "Select.hpp"
 #include "UiGenerator.hpp"
@@ -42,7 +43,7 @@ namespace{
      *          check if para's children are all leaves;
      *
      * @param paraPtr
-     * @return
+     * @return isCheckBoxGroup
      */
     bool isCheckBoxGroup(const scheme::Para& para) {
         const auto &orParas = para.getOrParas();
@@ -53,8 +54,8 @@ namespace{
     }
 }
 
-QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, QWidget* parent) {
-    QVBoxLayout* vbox = new QVBoxLayout(parent);
+QGroupBox* UiGenerator::createCheckBoxGroup(scheme::Para &para, QWidget* parent) {
+    QGridLayout* gridLayout = new QGridLayout(parent);
     auto buttonGroupPtr = new QButtonGroup(parent);
     buttonGroupPtr->setExclusive(false);
     mButtonGroupMap.insert(&para, buttonGroupPtr);
@@ -65,15 +66,27 @@ QGroupBox* UiGenerator::createCheckBoxGroup(const scheme::Para& para, QWidget* p
             mParasManager->setVal(val, ptr);
         });
         buttonGroupPtr->addButton(button);
-        vbox->addWidget(button);
+        int row = gridLayout->rowCount();
+        int col = 0;
+        gridLayout->addWidget(button, row, col++);
+        if(!paraPtr->getOrParas().empty()) {
+            auto comboBox = createComboBox(*paraPtr, parent);
+            QObject::connect(button, &QCheckBox::toggled, comboBox, &QComboBox::setEnabled);
+            gridLayout->addWidget(comboBox, row, col);
+        }
     }
-    vbox->addStretch();
-    auto groupBoxPtr = new QGroupBox(para.getName(), parent);
-    groupBoxPtr->setLayout(vbox);
+    auto groupBoxPtr = new QGroupBox(parent);
+    groupBoxPtr->setLayout(gridLayout);
     return groupBoxPtr;
 }
 
-QListWidgetItem* UiGenerator::createListWidgetItem(const scheme::Para &para, QListWidget* parent) {
+QComboBox* UiGenerator::createComboBox(scheme::Para &para, QWidget* parent) {
+    auto comboBox = new QComboBox(parent);
+    util::buildComboBox(comboBox, para);
+    return comboBox;
+}
+
+QListWidgetItem* UiGenerator::createListWidgetItem(scheme::Para &para, QListWidget* parent) {
     auto icon = mIconMapOwner.getInstance()[para.getSelectedType()];
     auto res = new QListWidgetItem(*icon, para.getName(), parent);
     mListWidgetItemMap.insert(&para, res);
@@ -87,7 +100,7 @@ SchemeSel* UiGenerator::createSchemeSelWidget(scheme::Para& para, QWidget* paren
     buttonGroupPtr->setExclusive(false);
     mButtonGroupMap.insert(&para, buttonGroupPtr);
 
-    QObject::connect(schemeSel, Select<const scheme::Para&,
+    QObject::connect(schemeSel, util::Select<const scheme::Para&,
                      SchemeSel::SchemeWidgetPtr>::overload_of(&SchemeSel::addScheme),
                      [this, &para, buttonGroupPtr](const scheme::Para& scheme, SchemeSel::SchemeWidgetPtr btnPtr){
                         auto ptr = mParasManager->addOrPara(&para, scheme);
@@ -105,13 +118,15 @@ QWidget* UiGenerator::createSpecialParaWidget(scheme::Para& para, QWidget* paren
     if(name == QObject::tr("方案选择")) {
         res = createSchemeSelWidget(para, parent);
     } else if(name == QObject::tr("基本参数选择")) {
-        res = new SchemeSel(parent);
+        res = createTabWidget(para, parent, [this](scheme::Para &para, QWidget *parent){
+            return createCheckBoxGroup(para, parent);
+        });
     }
     return res;
 }
 
 QToolBox* UiGenerator::createToolBox(
-        const scheme::Para& para,
+        scheme::Para& para,
         QWidget* parent) {
     QToolBox* res = new QToolBox();
     auto buttonGroupPtr = new QButtonGroup(parent);
@@ -128,12 +143,32 @@ QToolBox* UiGenerator::createToolBox(
     return res;
 }
 
-QWidget* UiGenerator::generateUi(const scheme::Para& para, QWidget* parent) {
+QTabWidget* UiGenerator::createTabWidget(
+        scheme::Para& para,
+        QWidget* parent,
+        GenerateFunc func) {
+    QTabWidget* res = new QTabWidget(parent);
+    for(const auto& paraPtr : para.getAndParas()) {
+        QWidget* page = func(*paraPtr, parent);
+        res->addTab(page, paraPtr->getName());
+    }
+    return res;
+}
+
+QTabWidget* UiGenerator::createTabWidget(scheme::Para &para, QWidget *parent) {
+    return createTabWidget(para, parent, [this](scheme::Para &para, QWidget *parent){
+        return generateUi(para, parent);
+    });
+}
+
+QWidget* UiGenerator::generateUi(scheme::Para& para, QWidget* parent) {
     QWidget* res = nullptr;
     if(isCheckBoxGroup(para)) {
         res = createCheckBoxGroup(para, parent);
-    } else if(!para.getOrParas().empty()){
+    } else if(!para.getOrParas().empty()) {
         res = createToolBox(para, parent);
+    } else if(!para.getAndParas().empty()) {
+        res = createTabWidget(para, parent);
     }
     return res;
 }
@@ -172,7 +207,6 @@ void UiGenerator::changeParasExclusive(const scheme::Para* multiPara) {
                   */
                 groupBox->setExclusive(multiPara != nullptr);
             }
-
         }
     }
     changeIcon(lastMultiPara != nullptr ? lastMultiPara : multiPara);

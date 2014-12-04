@@ -7,7 +7,7 @@
 QMAKE_CXXFLAGS += -std=c++0x
 
 QT       += core gui xml
-CONFIG += c++11
+CONFIG += c++14
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -52,7 +52,8 @@ SOURCES += main.cpp \
     UiGenerator.cpp \
     SelDispCombo.cpp \
     SchemeSel.cpp \
-    Scheme.cpp
+    Scheme.cpp \
+    paraUtil.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -97,7 +98,9 @@ HEADERS  += \
     Singleton.hpp \
     SchemeSel.hpp \
     Scheme.hpp \
-    Select.hpp
+    Select.hpp \
+    iterate.hpp \
+    paraUtil.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -140,7 +143,8 @@ RESOURCES += \
     resource.qrc \
     image.qrc
 
-INCLUDEPATH += E:\code\renkou\Scheme
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib
 LIBS += -L../lib -lScheme
 DEPENDPATH += ..\Scheme
 PRE_TARGETDEPS += ..\lib\libscheme.a

@@ -1,3 +1,4 @@
+#include "../Scheme/jsonUtil.hpp"
 #include "ParasManager.hpp"
 #include <numeric>
 #include <QFile>
@@ -14,14 +15,8 @@ ParasManager::ParasManager() : mMultiSelPara(nullptr)
 }
 
 void ParasManager::read() {
-    QFile file(PARA_PATH);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open para file");
-        return;
-    }
-    QString val = file.readAll();
-    QJsonDocument doc(QJsonDocument::fromJson(val.toUtf8()));
-    mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray());
+    auto doc = jsonUtil::readFile(PARA_PATH);
+    mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray(), true);
     for(auto& paraPtr : mParaSet) {
         buildMap(*paraPtr);
     }
@@ -36,13 +31,11 @@ void ParasManager::buildMap(scheme::Para& para) {
     for(auto& paraPtr : para.getAndParas()) {
         buildMap(*paraPtr);
         mParentMap.insert(paraPtr.get(), &para);
-        qDebug() << "key" << paraPtr.get() << " value " << &para;
     }
 
     for(auto& paraPtr : para.getOrParas()) {
         buildMap(*paraPtr);
         mParentMap.insert(paraPtr.get(), &para);
-        qDebug() << "key" << paraPtr.get() << " value " << &para;
     }
 }
 
@@ -72,7 +65,8 @@ namespace {
     scheme::Para::SelectedType getSelectionType(scheme::Para& para) {
         using SelectedType = scheme::Para::SelectedType;
         const auto& orParas = para.getOrParas();
-        SelectedType orRes = std::accumulate(orParas.begin(), orParas.end(),
+        SelectedType orRes = orParas.empty() ? SelectedType::SINGLE :
+                std::accumulate(orParas.begin(), orParas.end(),
                                              SelectedType::INCOMPLETE,
                                              [](SelectedType x, const scheme::Para::ParaPtr yPtr) {
             auto y = yPtr->getSelectedType();
@@ -83,7 +77,8 @@ namespace {
             else
                 return x != SelectedType::INCOMPLETE ? SelectedType::MULTIPLE : SelectedType::SINGLE;
         });
-
+        qDebug() << "getSelectionType()" << para.getName();
+        qDebug() << "orRes" << orRes;
         const auto& andParas = para.getAndParas();
         return std::accumulate(andParas.begin(), andParas.end(), orRes, // all orParas can be view as 1 andPara
                                                [](SelectedType x, const scheme::Para::ParaPtr yPtr) {
@@ -114,7 +109,7 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
             nextIter = mParentMap.find(curr)) {
         curr = nextIter.value();
         isSelectionTypeChanged = setValue(getSelectionType(*curr), *curr);
-        qDebug() << "para key:" << curr->getKey();
+        qDebug() << "para" << curr->getName();
         qDebug() << "selectionTypeChanged:" << isSelectionTypeChanged;
         qDebug() << "type now:" << curr->getSelectedType();
     }

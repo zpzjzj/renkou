@@ -35,6 +35,8 @@ private:
      */
     void buildScheme();
     void bind();  //!<bind mCurrScheme to qWidget
+private slots:
+    void synchronizeScheme();
 private:
     Ui::SchemeSel *ui;
     scheme::Para mCurrScheme;

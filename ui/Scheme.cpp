@@ -1,3 +1,5 @@
+#include "iterate.hpp"
+#include "paraUtil.hpp"
 #include "Scheme.hpp"
 #include "Select.hpp"
 #include <algorithm>
@@ -5,28 +7,6 @@
 #include <QDate>
 #include <QObject>
 #include <string>
-
-namespace {
-    void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect = false) {
-        using SelectedType = scheme::Para::SelectedType;
-        scheme::Para::ParaSet& set = dest->getOrParas();
-        int selCnt = 0;
-        for(scheme::Para::ParaPtr& option : set) {
-            if(option.get() == selected) {
-                option->setSelectedType(SelectedType::SINGLE);
-                ++selCnt;
-            } else {
-                if(option->getSelectedType() != SelectedType::INCOMPLETE) {
-                    if(isMultiSelect)
-                        ++selCnt;
-                    else
-                        option->setSelectedType(SelectedType::INCOMPLETE);
-                }
-            }
-        }
-        dest->setSelectedType(selCnt > 1 ? SelectedType::MULTIPLE : SelectedType::SINGLE);
-    }
-}
 
 display::Policy::Policy(PolicyWidget policyWidgetPtr, TimeWidget timeWidgetPtr)
     : mPolicy(policyWidgetPtr), mTime(timeWidgetPtr){}
@@ -47,55 +27,58 @@ void display::Policy::bind(ParaPtr paraPtr) {
             mPolicyParaPtr = paraPtr.get();
     }
 
-    // add to comboBox list
-    for(auto paraPtr : mPolicyParaPtr->getOrParas()) {
-        mPolicy->addItem(paraPtr->getName());
-    }
+    util::buildComboBox(mPolicy, *mPolicyParaPtr);
 
-    auto func = [this](int index) {
-        selectPara(mPolicyParaPtr, (mPolicyParaPtr->getOrParas())[index].get());
-    };
-
-    QObject::connect(mPolicy, Select<int>::overload_of(&QComboBox::currentIndexChanged), func);
-    func(mPolicy->currentIndex());
-
-    QObject::connect(mTime, Select<int>::overload_of(&QSpinBox::valueChanged), [this](int val) {
+    QObject::connect(mTime, util::Select<int>::overload_of(&QSpinBox::valueChanged), [this](int val) {
         mTimeParaPtr->setVal(std::to_string(val).c_str());
     });
     mTime->setMaximum(MAX_YEAR);
     mTime->setValue(QDate::currentDate().year());
+    mPolicy->setEnabled(false);
+    mTime->setEnabled(false);
+}
+
+void display::Policy::setVal(const Policy &other) {
+    mPolicy->setCurrentIndex(other.mPolicy->currentIndex());
+    mTime->setValue(other.mTime->value());
 }
 
 display::SchemeOption::SchemeOption(OptionWidget optionWidgetPtr)
     : mOption(optionWidgetPtr){}
 
 void display::SchemeOption::bind(ParaPtr paraPtr) {
-    qDebug() << "display::SchemeOption::bind()" << "para name" << paraPtr->getName();
     mParaPtr = paraPtr;
-    qDebug() << "policy num" << mParaPtr->getAndParas().size() << "==" << mPolicies.size();
-    int index = 0;
-    for(auto paraPtr : mParaPtr->getAndParas()) {
-        qDebug() << "index in SchemeOption::bind" << index;
-        mPolicies.at(index).bind(paraPtr.get());
-        ++index;
-    }
+    util::iterate([this](scheme::Para::ParaPtr& paraPtr, display::Policy& policy){
+        policy.bind(paraPtr.get());
+        QObject::connect(mOption, &QRadioButton::toggled, policy.mPolicy, &QComboBox::setEnabled);
+        QObject::connect(mOption, &QRadioButton::toggled, policy.mTime, &QSpinBox::setEnabled);
+    }, mParaPtr->getAndParas(), mPolicies);
+}
+
+void display::SchemeOption::setVal(const SchemeOption &other) {
+    if(other.mOption->isChecked())
+        mOption->click();
+    util::iterate([](display::Policy& policy, const display::Policy& other) {
+        policy.setVal(other);
+    }, mPolicies, other.mPolicies);
+}
+
+void display::Scheme::setVal(const Scheme &other) {
+    util::iterate([](display::SchemeOption& option, const display::SchemeOption& other) {
+        option.setVal(other);
+    }, mOptions, other.mOptions);
 }
 
 void display::Scheme::bind(ParaPtr paraPtr, QWidget* parent) {
-    qDebug() << "display::Scheme::bind()" << "para name" << paraPtr->getName();
     mParaPtr = paraPtr;
     auto btnGroupPtr = new QButtonGroup(parent);
-    int index = 0;
-    for(auto paraPtr : mParaPtr->getOrParas()) {
-        qDebug() << "index in Scheme::bind()" << index;
-        auto &schemeOption = mOptions.at(index);
+    util::iterate([&btnGroupPtr, this](scheme::Para::ParaPtr& paraPtr, display::SchemeOption&schemeOption){
         schemeOption.bind(paraPtr.get());
         auto optionWidget = schemeOption.mOption;
         btnGroupPtr->addButton(optionWidget);
         QObject::connect(optionWidget, &QRadioButton::clicked, [this, paraPtr](int val) {
             if(val)
-                selectPara(mParaPtr, paraPtr.get());
+                util::selectPara(mParaPtr, paraPtr.get());
         });
-        ++index;
-    }
+    }, mParaPtr->getOrParas(), mOptions);
 }

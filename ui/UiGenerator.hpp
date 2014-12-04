@@ -4,12 +4,15 @@
 #include "SelDispCombo.hpp"
 #include "SchemeSel.hpp"
 #include "Singleton.hpp"
+#include <functional>
 #include <memory>
 #include <QButtonGroup>
+#include <QComboBox>
 #include <QGroupBox>
 #include <QListWidgetItem>
 #include <QMap>
 #include <QMultiMap>
+#include <QTabWidget>
 #include <QToolBox>
 
 class UiGenerator : public QObject
@@ -18,6 +21,7 @@ class UiGenerator : public QObject
 public:
     typedef std::unique_ptr<ParasManager> ParasManagerPtr;
     typedef std::shared_ptr<SelDispCombo> PanelPtr;
+    typedef std::function<QWidget* (scheme::Para& para, QWidget* parent)> GenerateFunc;
     UiGenerator(PanelPtr panel, ParasManager* ptr);
     void generateUi();
 private:
@@ -28,10 +32,14 @@ private slots:
     void changeIcon(const scheme::Para* changedPara);
     void changeParasExclusive(const scheme::Para* multiPara);
 private:
-    QWidget* generateUi(const scheme::Para& para, QWidget* parent);//<!dispatcher
-    QGroupBox* createCheckBoxGroup(const scheme::Para &para, QWidget* parent);
-    QListWidgetItem* createListWidgetItem(const scheme::Para &para, QListWidget *parent);
-    QToolBox* createToolBox(const scheme::Para& para, QWidget* parent);
+    QWidget* generateUi(scheme::Para &para, QWidget* parent);//<!dispatcher
+    QComboBox* createComboBox(scheme::Para &para, QWidget* parent);
+    QGroupBox* createCheckBoxGroup(scheme::Para &para, QWidget* parent);
+    QListWidgetItem* createListWidgetItem(scheme::Para &para, QListWidget *parent);
+    QToolBox* createToolBox(scheme::Para& para, QWidget* parent);
+    QTabWidget* createTabWidget(scheme::Para& para, QWidget* parent,
+            GenerateFunc func);
+    QTabWidget* createTabWidget(scheme::Para &para, QWidget *parent);
     QWidget* createSpecialParaWidget(scheme::Para &para, QWidget* parent);//<!generate special para's UI
     SchemeSel* createSchemeSelWidget(scheme::Para &para, QWidget* parent);
 private:

@@ -27,7 +27,9 @@ HEADERS += \
     exceptions/ExceptionNoParaName.hpp \
     exceptions/ColumnNotExist.hpp \
     transfromPara.hpp \
-    Para.hpp
+    Para.hpp \
+    Singleton.hpp \
+    jsonUtil.hpp
 
 SOURCES += \
     SchemeParameter.cpp \
@@ -40,4 +42,8 @@ SOURCES += \
     metadataItem.cpp \
     ConfigMan.cpp \
     transfromPara.cpp \
-    Para.cpp
+    Para.cpp \
+    jsonUtil.cpp
+
+RESOURCES += \
+    config.qrc

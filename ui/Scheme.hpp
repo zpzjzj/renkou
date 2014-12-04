@@ -18,6 +18,7 @@ public:
     Policy(PolicyWidget policyWidgetPtr, TimeWidget timeWidgetPtr);
     Policy(const Policy& policy);
     void bind(ParaPtr paraPtr);
+    void setVal(const Policy& other);
 public:
     PolicyWidget mPolicy;
     TimeWidget mTime;
@@ -34,6 +35,7 @@ public:
 public:
     SchemeOption(OptionWidget optionWidgetPtr);
     void bind(ParaPtr paraPtr);
+    void setVal(const SchemeOption& other);
 public:
     OptionWidget mOption;
     PolicySet mPolicies;
@@ -44,6 +46,7 @@ struct Scheme {
 public:
     typedef std::vector<SchemeOption> OptionSet;
     void bind(ParaPtr paraPtr, QWidget* parent);
+    void setVal(const Scheme& other);
 public:
     OptionSet mOptions;
     ParaPtr mParaPtr;
