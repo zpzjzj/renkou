@@ -9,21 +9,34 @@
  *
  */
 
-QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
-    using SelectedType = scheme::Para::SelectedType;
-    switch (type) {
-    case SelectedType::INCOMPLETE :
-        out << "incomplete";
-        break;
-    case SelectedType::SINGLE :
-        out << "single";
-        break;
-    case SelectedType::MULTIPLE :
-        out << "multiple";
-        break;
-    default:
-        break;
+namespace {
+    QString toString(const scheme::Para::SelectedType type) {
+        using SelectedType = scheme::Para::SelectedType;
+        switch (type) {
+        case SelectedType::INCOMPLETE :
+            return "incomplete";
+        case SelectedType::SINGLE :
+            return "single";
+        case SelectedType::MULTIPLE :
+            return "multiple";
+        default:
+            return "";
+        }
     }
+
+    scheme::Para::SelectedType toEnum(const QString& str) {
+        using SelectedType = scheme::Para::SelectedType;
+        if(str == "multiple")
+            return SelectedType::MULTIPLE;
+        else if(str == "single")
+            return SelectedType::SINGLE;
+        else
+            return SelectedType::INCOMPLETE;
+    }
+}
+
+QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
+    out << toString(type);
     return out;
 }
 
@@ -111,6 +124,10 @@ void scheme::Para::read(const QJsonObject &json, bool hasAlias) {
     mName = json["name"].toString();
     mKey = json["key"].toString();
     mVal = json["val"].toString();
+    auto iter = json.find("selectedType");
+    if(iter != json.end()) {
+        mSelectedType = toEnum((*iter).toString());
+    }
     mAndParas = readParas(json["andParas"].toArray(), hasAlias);
     mOrParas = readParas(json["orParas"].toArray(), hasAlias);
 }
@@ -119,6 +136,7 @@ void scheme::Para::write(QJsonObject &json) const {
     json["name"] = mName;
     json["key"] = mKey;
     json["val"] = mVal;
+    json["selectedType"] = toString(mSelectedType);
     json["andParas"] = writeParas(mAndParas);
     json["orParas"] = writeParas(mOrParas);
 }
@@ -154,7 +172,6 @@ scheme::Para::ParaSet scheme::Para::readParas(const QJsonArray &jsonArray, bool 
         ParaPtr paraPtr(new Para());
         paraPtr->read(paraObject, hasAlias);
         if(hasAlias && getParaMap().contains(paraPtr->getName())) {
-            qDebug() << "scheme::Para::readParas" << "hasAlias" << paraPtr->getName();
             auto &paras = getParaMap()[paraPtr->getName()];
             res.insert(res.end(), paras.begin(), paras.end());
         } else

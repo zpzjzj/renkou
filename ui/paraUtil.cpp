@@ -32,4 +32,16 @@ namespace util{
         QObject::connect(comboBox, Select<int>::overload_of(&QComboBox::currentIndexChanged), func);
         para.getOrParas()[comboBox->currentIndex()]->setSelectedType(scheme::Para::SelectedType::SINGLE);
     }
+
+    bool isSelected(scheme::Para::SelectedType type) {
+        return type != scheme::Para::SelectedType::INCOMPLETE;
+    }
+
+    bool isSelected(const scheme::Para& para) {
+        return isSelected(para.getSelectedType());
+    }
+
+    bool isMultiSelected(const scheme::Para& para) {
+        return para.getSelectedType() == scheme::Para::SelectedType::MULTIPLE;
+    }
 }

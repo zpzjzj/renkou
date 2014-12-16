@@ -17,6 +17,9 @@ public:
 signals:
     void paraStateChanged(const scheme::Para*);
     void multiParaChanged(const scheme::Para*);
+    void paraChanged(const scheme::Para*);
+public slots:
+    bool saveToFile(const QString fname = "/Users/zhaoping/default.json");
 private:
     typedef QMap<scheme::Para*, scheme::Para*> ParaMap;
 private:

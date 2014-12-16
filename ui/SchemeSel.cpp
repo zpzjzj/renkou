@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QObject>
 #include <QRadioButton>
+#include "paraUtil.hpp"
 
 const QString SCHEME_PATH = ":/display/config/scheme.json";
 
@@ -82,11 +83,20 @@ void SchemeSel::addScheme() {
     if(std::none_of(mSchemeList.begin(), mSchemeList.end(),
                    [val](QCheckBox* ptr){
                         return ptr->text() == val;})) {
-        auto checkBoxPtr = new QCheckBox(val, this);
-        mSchemeList.append(checkBoxPtr);
-        ui->mSchemeSetLayout->addWidget(checkBoxPtr);
-        emit addScheme(mCurrScheme, checkBoxPtr);
+        emit addScheme(mCurrScheme, createSchemeWidget(val));
     }
+}
+
+SchemeSel::SchemeWidgetPtr SchemeSel::createSchemeWidget(const scheme::Para &para) {
+    return createSchemeWidget(toString(para), util::isSelected(para));
+}
+
+SchemeSel::SchemeWidgetPtr SchemeSel::createSchemeWidget(const QString& text, bool isChecked) {
+    auto checkBoxPtr = new QCheckBox(text, this);
+    checkBoxPtr->setChecked(isChecked);
+    mSchemeList.append(checkBoxPtr);
+    ui->mSchemeSetLayout->addWidget(checkBoxPtr);
+    return checkBoxPtr;
 }
 
 void SchemeSel::read() {

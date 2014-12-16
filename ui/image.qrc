@@ -3,5 +3,6 @@
         <file>image/lampGrey.gif</file>
         <file>image/lampMulti.gif</file>
         <file>image/lampYellow.gif</file>
+        <file>image/single.gif</file>
     </qresource>
 </RCC>

@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QStackedWidget>
+#include <QPushButton>
 
 namespace Ui {
 class SelDispCombo;
@@ -20,6 +21,7 @@ public:
 
     QListWidget* getParaListWidget();
     QStackedWidget* getStackedWidget();
+    QPushButton* getSaveToFileBtn();
 
 private:
     Ui::SelDispCombo *ui;

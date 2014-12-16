@@ -23,6 +23,8 @@ public:
     ~SchemeSel();
     const scheme::Para& getScheme() {return mCurrScheme;}
     void build();
+public:
+    SchemeWidgetPtr createSchemeWidget(const scheme::Para &para);
 public slots:
     void addScheme();//!<check existance and emit signal
 signals:
@@ -35,6 +37,7 @@ private:
      */
     void buildScheme();
     void bind();  //!<bind mCurrScheme to qWidget
+    SchemeWidgetPtr createSchemeWidget(const QString& text, bool isChecked = false);
 private slots:
     void synchronizeScheme();
 private:

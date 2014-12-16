@@ -22,3 +22,7 @@ QListWidget* SelDispCombo::getParaListWidget() {
 QStackedWidget* SelDispCombo::getStackedWidget() {
     return ui->mStackedWidget;
 }
+
+QPushButton* SelDispCombo::getSaveToFileBtn() {
+    return ui->mSaveToFileBtn;
+}

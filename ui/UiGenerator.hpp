@@ -32,22 +32,23 @@ private slots:
     void changeIcon(const scheme::Para* changedPara);
     void changeParasExclusive(const scheme::Para* multiPara);
 private:
-    QWidget* generateUi(scheme::Para &para, QWidget* parent);//<!dispatcher
+    QWidget* generateUi(scheme::Para &para, QWidget* parent, QButtonGroup *btnGroupPtr = nullptr);//<!dispatcher
     QComboBox* createComboBox(scheme::Para &para, QWidget* parent);
-    QGroupBox* createCheckBoxGroup(scheme::Para &para, QWidget* parent);
+    QGroupBox* createCheckBoxGroup(scheme::Para &para, QWidget* parent, QButtonGroup *buttonGroupPtr = nullptr);
     QListWidgetItem* createListWidgetItem(scheme::Para &para, QListWidget *parent);
     QToolBox* createToolBox(scheme::Para& para, QWidget* parent);
-    QTabWidget* createTabWidget(scheme::Para& para, QWidget* parent,
-            GenerateFunc func);
+    QTabWidget* createTabWidget(scheme::Para& para, QWidget* parent, GenerateFunc func);
     QTabWidget* createTabWidget(scheme::Para &para, QWidget *parent);
     QWidget* createSpecialParaWidget(scheme::Para &para, QWidget* parent);//<!generate special para's UI
     SchemeSel* createSchemeSelWidget(scheme::Para &para, QWidget* parent);
+    QButtonGroup* createButtonGroup(scheme::Para &para, QWidget* parent, bool isExclusive = false);
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;
     ButtonGroupMap mButtonGroupMap;
     ListWidgetItemMap mListWidgetItemMap;
     Singleton<SelectedTypeIconMap> mIconMapOwner;
+    Singleton<QIcon> mInitIcon;
 };
 
 #endif // UIGENERATOR_HPP

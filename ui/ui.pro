@@ -53,7 +53,8 @@ SOURCES += main.cpp \
     SelDispCombo.cpp \
     SchemeSel.cpp \
     Scheme.cpp \
-    paraUtil.cpp
+    paraUtil.cpp \
+    SchemeListManager.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -100,7 +101,8 @@ HEADERS  += \
     Scheme.hpp \
     Select.hpp \
     iterate.hpp \
-    paraUtil.hpp
+    paraUtil.hpp \
+    SchemeListManager.hpp
 
 FORMS += \
     customMadeArea.ui \

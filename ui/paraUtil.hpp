@@ -23,6 +23,10 @@ namespace util {
      * @param isMultiSelect
      */
     void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect = false);
+
+    bool isSelected(scheme::Para::SelectedType type);
+    bool isSelected(const scheme::Para& para);
+    bool isMultiSelected(const scheme::Para& para);
 }
 
 #endif // PARAUTIL_HPP
