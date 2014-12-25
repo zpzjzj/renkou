@@ -29,33 +29,12 @@ UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     }), mInitIcon([](){
         return QIcon(ICON_PATH + INIT_ICON_NAME);
     }){
+    mSchemeListManager = new SchemeListManager(mParasManager.get(), panel->getSchemeListWidget(), panel.get());
     QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
                      this, SLOT(changeIcon(const scheme::Para*)));
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
                      this, SLOT(changeParasExclusive(const scheme::Para*)));
     QObject::connect(panel->getSaveToFileBtn(), SIGNAL(clicked()), mParasManager.get(), SLOT(saveToFile()));
-}
-
-namespace{
-
-    bool isLeaf(const scheme::Para& para) {
-        return para.getAndParas().empty() && para.getOrParas().empty();
-    }
-
-    /**
-     * @brief isCheckBoxGroup
-     *          check if para's children are all leaves;
-     *
-     * @param paraPtr
-     * @return isCheckBoxGroup
-     */
-    bool isCheckBoxGroup(const scheme::Para& para) {
-        const auto &orParas = para.getOrParas();
-        return std::accumulate(orParas.begin(), orParas.end(),
-                               para.getAndParas().empty(), [](bool x, const scheme::Para::ParaPtr y){
-            return x && isLeaf(*y);
-        });
-    }
 }
 
 QGroupBox* UiGenerator::createCheckBoxGroup(scheme::Para &para, QWidget* parent, QButtonGroup* buttonGroupPtr) {
@@ -74,7 +53,7 @@ QGroupBox* UiGenerator::createCheckBoxGroup(scheme::Para &para, QWidget* parent,
         int row = gridLayout->rowCount();
         int col = 0;
         gridLayout->addWidget(button, row, col++);
-        if(!paraPtr->getOrParas().empty()) {
+        if(util::hasComboBox(*paraPtr)) {
             auto comboBox = createComboBox(*paraPtr, parent);
             QObject::connect(button, &QCheckBox::toggled, comboBox, &QComboBox::setEnabled);
             gridLayout->addWidget(comboBox, row, col);
@@ -169,7 +148,7 @@ QTabWidget* UiGenerator::createTabWidget(scheme::Para &para, QWidget *parent) {
 
 QWidget* UiGenerator::generateUi(scheme::Para& para, QWidget* parent, QButtonGroup* btnGroupPtr) {
     QWidget* res = nullptr;
-    if(isCheckBoxGroup(para)) {
+    if(util::isCheckBoxGroup(para)) {
         res = createCheckBoxGroup(para, parent, btnGroupPtr);
     } else if(!para.getOrParas().empty()) {
         res = createToolBox(para, parent);

@@ -9,8 +9,8 @@
 #include <QDebug>
 #include <utility>
 
-//const QString ParasManager::PARA_PATH = ":/display/config/para.json";
-const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
+const QString ParasManager::PARA_PATH = ":/display/config/para.json";
+//const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
 
 ParasManager::ParasManager() : mMultiSelPara(nullptr)
 {

@@ -9,6 +9,7 @@ SelDispCombo::SelDispCombo(QWidget *parent) :
     QObject::connect(ui->mParaListWidget, SIGNAL(currentRowChanged(int)),
                      ui->mStackedWidget, SLOT(setCurrentIndex(int)));
     ui->mParaListWidget->setCurrentRow(0);
+    ui->mSelectedSchemeWidget->setMinimumHeight(80);
 }
 
 SelDispCombo::~SelDispCombo()
@@ -19,10 +20,15 @@ SelDispCombo::~SelDispCombo()
 QListWidget* SelDispCombo::getParaListWidget() {
     return ui->mParaListWidget;
 }
+
 QStackedWidget* SelDispCombo::getStackedWidget() {
     return ui->mStackedWidget;
 }
 
 QPushButton* SelDispCombo::getSaveToFileBtn() {
     return ui->mSaveToFileBtn;
+}
+
+QListWidget* SelDispCombo::getSchemeListWidget() {
+    return ui->mSelectedSchemeWidget;
 }

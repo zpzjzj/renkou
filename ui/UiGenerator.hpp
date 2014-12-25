@@ -1,8 +1,9 @@
 #ifndef UIGENERATOR_HPP
 #define UIGENERATOR_HPP
 #include "ParasManager.hpp"
-#include "SelDispCombo.hpp"
+#include "SchemeListManager.hpp"
 #include "SchemeSel.hpp"
+#include "SelDispCombo.hpp"
 #include "Singleton.hpp"
 #include <functional>
 #include <memory>
@@ -45,6 +46,7 @@ private:
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;
+    SchemeListManager* mSchemeListManager;
     ButtonGroupMap mButtonGroupMap;
     ListWidgetItemMap mListWidgetItemMap;
     Singleton<SelectedTypeIconMap> mIconMapOwner;

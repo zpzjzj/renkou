@@ -25,6 +25,7 @@ public:
     void build();
 public:
     SchemeWidgetPtr createSchemeWidget(const scheme::Para &para);
+    static QString toString(const scheme::Para &para);
 public slots:
     void addScheme();//!<check existance and emit signal
 signals:

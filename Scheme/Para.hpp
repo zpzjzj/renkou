@@ -18,6 +18,8 @@ namespace scheme {
         typedef std::vector<ParaPtr> ParaSet;
         typedef QMap<QString, ParaSet> ParaMap;
         enum class SelectedType{INCOMPLETE, SINGLE, MULTIPLE};
+        enum class Tag{SINGLE_SELECT};
+        typedef QVector<Tag> TagSet;
         //!<for leaf para, INCOMPLETE means not selected
     public:
         Para(); //!<provide default value for members
@@ -63,6 +65,8 @@ namespace scheme {
         SelectedType getSelectedType() const{return mSelectedType;}
         void setSelectedType(SelectedType type) {mSelectedType = type;}
 
+        const TagSet& getTags() const{return mTags;}
+
         void read(const QJsonObject &json, bool hasAlias = false);
         void write(QJsonObject &json) const;
 
@@ -74,6 +78,7 @@ namespace scheme {
         QString mName;//!<field displayed on UI
         QString mKey;
         QString mVal;
+        TagSet mTags;
         ParaSet mAndParas;//!<represents different aspects
         ParaSet mOrParas;//!<selections more than one elements means it's a multiple choice
         SelectedType mSelectedType;//!<select status for UI

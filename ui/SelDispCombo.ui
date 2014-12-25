@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
-    <height>298</height>
+    <width>554</width>
+    <height>483</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -52,6 +52,13 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>当前比较方案</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QListWidget" name="mSelectedSchemeWidget">

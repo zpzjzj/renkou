@@ -27,6 +27,10 @@ namespace util {
     bool isSelected(scheme::Para::SelectedType type);
     bool isSelected(const scheme::Para& para);
     bool isMultiSelected(const scheme::Para& para);
+
+    bool isLeaf(const scheme::Para& para);
+    bool isCheckBoxGroup(const scheme::Para& para);
+    bool hasComboBox(const scheme::Para& para);
 }
 
 #endif // PARAUTIL_HPP

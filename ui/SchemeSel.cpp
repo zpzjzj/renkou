@@ -49,18 +49,18 @@ namespace {
     QString toString_partScheme(const scheme::Para& partScheme) {
         return partScheme.getName() + ":" + toString_schemeOption(*getSelected(partScheme));
     }
+}
 
-    /**
-     * @brief toString
-     * @param scheme
-     * @return string representation
-     */
-    QString toString(const scheme::Para &scheme) {
-        QStringList strList;
-        for(auto &ptr : scheme.getAndParas())
-            strList << toString_partScheme(*ptr);
-        return strList.join(';');
-    }
+/**
+ * @brief toString
+ * @param scheme
+ * @return string representation
+ */
+QString SchemeSel::toString(const scheme::Para &scheme) {
+    QStringList strList;
+    for(auto &ptr : scheme.getAndParas())
+        strList << toString_partScheme(*ptr);
+    return strList.join(';');
 }
 
 SchemeSel::SchemeSel(QWidget *parent) :

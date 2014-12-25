@@ -143,6 +143,9 @@
           "orParas": [
             {
               "name": "对数模型法（系统提供数据）",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"
@@ -165,6 +168,9 @@
           "orParas": [
             {
               "name": "迭代预测模型法(系统提供数据)",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"
@@ -181,6 +187,9 @@
           "orParas": [
             {
               "name": "总和迁移率模型法(系统提供数据)",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"
@@ -197,6 +206,9 @@
           "orParas": [
             {
               "name": "回归模型法(系统提供数据)",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"
@@ -213,6 +225,9 @@
           "orParas": [
             {
               "name": "基于调查数据的量化模型法(系统提供数据)",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"
@@ -229,6 +244,9 @@
           "orParas": [
             {
               "name": "迭代回归模型法(系统提供数据)",
+              "tags": [
+                "single_select"
+              ],
               "orParas": [
                 {
                   "name": "area"

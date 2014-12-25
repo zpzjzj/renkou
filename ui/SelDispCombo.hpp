@@ -22,6 +22,7 @@ public:
     QListWidget* getParaListWidget();
     QStackedWidget* getStackedWidget();
     QPushButton* getSaveToFileBtn();
+    QListWidget* getSchemeListWidget();
 
 private:
     Ui::SelDispCombo *ui;
