@@ -45,7 +45,6 @@ void TestTest::testAbstractScheme()
 {
 try {
     AbstractScheme as(std::make_shared<SchemeParameterDefault>(), std::make_shared<SchemeBuffer>());
-    schememetadataPtr meta_renkougaiyao(new schememetadata("META_RENKOUGAIYAO"));
     as.set("diqu", QObject::tr("上海"));
     as.set("huji", QObject::tr("农业"));
     as.set("shixian", QObject::tr("回归生育"));
@@ -54,6 +53,7 @@ try {
     as.set("koujinplusshiji", QObject::tr("农d11"));
     as.set("qianyi", QObject::tr("非d11_z"));
 
+    schememetadataPtr meta_renkougaiyao(new schememetadata("META_RENKOUGAIYAO"));
     SchemePtr schemePtr = as.generate(meta_renkougaiyao);
 
     qDebug() << "name" << schemePtr->getName() << endl;

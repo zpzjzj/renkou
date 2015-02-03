@@ -1,7 +1,7 @@
 #ifndef PARAUTIL_HPP
 #define PARAUTIL_HPP
 
-#include "../Scheme/Para.hpp"
+#include "../Scheme/paraUtil.hpp"
 #include <QComboBox>
 
 namespace util {
@@ -23,12 +23,6 @@ namespace util {
      * @param isMultiSelect
      */
     void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect = false);
-
-    bool isSelected(scheme::Para::SelectedType type);
-    bool isSelected(const scheme::Para& para);
-    bool isMultiSelected(const scheme::Para& para);
-
-    bool isLeaf(const scheme::Para& para);
     bool isCheckBoxGroup(const scheme::Para& para);
     bool hasComboBox(const scheme::Para& para);
 }

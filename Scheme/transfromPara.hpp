@@ -8,14 +8,6 @@
 
 namespace scheme{
     /**
-     * @brief expand
-     * @param paraSet para that have 0 or 1 orPara elem (single selection)
-     * @param variable para that can have more than one orParas (multiple selection)
-     * @return a list of comparing ParaSet
-     */
-    extern std::list<Para::ParaSet> expand(const Para::ParaSet& paraSet, const Para& variable);
-
-    /**
      * @brief map the paraSet to SchemeParamter (actually the default parameter)
      * @param paraSet
      * @return the pointer to default parameter

@@ -1,4 +1,5 @@
 #include "../Scheme/jsonUtil.hpp"
+#include "../Scheme/transfromPara.hpp"
 #include "ParasManager.hpp"
 #include "paraUtil.hpp"
 #include <numeric>
@@ -9,8 +10,8 @@
 #include <QDebug>
 #include <utility>
 
-const QString ParasManager::PARA_PATH = ":/display/config/para.json";
-//const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
+//const QString ParasManager::PARA_PATH = ":/display/config/para.json";
+const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
 
 ParasManager::ParasManager() : mMultiSelPara(nullptr)
 {
@@ -154,4 +155,10 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
         }
     }
     emit paraChanged(curr);
+}
+
+AbstractScheme ParasManager::generate() const{
+    qDebug() << "AbstractScheme ParasManager::generate() const";
+    AbstractScheme as(scheme::map(mParaSet), std::make_shared<SchemeBuffer>());
+    return as;
 }

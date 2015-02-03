@@ -35,6 +35,7 @@ UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
                      this, SLOT(changeParasExclusive(const scheme::Para*)));
     QObject::connect(panel->getSaveToFileBtn(), SIGNAL(clicked()), mParasManager.get(), SLOT(saveToFile()));
+    QObject::connect(panel.get(), SIGNAL(accepted()), mParasManager.get(), SLOT(generate()));
 }
 
 QGroupBox* UiGenerator::createCheckBoxGroup(scheme::Para &para, QWidget* parent, QButtonGroup* buttonGroupPtr) {

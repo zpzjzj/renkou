@@ -10,6 +10,7 @@ SelDispCombo::SelDispCombo(QWidget *parent) :
                      ui->mStackedWidget, SLOT(setCurrentIndex(int)));
     ui->mParaListWidget->setCurrentRow(0);
     ui->mSelectedSchemeWidget->setMinimumHeight(80);
+//    QObject::connect(this, SIGNAL(accepted()), this, SLOT(afterSelect());
 }
 
 SelDispCombo::~SelDispCombo()
@@ -31,4 +32,9 @@ QPushButton* SelDispCombo::getSaveToFileBtn() {
 
 QListWidget* SelDispCombo::getSchemeListWidget() {
     return ui->mSelectedSchemeWidget;
+}
+
+void SelDispCombo::afterSelect() {
+    qDebug() << "SelDispCombo::afterSelect()";
+    //TODO
 }

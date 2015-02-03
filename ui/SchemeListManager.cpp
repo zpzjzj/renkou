@@ -1,3 +1,4 @@
+#include "../Scheme/stlUtil.hpp"
 #include "paraUtil.hpp"
 #include "SchemeSel.hpp"
 #include "SchemeListManager.hpp"
@@ -15,14 +16,14 @@ namespace {
      * @param checkBoxWithComboBoxPara
      *          satisfy condition in isCheckBoxWithComboBox(para)
      *          and is single selected
-     * @return
+     * @return checkbox's name + option's name
      */
-    QString toString(const scheme::Para& checkBoxWithComboBoxPara) {
-        auto &orParas = checkBoxWithComboBoxPara.getOrParas();
+    QString toString_checkBoxWithCombo(const scheme::Para& para) {
+        auto &orParas = para.getOrParas();
         auto iter = std::find_if(orParas.begin(), orParas.end(),
                                  [](scheme::Para::ParaPtr ptr){
                 return util::isSelected(*ptr);});
-        return checkBoxWithComboBoxPara.getName() + " " + (*iter)->getName();
+        return para.getName() + " " + (*iter)->getName();
     }
 
     template<typename C>
@@ -55,7 +56,14 @@ SchemeListManager::SchemeListManager(ParasManager *parasManager, QListWidget *li
 }
 
 void SchemeListManager::updateSchemes(const scheme::Para* paraPtr) {
-    mParaStrsMap[paraPtr] = toStrings(*paraPtr);
+    auto key = paraPtr;
+    while(!mParaStrsMap.contains(key) && key != nullptr) {
+        key = mParasManager->getParent(key);
+    }
+    if(key != nullptr) {
+        qDebug() << key->getName();
+        mParaStrsMap[key] = toStrings(*key);
+    }
     updateList();
 }
 
@@ -83,42 +91,29 @@ std::vector<QString> SchemeListManager::toStrings(const scheme::Para& para) {
     } else if(util::isLeaf(para)) {
         return {para.getName()};
     } else if(isCheckBoxWithComboBox(para)) {
-        qDebug() << "isCheckBoxWithComboBox(para)" << para.getName();
-        return {toString(para)};
-    }
-
-    std::vector<scheme::Para::ParaSet> paraSets;//combination of para
-    auto& andParas = para.getAndParas();
-    if(!para.getOrParas().empty()) {//combine orPara with andParas
-        for(auto& paraPtr : para.getOrParas()) {
-            if(util::isSelected(*paraPtr)) {
-                auto paras(andParas);
-                paras.push_back(paraPtr);
-                paraSets.push_back(paras);
-            }
-        }
-    } else {
-        paraSets.push_back(andParas);
+        return {toString_checkBoxWithCombo(para)};
     }
 
     std::vector<QString> res;
-    for(auto& paraSet : paraSets) {
-        auto strs = toStrings(paraSet);
-        res.insert(res.end(), strs.begin(), strs.end());
+    for(auto& paraSet : util::expand(para)) {
+        util::append(res, toStrings(paraSet));
     }
     return res;
 }
 
 /**
  * @brief SchemeListManager::toStrings
+ *          each para call toStrings(para)
+ *          then combine all results
  * @param paraSet (considered as list of andParas)
- * @return
+ * @return combination result of paraSet
  */
 std::vector<QString> SchemeListManager::toStrings(scheme::Para::ParaSet paraSet) {
-    QList<std::vector<QString> > strs;
-    for(auto paraPtr : paraSet) {
-        strs.push_back(toStrings(*paraPtr));
-    }
+    std::vector<std::vector<QString> > strs(paraSet.size());
+    std::transform(paraSet.begin(), paraSet.end(), strs.begin(),
+                   [](const scheme::Para::ParaPtr& paraPtr){
+        return toStrings(*paraPtr);
+    });
     //combine strings
     return combine(strs);
 }

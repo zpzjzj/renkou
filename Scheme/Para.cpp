@@ -17,7 +17,7 @@ namespace {
         std::make_pair(SelectedType::MULTIPLE, "multiple")
     };
 
-    QString toString(const SelectedType type) {
+    QString toString_checkBoxWithCombo(const SelectedType type) {
         return selectedTypeMap.value(type, "");
     }
 
@@ -30,7 +30,7 @@ namespace {
         std::make_pair(Tag::SINGLE_SELECT, "single_select")
     };
 
-    QString toString(const Tag tag) {
+    QString toString_checkBoxWithCombo(const Tag tag) {
         return tagMap.value(tag, "");
     }
 
@@ -40,7 +40,7 @@ namespace {
 }
 
 QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
-    out << toString(type);
+    out << toString_checkBoxWithCombo(type);
     return out;
 }
 
@@ -136,7 +136,6 @@ void scheme::Para::read(const QJsonObject &json, bool hasAlias) {
     }
     iter = json.find("tags");
     if(iter != json.end()) {
-        qDebug() << "find tag";
         for(auto jsonObject : (*iter).toArray()) {
             mTags.push_back(toTag(jsonObject.toString()));
             qDebug() << "get tag" << jsonObject.toString() << mName;
@@ -152,10 +151,10 @@ void scheme::Para::write(QJsonObject &json) const {
     json["val"] = mVal;
     QJsonArray tagArray;
     for(auto tag : mTags) {
-        tagArray.append(toString(tag));
+        tagArray.append(toString_checkBoxWithCombo(tag));
     }
     json["tags"] = tagArray;
-    json["selectedType"] = toString(mSelectedType);
+    json["selectedType"] = toString_checkBoxWithCombo(mSelectedType);
     json["andParas"] = writeParas(mAndParas);
     json["orParas"] = writeParas(mOrParas);
 }

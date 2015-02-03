@@ -6,6 +6,7 @@
 #include <QListWidget>
 #include <QStackedWidget>
 #include <QPushButton>
+#include "ParasManager.hpp"
 
 namespace Ui {
 class SelDispCombo;
@@ -23,9 +24,16 @@ public:
     QStackedWidget* getStackedWidget();
     QPushButton* getSaveToFileBtn();
     QListWidget* getSchemeListWidget();
-
+public slots:
+    /**
+     * @brief afterSelect
+     *          generate scheme
+     *          show indicator select ui
+     */
+    void afterSelect();
 private:
     Ui::SelDispCombo *ui;
+    ParasManager* mParasManager;
 };
 
 #endif // SELDISPCOMBO_HPP

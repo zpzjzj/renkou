@@ -34,22 +34,6 @@ namespace util{
         para.getOrParas()[comboBox->currentIndex()]->setSelectedType(scheme::Para::SelectedType::SINGLE);
     }
 
-    bool isSelected(scheme::Para::SelectedType type) {
-        return type != scheme::Para::SelectedType::INCOMPLETE;
-    }
-
-    bool isSelected(const scheme::Para& para) {
-        return isSelected(para.getSelectedType());
-    }
-
-    bool isMultiSelected(const scheme::Para& para) {
-        return para.getSelectedType() == scheme::Para::SelectedType::MULTIPLE;
-    }
-
-    bool isLeaf(const scheme::Para& para) {
-        return para.getAndParas().empty() && para.getOrParas().empty();
-    }
-
     /**
      * @brief isCheckBoxGroup
      *          check if para's children are all leaves;
