@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     SchemeSel.cpp \
     Scheme.cpp \
     paraUtil.cpp \
-    SchemeListManager.cpp
+    SchemeListManager.cpp \
+    IndicatorSel.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -102,7 +103,8 @@ HEADERS  += \
     Select.hpp \
     iterate.hpp \
     paraUtil.hpp \
-    SchemeListManager.hpp
+    SchemeListManager.hpp \
+    IndicatorSel.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -129,7 +131,8 @@ FORMS += \
     ui_wizard/selectwizardpage.ui \
     openProject.ui \
     SelDispCombo.ui \
-    SchemeSel.ui
+    SchemeSel.ui \
+    IndicatorSel.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \

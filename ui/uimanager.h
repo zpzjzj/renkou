@@ -32,6 +32,7 @@ public:
         newprojectionwizard,
         PAGE_SIZE
     };
+
 public:
     UiManager();
     ~UiManager();

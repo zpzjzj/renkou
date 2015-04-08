@@ -10,7 +10,7 @@ SelDispCombo::SelDispCombo(QWidget *parent) :
                      ui->mStackedWidget, SLOT(setCurrentIndex(int)));
     ui->mParaListWidget->setCurrentRow(0);
     ui->mSelectedSchemeWidget->setMinimumHeight(80);
-//    QObject::connect(this, SIGNAL(accepted()), this, SLOT(afterSelect());
+    QObject::connect(this, SIGNAL(accepted()), this, SLOT(afterSelect()));
 }
 
 SelDispCombo::~SelDispCombo()
@@ -36,5 +36,5 @@ QListWidget* SelDispCombo::getSchemeListWidget() {
 
 void SelDispCombo::afterSelect() {
     qDebug() << "SelDispCombo::afterSelect()";
-    //TODO
+    mIndicatorSel->show();
 }

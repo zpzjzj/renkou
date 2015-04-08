@@ -20,6 +20,7 @@ class UiGenerator : public QObject
 {
     Q_OBJECT
 public:
+    typedef std::shared_ptr<SchemeListManager> SchemeListManagerPtr;
     typedef std::unique_ptr<ParasManager> ParasManagerPtr;
     typedef std::shared_ptr<SelDispCombo> PanelPtr;
     typedef std::function<QWidget* (scheme::Para& para, QWidget* parent)> GenerateFunc;
@@ -46,7 +47,7 @@ private:
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;
-    SchemeListManager* mSchemeListManager;
+    SchemeListManagerPtr mSchemeListManager;
     ButtonGroupMap mButtonGroupMap;
     ListWidgetItemMap mListWidgetItemMap;
     Singleton<SelectedTypeIconMap> mIconMapOwner;

@@ -29,13 +29,12 @@ UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     }), mInitIcon([](){
         return QIcon(ICON_PATH + INIT_ICON_NAME);
     }){
-    mSchemeListManager = new SchemeListManager(mParasManager.get(), panel->getSchemeListWidget(), panel.get());
+    mSchemeListManager = std::make_shared<SchemeListManager>(mParasManager.get(), panel->getSchemeListWidget());
     QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
                      this, SLOT(changeIcon(const scheme::Para*)));
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
                      this, SLOT(changeParasExclusive(const scheme::Para*)));
     QObject::connect(panel->getSaveToFileBtn(), SIGNAL(clicked()), mParasManager.get(), SLOT(saveToFile()));
-    QObject::connect(panel.get(), SIGNAL(accepted()), mParasManager.get(), SLOT(generate()));
 }
 
 QGroupBox* UiGenerator::createCheckBoxGroup(scheme::Para &para, QWidget* parent, QButtonGroup* buttonGroupPtr) {
