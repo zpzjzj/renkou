@@ -3,6 +3,7 @@
 
 # include "Para.hpp"
 # include "SchemeParameter.hpp"
+# include "AbstractScheme.hpp"
 # include <list>
 # include <memory>
 
@@ -12,6 +13,6 @@ namespace scheme{
      * @param paraSet
      * @return the pointer to default parameter
      */
-    extern std::shared_ptr<SchemeParameter> map(const Para::ParaSet& paraSet);
+    extern std::vector<std::shared_ptr<AbstractScheme> > map(const Para::ParaSet& paraSet);
 }
 #endif // TRANSFROMPARA_HPP

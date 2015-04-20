@@ -33,8 +33,3 @@ QPushButton* SelDispCombo::getSaveToFileBtn() {
 QListWidget* SelDispCombo::getSchemeListWidget() {
     return ui->mSelectedSchemeWidget;
 }
-
-void SelDispCombo::afterSelect() {
-    qDebug() << "SelDispCombo::afterSelect()";
-    mIndicatorSel->show();
-}

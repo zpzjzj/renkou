@@ -1,0 +1,14 @@
+DATA_STRUCT_PATH = E:\demography\data\sim\0816\
+DATA_PATH = E:\demography\data\sim\0926\
+DATABASE_DBNAME = rr
+DATABASE_USERNAME = root
+DATABASE_PASSWORD = 123456
+RenKouGaiYao = 人口概要类字段名和对应指标名.txt
+ShengYuHaiCi = 生育孩次类字段名和对应指标名.txt
+ZhengCeShengYu = 政策生育类字段名和对应指标名.txt
+FuFuZiNv = 夫妇子女类字段名和对应指标名.txt
+FenLingTeFu = 分龄特扶类字段名和对应指标名.txt
+FenLingJiangFu = 分龄父母类字段名和对应指标名.txt
+FenLingHeJi = 分龄合计类字段名和对应指标名.txt
+FenLingNongYe = 分龄农业类字段名和对应指标名.txt
+FenLingFeiNong = 分龄非农类字段名和对应指标名.txt

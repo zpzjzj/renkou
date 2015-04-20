@@ -1,5 +1,4 @@
 #include "transfromPara.hpp"
-#include "SchemeParameter.hpp"
 #include "paraUtil.hpp"
 #include "stlUtil.hpp"
 #include "Select.hpp"
@@ -169,12 +168,22 @@ namespace scheme {
  * @param paraSet
  * @return a SchemeParameter
  */
-std::shared_ptr<SchemeParameter> map(const Para::ParaSet& paraSet) {
-    std::shared_ptr<SchemeParameter> parameter = std::make_shared<SchemeParameterDefault>();
-    auto pairSets = expand(paraSet);
+std::vector<std::shared_ptr<AbstractScheme> > map(const Para::ParaSet& paraSet) {
+    auto buffer = std::make_shared<SchemeBuffer>();
+    PairSets pairSets = expand(paraSet);
     qDebug() << "res in std::shared_ptr<SchemeParameter> map(const Para::ParaSet& paraSet)";
     printSets(pairSets);
-    return parameter;
+    std::vector<std::shared_ptr<AbstractScheme> > abstractSchemes;
+    abstractSchemes.reserve(pairSets.size());
+    for(PairSet& pairSet : pairSets) {
+        std::shared_ptr<SchemeParameter> paraPtr = std::make_shared<SchemeParameterDefault>();
+        for(Pair& pair : pairSet) {
+            paraPtr->set(pair.first, pair.second);
+        }
+        abstractSchemes.push_back(std::make_shared<AbstractScheme>(paraPtr, buffer));
+    }
+
+    return abstractSchemes;
 }
 
 }

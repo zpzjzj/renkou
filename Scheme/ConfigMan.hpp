@@ -10,7 +10,7 @@
  * 		ConfigMan config;
  * 2, read Configure file
  * 		config.read("config.txt");
- * 	2.1, validate:
+ * 2.1, validate:
  * 		if (config.read())
  * 			or
  * 		config.read();
@@ -25,7 +25,7 @@ namespace Config {
             ConfigMan() {valid = false;}
             ~ConfigMan(void) {}
             // read config file, reture false upon failure
-            bool read(const QString& _filename="K:\\build-renkou-Desktop_Qt_5_1_1_MinGW_32bit-Debug\\config.txt") ;
+            bool read(const QString& _filename=":/config/config.txt") ;
             // return true if config file is read
             bool success(void) const { return valid; }
             // throw ValueNotExist

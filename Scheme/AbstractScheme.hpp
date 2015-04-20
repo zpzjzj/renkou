@@ -13,7 +13,7 @@
 
 /**
  * @brief The AbstractScheme class
- *        结果集，内部可分夫妇子女、人口概要、生育孩次、政策 四类，即包含四个Scheme
+ *        结果集，内部可分夫妇子女、人口概要、生育孩次、政策、分龄 五类，即包含多个Scheme
  */
 class AbstractScheme {
         typedef std::shared_ptr<SchemeParameter> SchemeParaPtr;
@@ -29,9 +29,20 @@ class AbstractScheme {
         //get scheme's parameter
         const QString& value(const QString& key) const {return para->value(key);}
 
-        //generate scheme according to its metadata (or indicator)
+        /**
+         * @brief generate scheme according to its metadata (or indicator)
+         * @param meta
+         * @return ptr of scheme, can be nullptr if not available
+         */
         SchemePtr generate(schememetadataPtr meta) const {
-            return std::make_shared<Scheme>(Scheme(meta, buffer, para->generate(meta)));
+            QString fileName = para->generate(meta);
+            if(fileName.isEmpty()) {
+                qDebug() << "filename is empty in generate(schememetadataPtr meta)";
+                return nullptr;
+            } else {
+                qDebug() << "filename: " << fileName << "in generate(schememetadataPtr meta)";
+                return std::make_shared<Scheme>(Scheme(meta, buffer, fileName));
+            }
         }
     private:
         SchemeParaPtr para;

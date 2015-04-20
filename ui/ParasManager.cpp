@@ -157,8 +157,7 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
     emit paraChanged(curr);
 }
 
-AbstractScheme ParasManager::generate() const{
+ParasManager::AbstractSchemeList ParasManager::generate() const{
     qDebug() << "AbstractScheme ParasManager::generate() const";
-    AbstractScheme as(scheme::map(mParaSet), std::make_shared<SchemeBuffer>());
-    return as;
+    return scheme::map(mParaSet);
 }

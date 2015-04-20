@@ -1,3 +1,4 @@
+#include "../Scheme/schememetadata.h"
 #include "../Scheme/jsonUtil.hpp"
 #include "IndicatorSel.hpp"
 #include "ui_IndicatorSel.h"
@@ -60,6 +61,33 @@ namespace {
             }
         }
     }
+
+    /**
+     * @brief getItem
+     * @return sibling of item
+     */
+    QStandardItem* getItem(QStandardItem* siblingItem, int col) {
+        auto parent = siblingItem->parent();
+        return parent->child(siblingItem->row(), col);
+    }
+
+    using Category = schememetadata::Category;
+    Category getCategory(const QString& str) {
+        //!< map of str in indicator file and Category
+        const static QMap<QString, Category> map = {
+            std::make_pair(QObject::tr("人口概要"), Category::RenKouGaiYao),
+            std::make_pair(QObject::tr("夫妇子女"), Category::FuFuZiNv),
+            std::make_pair(QObject::tr("政策生育"), Category::ZhengCeShengYu),
+            std::make_pair(QObject::tr("生育孩次"), Category::ShengYuHaiCi),
+            std::make_pair(QObject::tr("分龄非农"), Category::FenLingFeiNong),
+            std::make_pair(QObject::tr("分龄农业"), Category::FenLingNongYe),
+            std::make_pair(QObject::tr("分龄合计"), Category::FenLingHeJi),
+            std::make_pair(QObject::tr("分龄特扶"), Category::FenLingTeFu),
+            std::make_pair(QObject::tr("分龄奖扶"), Category::FenLingJiangFu)
+        };
+        return map.value(str);
+    }
+
 }
 
 void IndicatorSel::createTreeView() {
@@ -81,12 +109,36 @@ void IndicatorSel::coordDisplay() {
     auto item = getSelection();
     if(item == nullptr)
         return;
+    auto schemes = getSchemes(getCategory(getItem(item, item->column() + 1)->text()));
+    //TODO
 }
 
 void IndicatorSel::mapDisplay() {
+    const static QString AREA_STR = "diqu";
     auto item = getSelection();
     if(item == nullptr)
         return;
+    if(mAbstractSchemes.front()->value(AREA_STR) == mAbstractSchemes.back()->value(AREA_STR)) {
+        QMessageBox::warning(this, tr("指标选择"), tr("当前方案在同一地区，不能地图显示"));
+        return;
+    }
+    auto schemes = getSchemes(getCategory(getItem(item, item->column() + 1)->text()));
+    //TODO
+}
+
+IndicatorSel::SchemeList IndicatorSel::getSchemes(schememetadata::Category category) const {
+    SchemeList res;
+    schememetadataPtr meta = std::make_shared<schememetadata>(category);
+    res.reserve(mAbstractSchemes.size());
+    for(auto abstractSchemePtr : mAbstractSchemes) {
+        auto scheme = abstractSchemePtr->generate(meta);
+        if(scheme != nullptr) {
+            qDebug() << "scheme: " << scheme->getName()
+                     << "in IndicatorSel::getSchemes(schememetadata::Category category)";
+            res.push_back(scheme);
+        }
+    }
+    return res;
 }
 
 QStandardItem* IndicatorSel::getSelection() {

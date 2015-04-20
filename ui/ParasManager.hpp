@@ -9,6 +9,8 @@ class ParasManager : public QObject
 {
     Q_OBJECT
 public:
+    using AbstractSchemeList = std::vector<std::shared_ptr<AbstractScheme> >;
+public:
     ParasManager();
     void read();
     const scheme::Para::ParaSet& getParaSet() const {return mParaSet;}
@@ -26,7 +28,7 @@ signals:
 public slots:
     //TODO
     bool saveToFile(const QString fname = "/Users/zhaoping/default.json");
-    AbstractScheme generate() const;//TODO
+    AbstractSchemeList generate() const;
 private:
     typedef QMap<scheme::Para*, scheme::Para*> ParaMap;
 private:

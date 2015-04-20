@@ -28,15 +28,11 @@ public:
 
     void initIndicatorSel(ParasManager* parasManager) {
         mIndicatorSel = new IndicatorSel(parasManager, this);
+        QObject::connect(this, &SelDispCombo::accepted, [this, parasManager]() {
+            mIndicatorSel->setAbstractSchemes(parasManager->generate());
+            mIndicatorSel->show();
+        });
     }
-
-public slots:
-    /**
-     * @brief afterSelect
-     *          generate scheme
-     *          show indicator select ui
-     */
-    void afterSelect();
 private:
     Ui::SelDispCombo *ui;
     IndicatorSel* mIndicatorSel;

@@ -39,7 +39,6 @@ bool ConfigMan::read(const QString& _filename)
             continue;
         }
 
-
         property_value = tmpline.right(tmpline.size()-split-1).simplified();
         property_name = tmpline.left(split-1).simplified();
         map.insert(property_name, property_value);
@@ -52,7 +51,10 @@ bool ConfigMan::read(const QString& _filename)
 const QString& ConfigMan::value(const QString& key) const {
     try {
         QMap<QString, QString>::const_iterator iter = map.find(key);
-        if (iter == map.end()) throw ValueNotExist(key);
+        if (iter == map.end()) {
+            qWarning() << key << "not found in ConfigMan::value";
+            throw ValueNotExist(key);
+        }
         return iter.value();
     } catch (ValueNotExist& e) {
         throw ValueNotExist(key);

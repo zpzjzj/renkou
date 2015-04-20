@@ -16,12 +16,24 @@ namespace scheme {
 class schememetadata
 {
 public:
-    schememetadata(const QString& filename)
-    {
+    enum Category{
+        RenKouGaiYao,
+        FuFuZiNv,
+        ShengYuHaiCi,
+        ZhengCeShengYu,
+        FenLingTeFu,
+        FenLingJiangFu,
+        FenLingHeJi,
+        FenLingNongYe,
+        FenLingFeiNong
+    };
+public:
+    schememetadata(Category category);
+    schememetadata(const QString& filename) {
         readMetadata(filename);
         metadataName = filename;
     }
-
+    Category category() const;
     const metadataItem& getMetadata(const QString& field_name)const ;
     const metadataItem& operator[] (const QString& field_name) const ;
     const metadataItem& operator[] (const int index) const ;
@@ -53,7 +65,8 @@ public:
     QString name(){
         return metadataName;
     }
-
+public:
+    static bool isFenLingCategory(const schememetadata& meta);
 private:
     schememetadata(const schememetadata&);
     schememetadata& operator= (const schememetadata&);
