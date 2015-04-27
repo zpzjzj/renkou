@@ -22,6 +22,7 @@ UiManager::UiManager()
 
 namespace {
     QDialog* createSelDispCombo(UiManager* uiManager) {
+        QWizard* wizard = new QWizard;
         auto derived_ptr = new SelDispCombo();
         derived_ptr->setUiManager(uiManager);
         auto parasManagerPtr = new ParasManager();
@@ -29,7 +30,12 @@ namespace {
         auto uiGenerator = new UiGenerator(UiGenerator::PanelPtr(derived_ptr), parasManagerPtr);
         uiGenerator->generateUi();
         derived_ptr->initIndicatorSel(parasManagerPtr);
+        QWizardPage *page = new QWizardPage(wizard);
+
+        wizard->addPage(new QWizardPage(derived_ptr));
+        wizard->setWindowTitle(QWizard::tr("方案演示"));
         return derived_ptr;
+//        return wizard;
     }
 }
 
@@ -116,5 +122,5 @@ void UiManager::disactive(UiManager::page uiPage)
 
 void UiManager::makeFront(UiManager::page uiPage)
 {
-    get_ui(uiPage)->exec();
+    get_ui(uiPage)->raise();
 }

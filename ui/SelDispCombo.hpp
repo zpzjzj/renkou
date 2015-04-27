@@ -3,6 +3,7 @@
 
 #include <uiitem.h>
 #include <QDialog>
+#include <QWizardPage>
 #include <QListWidget>
 #include <QStackedWidget>
 #include <QPushButton>
@@ -36,6 +37,7 @@ public:
 private:
     Ui::SelDispCombo *ui;
     IndicatorSel* mIndicatorSel;
+    QPushButton* mSaveButton;
 };
 
 #endif // SELDISPCOMBO_HPP

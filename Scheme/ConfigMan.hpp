@@ -2,6 +2,7 @@
 #define _CONFIG_MAN_HPP
 #include <QMap>
 #include <QString>
+#include <QSettings>
 
 /**
  * aim: I shall make the program run normally evenif config is not loaded
@@ -20,24 +21,20 @@
  */
 namespace Config {
 
-    class ConfigMan {
+    class ConfigMan : QSettings{
         public:
-            ConfigMan() {valid = false;}
+            ConfigMan();
             ~ConfigMan(void) {}
-            // read config file, reture false upon failure
-            bool read(const QString& _filename=":/config/config.txt") ;
-            // return true if config file is read
-            bool success(void) const { return valid; }
-            // throw ValueNotExist
-            const QString& value(const QString& key) const;
-            const QString& operator [] (const QString& key) const {return value(key);}
-            // do no effort to prevent users from reading wrong format
-            int Int(const QString& key) const {return value(key).toInt();}
-            double Double(const QString& key) const {return value(key).toDouble();}
+            QString value(const QString& key) const {return QSettings::value(key).toString();}
+            QString operator [] (const QString& key) const {return value(key);}
+            int Int(const QString& key) const {return QSettings::value(key).toInt();}
+            double Double(const QString& key) const {return QSettings::value(key).toDouble();}
         private:
-                QString __filename;
-                bool valid;
-                QMap<QString, QString> map;
+            /**
+             * @brief init
+             *      init the settings, when there's none
+             */
+            void init();
     } ;
 
     // the default instance

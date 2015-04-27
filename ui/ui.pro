@@ -145,8 +145,10 @@ SUBDIRS += \
 
 RESOURCES += \
     translator.qrc \
-    resource.qrc \
-    image.qrc
+    image.qrc \
+    resource.qrc
+
+include(external.pri)
 
 INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib
