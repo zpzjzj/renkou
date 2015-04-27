@@ -1,8 +1,9 @@
 #ifndef UIGENERATOR_HPP
 #define UIGENERATOR_HPP
 #include "ParasManager.hpp"
-#include "SelDispCombo.hpp"
+#include "SchemeListManager.hpp"
 #include "SchemeSel.hpp"
+#include "SelDispCombo.hpp"
 #include "Singleton.hpp"
 #include <functional>
 #include <memory>
@@ -19,6 +20,7 @@ class UiGenerator : public QObject
 {
     Q_OBJECT
 public:
+    typedef std::shared_ptr<SchemeListManager> SchemeListManagerPtr;
     typedef std::unique_ptr<ParasManager> ParasManagerPtr;
     typedef std::shared_ptr<SelDispCombo> PanelPtr;
     typedef std::function<QWidget* (scheme::Para& para, QWidget* parent)> GenerateFunc;
@@ -32,22 +34,24 @@ private slots:
     void changeIcon(const scheme::Para* changedPara);
     void changeParasExclusive(const scheme::Para* multiPara);
 private:
-    QWidget* generateUi(scheme::Para &para, QWidget* parent);//<!dispatcher
+    QWidget* generateUi(scheme::Para &para, QWidget* parent, QButtonGroup *btnGroupPtr = nullptr);//<!dispatcher
     QComboBox* createComboBox(scheme::Para &para, QWidget* parent);
-    QGroupBox* createCheckBoxGroup(scheme::Para &para, QWidget* parent);
+    QGroupBox* createCheckBoxGroup(scheme::Para &para, QWidget* parent, QButtonGroup *buttonGroupPtr = nullptr);
     QListWidgetItem* createListWidgetItem(scheme::Para &para, QListWidget *parent);
     QToolBox* createToolBox(scheme::Para& para, QWidget* parent);
-    QTabWidget* createTabWidget(scheme::Para& para, QWidget* parent,
-            GenerateFunc func);
+    QTabWidget* createTabWidget(scheme::Para& para, QWidget* parent, GenerateFunc func);
     QTabWidget* createTabWidget(scheme::Para &para, QWidget *parent);
     QWidget* createSpecialParaWidget(scheme::Para &para, QWidget* parent);//<!generate special para's UI
     SchemeSel* createSchemeSelWidget(scheme::Para &para, QWidget* parent);
+    QButtonGroup* createButtonGroup(scheme::Para &para, QWidget* parent, bool isExclusive = false);
 private:
     PanelPtr mPanel;
     ParasManagerPtr mParasManager;
+    SchemeListManagerPtr mSchemeListManager;
     ButtonGroupMap mButtonGroupMap;
     ListWidgetItemMap mListWidgetItemMap;
     Singleton<SelectedTypeIconMap> mIconMapOwner;
+    Singleton<QIcon> mInitIcon;
 };
 
 #endif // UIGENERATOR_HPP

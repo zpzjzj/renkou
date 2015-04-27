@@ -5,6 +5,9 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QStackedWidget>
+#include <QPushButton>
+#include "IndicatorSel.hpp"
+#include "ParasManager.hpp"
 
 namespace Ui {
 class SelDispCombo;
@@ -20,9 +23,19 @@ public:
 
     QListWidget* getParaListWidget();
     QStackedWidget* getStackedWidget();
+    QPushButton* getSaveToFileBtn();
+    QListWidget* getSchemeListWidget();
 
+    void initIndicatorSel(ParasManager* parasManager) {
+        mIndicatorSel = new IndicatorSel(parasManager, this);
+        QObject::connect(this, &SelDispCombo::accepted, [this, parasManager]() {
+            mIndicatorSel->setAbstractSchemes(parasManager->generate());
+            mIndicatorSel->show();
+        });
+    }
 private:
     Ui::SelDispCombo *ui;
+    IndicatorSel* mIndicatorSel;
 };
 
 #endif // SELDISPCOMBO_HPP

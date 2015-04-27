@@ -6,5 +6,6 @@
     <qresource prefix="/display">
         <file>config/scheme.json</file>
         <file>config/para.json</file>
+        <file>config/indicator.json</file>
     </qresource>
 </RCC>

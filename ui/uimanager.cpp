@@ -28,6 +28,7 @@ namespace {
         parasManagerPtr->read();
         auto uiGenerator = new UiGenerator(UiGenerator::PanelPtr(derived_ptr), parasManagerPtr);
         uiGenerator->generateUi();
+        derived_ptr->initIndicatorSel(parasManagerPtr);
         return derived_ptr;
     }
 }

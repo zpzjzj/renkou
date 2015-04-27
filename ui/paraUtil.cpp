@@ -1,5 +1,6 @@
 #include "paraUtil.hpp"
 #include "Select.hpp"
+#include <numeric>
 
 namespace util{
     void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect) {
@@ -31,5 +32,24 @@ namespace util{
         };
         QObject::connect(comboBox, Select<int>::overload_of(&QComboBox::currentIndexChanged), func);
         para.getOrParas()[comboBox->currentIndex()]->setSelectedType(scheme::Para::SelectedType::SINGLE);
+    }
+
+    /**
+     * @brief isCheckBoxGroup
+     *          check if para's children are all leaves;
+     *          and has no andParas
+     * @param paraPtr
+     * @return isCheckBoxGroup
+     */
+    bool isCheckBoxGroup(const scheme::Para& para) {
+        const auto &orParas = para.getOrParas();
+        return std::accumulate(orParas.begin(), orParas.end(),
+                               para.getAndParas().empty(), [](bool x, const scheme::Para::ParaPtr y){
+            return x && isLeaf(*y);
+        });
+    }
+
+    bool hasComboBox(const scheme::Para& para) {
+        return para.getTags().contains(scheme::Para::Tag::SINGLE_SELECT);
     }
 }

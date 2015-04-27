@@ -1,8 +1,8 @@
 #ifndef _SCHEME_PARA_HPP
 #define _SCHEME_PARA_HPP
 #include <QString>
-#include "SchemeDef.hpp"
 #include "schememetadata.h"
+#include "SchemeDef.hpp"
 #include "parasetter.hpp"
 #include "paraholder.hpp"
 
@@ -27,6 +27,7 @@ class SchemeParameter : public ParaSetter {
          *  @params: the parameters input, the metadata
          *  @return: the internal scheme name (used by Abstract Scheme)
          *  @note: the full name of a scheme will be determined by the metadata
+         *          if not available, return empty string ""
          */
         virtual QString do_generate(schememetadataPtr meta) const = 0;
 };

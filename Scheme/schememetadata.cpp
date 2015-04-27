@@ -5,6 +5,7 @@
 #include <QString>
 #include <QTextCodec>
 #include <QObject>
+#include <QSet>
 #include <QStringList>
 #include <map>
 #include <iterator>
@@ -13,6 +14,41 @@
 #include <iostream>
 #include <QTextStream>
 #include <QDebug>
+
+namespace {
+    using Category = schememetadata::Category;
+    typedef QMap<Category, QString> CategoryMap;
+    const CategoryMap categoryMap = {
+        std::make_pair(Category::RenKouGaiYao, "RenKouGaiYao"),
+        std::make_pair(Category::ShengYuHaiCi, "ShengYuHaiCi"),
+        std::make_pair(Category::ZhengCeShengYu, "ZhengCeShengYu"),
+        std::make_pair(Category::FuFuZiNv, "FuFuZiNv"),
+        std::make_pair(Category::FenLingJiangFu, "FenLingJiangFu"),
+        std::make_pair(Category::FenLingTeFu, "FenLingTeFu"),
+        std::make_pair(Category::FenLingNongYe, "FenLingNongYe"),
+        std::make_pair(Category::FenLingFeiNong, "FenLingFeiNong"),
+        std::make_pair(Category::FenLingHeJi, "FenLingHeji")
+    };
+}
+
+schememetadata::schememetadata(Category category)
+    : schememetadata(categoryMap.value(category)){
+}
+
+schememetadata::Category schememetadata::category() const {
+    return categoryMap.key(metadataName);
+}
+
+bool schememetadata::isFenLingCategory(const schememetadata& meta) {
+    const static QSet<Category> fenLingSet = {
+        Category::FenLingTeFu,
+        Category::FenLingJiangFu,
+        Category::FenLingNongYe,
+        Category::FenLingFeiNong,
+        Category::FenLingHeJi
+    };
+    return fenLingSet.contains(meta.category());
+}
 
 /*@descr: schememetadata 负责从元文件中读取数据并将其初始化
  *	@params: 元信息文件的文件名,包括路径

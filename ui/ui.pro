@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++1y
 
 QT       += core gui xml
 CONFIG += c++14
@@ -53,7 +53,9 @@ SOURCES += main.cpp \
     SelDispCombo.cpp \
     SchemeSel.cpp \
     Scheme.cpp \
-    paraUtil.cpp
+    paraUtil.cpp \
+    SchemeListManager.cpp \
+    IndicatorSel.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -100,7 +102,9 @@ HEADERS  += \
     Scheme.hpp \
     Select.hpp \
     iterate.hpp \
-    paraUtil.hpp
+    paraUtil.hpp \
+    SchemeListManager.hpp \
+    IndicatorSel.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -127,7 +131,8 @@ FORMS += \
     ui_wizard/selectwizardpage.ui \
     openProject.ui \
     SelDispCombo.ui \
-    SchemeSel.ui
+    SchemeSel.ui \
+    IndicatorSel.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \

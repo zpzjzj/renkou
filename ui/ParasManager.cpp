@@ -1,5 +1,7 @@
 #include "../Scheme/jsonUtil.hpp"
+#include "../Scheme/transfromPara.hpp"
 #include "ParasManager.hpp"
+#include "paraUtil.hpp"
 #include <numeric>
 #include <QFile>
 #include <QJsonDocument>
@@ -8,7 +10,8 @@
 #include <QDebug>
 #include <utility>
 
-const QString ParasManager::PARA_PATH = ":/display/config/para.json";
+//const QString ParasManager::PARA_PATH = ":/display/config/para.json";
+const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
 
 ParasManager::ParasManager() : mMultiSelPara(nullptr)
 {
@@ -19,7 +22,29 @@ void ParasManager::read() {
     mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray(), true);
     for(auto& paraPtr : mParaSet) {
         buildMap(*paraPtr);
+        if(util::isMultiSelected(*paraPtr)) {
+            if(mMultiSelPara == nullptr)
+                mMultiSelPara = paraPtr.get();
+            else {
+                qWarning() << "multiple multi-selected para";
+            }
+        }
     }
+}
+
+bool ParasManager::saveToFile(const QString fname) {
+    qDebug() << "ParasManager::saveToFile(const QString fname)";
+    qDebug() << "fname" << fname;
+    QFile file(fname);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "Couldn't open save file" << fname;
+        return false;
+    }
+    QJsonObject object;
+    object["paras"] = scheme::Para::writeParas(mParaSet);
+    QJsonDocument doc(object);
+    file.write(doc.toJson());
+    return true;
 }
 
 /**
@@ -121,8 +146,7 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
             mMultiSelPara = nullptr;
             emit multiParaChanged(mMultiSelPara);
         }
-        else if(mMultiSelPara == nullptr &&
-                curr->getSelectedType() == scheme::Para::SelectedType::MULTIPLE) {
+        else if(mMultiSelPara == nullptr && util::isMultiSelected(*curr)) {
             //new multi para
             mMultiSelPara = curr;
             emit multiParaChanged(curr);
@@ -130,4 +154,10 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
             emit paraStateChanged(curr);
         }
     }
+    emit paraChanged(curr);
+}
+
+ParasManager::AbstractSchemeList ParasManager::generate() const{
+    qDebug() << "AbstractScheme ParasManager::generate() const";
+    return scheme::map(mParaSet);
 }

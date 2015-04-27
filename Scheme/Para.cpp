@@ -9,21 +9,38 @@
  *
  */
 
-QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
+namespace {
     using SelectedType = scheme::Para::SelectedType;
-    switch (type) {
-    case SelectedType::INCOMPLETE :
-        out << "incomplete";
-        break;
-    case SelectedType::SINGLE :
-        out << "single";
-        break;
-    case SelectedType::MULTIPLE :
-        out << "multiple";
-        break;
-    default:
-        break;
+    QMap<SelectedType, QString> selectedTypeMap = {
+        std::make_pair(SelectedType::INCOMPLETE, "incomplete"),
+        std::make_pair(SelectedType::SINGLE, "single"),
+        std::make_pair(SelectedType::MULTIPLE, "multiple")
+    };
+
+    QString toString_checkBoxWithCombo(const SelectedType type) {
+        return selectedTypeMap.value(type, "");
     }
+
+    SelectedType toEnum(const QString& str) {
+        return selectedTypeMap.key(str, SelectedType::INCOMPLETE);
+    }
+
+    using Tag = scheme::Para::Tag;
+    QMap<Tag, QString> tagMap = {
+        std::make_pair(Tag::SINGLE_SELECT, "single_select")
+    };
+
+    QString toString_checkBoxWithCombo(const Tag tag) {
+        return tagMap.value(tag, "");
+    }
+
+    Tag toTag(const QString& str) {
+        return tagMap.key(str);
+    }
+}
+
+QDebug& operator << (QDebug& out, const scheme::Para::SelectedType type) {
+    out << toString_checkBoxWithCombo(type);
     return out;
 }
 
@@ -40,18 +57,19 @@ namespace {
         for(const auto& objectJson : jsonArray) {
             QJsonObject object = objectJson.toObject();
             res.insert(object["key"].toString(), scheme::Para::readParas(object["val"].toArray()));
-            qDebug() << "buildParaMap()" << object["key"].toString();
         }
         return res;
     }
 }
 
+//singleton
 const scheme::Para::ParaMap& scheme::Para::getParaMap() {
     static const scheme::Para::ParaMap paraMap = buildParaMap();
     return paraMap;
 }
 
 scheme::Para::Para():mName(""), mKey(""), mVal(""),
+    mTags(Para::TagSet()),
     mAndParas(Para::ParaSet()), mOrParas(Para::ParaSet()),
     mSelectedType(SelectedType::INCOMPLETE){
 }
@@ -68,6 +86,7 @@ scheme::Para::Para(Para&& para) :
     mName(std::move(para.mName)),
     mKey(std::move(para.mKey)),
     mVal(std::move(para.mVal)),
+    mTags(std::move(para.mTags)),
     mAndParas(std::move(mAndParas)),
     mOrParas(std::move(mOrParas)),
     mSelectedType(para.mSelectedType) {}
@@ -87,7 +106,7 @@ scheme::Para::ParaSet clone(scheme::Para::ParaSet set) {
 }
 
 scheme::Para::Para(const Para &para)
-    :mName(para.mName), mKey(para.mKey), mVal(para.mVal), mSelectedType(para.mSelectedType){
+    :mName(para.mName), mKey(para.mKey), mVal(para.mVal), mTags(para.mTags), mSelectedType(para.mSelectedType){
     mAndParas = clone(para.mAndParas);
     mOrParas = clone(para.mOrParas);
 }
@@ -111,6 +130,17 @@ void scheme::Para::read(const QJsonObject &json, bool hasAlias) {
     mName = json["name"].toString();
     mKey = json["key"].toString();
     mVal = json["val"].toString();
+    auto iter = json.find("selectedType");
+    if(iter != json.end()) {
+        mSelectedType = toEnum((*iter).toString());
+    }
+    iter = json.find("tags");
+    if(iter != json.end()) {
+        for(auto jsonObject : (*iter).toArray()) {
+            mTags.push_back(toTag(jsonObject.toString()));
+            qDebug() << "get tag" << jsonObject.toString() << mName;
+        }
+    }
     mAndParas = readParas(json["andParas"].toArray(), hasAlias);
     mOrParas = readParas(json["orParas"].toArray(), hasAlias);
 }
@@ -119,6 +149,12 @@ void scheme::Para::write(QJsonObject &json) const {
     json["name"] = mName;
     json["key"] = mKey;
     json["val"] = mVal;
+    QJsonArray tagArray;
+    for(auto tag : mTags) {
+        tagArray.append(toString_checkBoxWithCombo(tag));
+    }
+    json["tags"] = tagArray;
+    json["selectedType"] = toString_checkBoxWithCombo(mSelectedType);
     json["andParas"] = writeParas(mAndParas);
     json["orParas"] = writeParas(mOrParas);
 }
@@ -154,7 +190,6 @@ scheme::Para::ParaSet scheme::Para::readParas(const QJsonArray &jsonArray, bool 
         ParaPtr paraPtr(new Para());
         paraPtr->read(paraObject, hasAlias);
         if(hasAlias && getParaMap().contains(paraPtr->getName())) {
-            qDebug() << "scheme::Para::readParas" << "hasAlias" << paraPtr->getName();
             auto &paras = getParaMap()[paraPtr->getName()];
             res.insert(res.end(), paras.begin(), paras.end());
         } else

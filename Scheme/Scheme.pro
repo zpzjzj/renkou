@@ -29,7 +29,14 @@ HEADERS += \
     transfromPara.hpp \
     Para.hpp \
     Singleton.hpp \
-    jsonUtil.hpp
+    jsonUtil.hpp \
+    paraUtil.hpp \
+    stlUtil.hpp \
+    Select.hpp \
+    add.hpp \
+    has_mem.hpp \
+    has_xxx.hpp \
+    is_container.hpp
 
 SOURCES += \
     SchemeParameter.cpp \
@@ -43,7 +50,11 @@ SOURCES += \
     ConfigMan.cpp \
     transfromPara.cpp \
     Para.cpp \
-    jsonUtil.cpp
+    jsonUtil.cpp \
+    paraUtil.cpp
 
 RESOURCES += \
     config.qrc
+
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib
