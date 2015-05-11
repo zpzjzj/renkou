@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QListWidget>
 #include <QMap>
+#include <QStringListModel>
 #include <vector>
 
 class SchemeListManager : public QObject
@@ -14,7 +15,10 @@ class SchemeListManager : public QObject
 public:
     typedef ParasManager* ParasManagerPtr;
 public:
-    SchemeListManager(ParasManagerPtr parasManager, QListWidget* listWidget, QObject *parent = 0);
+    SchemeListManager(ParasManagerPtr parasManager, QObject *parent = 0);
+    void bindListView(QListView* listView) {
+        listView->setModel(&model);
+    }
 public slots:
     void updateSchemes(const scheme::Para* paraPtr);
 private:
@@ -23,7 +27,7 @@ private:
     void updateList();
 private:
     ParasManagerPtr mParasManager;
-    QListWidget* mListWidget;
+    QStringListModel model;
     QMap<const scheme::Para*, std::vector<QString> > mParaStrsMap;
 };
 

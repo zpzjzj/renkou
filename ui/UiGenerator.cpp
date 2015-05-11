@@ -19,7 +19,7 @@ const QString COMPLETE_ICON_NAME = "single.gif";
 const QString MULTIPLE_SELECTED_ICON_NAME = "lampMulti.gif";
 const QString INIT_ICON_NAME = "lampYellow.gif";
 
-UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
+UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr, SchemeListManager *manager) :
     mPanel(panel), mParasManager(ptr), mIconMapOwner([](){
         return SelectedTypeIconMap{
             std::make_pair(scheme::Para::SelectedType::INCOMPLETE, new QIcon(ICON_PATH + ICOMPLETE_ICON_NAME)),
@@ -29,7 +29,7 @@ UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     }), mInitIcon([](){
         return QIcon(ICON_PATH + INIT_ICON_NAME);
     }){
-    mSchemeListManager = std::make_shared<SchemeListManager>(mParasManager.get(), panel->getSchemeListWidget());
+    manager->bindListView(panel->getSchemeListWidget());
     QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
                      this, SLOT(changeIcon(const scheme::Para*)));
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),

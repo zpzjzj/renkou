@@ -2,6 +2,7 @@
 #define SCHEMEMETADATA_H
 #include "metadataItem.h"
 #include "configMan.hpp"
+#include "Category.hpp"
 #include <QMap>
 #include <string>
 
@@ -16,17 +17,7 @@ namespace scheme {
 class schememetadata
 {
 public:
-    enum Category{
-        RenKouGaiYao,
-        FuFuZiNv,
-        ShengYuHaiCi,
-        ZhengCeShengYu,
-        FenLingTeFu,
-        FenLingJiangFu,
-        FenLingHeJi,
-        FenLingNongYe,
-        FenLingFeiNong
-    };
+    using Category = scheme::Category;
 public:
     schememetadata(Category category);
     schememetadata(const QString& filename) {
@@ -72,9 +63,9 @@ private:
     schememetadata& operator= (const schememetadata&);
     void readMetadata(const QString&);
 private:
-    QString metadataName;
-    QMap<QString , metadataItem> mtdMap;
-    QMap<int , QString> indexMap;
+    QString metadataName;//!< metadata filename
+    QMap<QString , metadataItem> mtdMap;//!< field_name - metadataItem
+    QMap<int , QString> indexMap;//!< index - field_name
 };
 
 #endif // SCHEMEMETADATA_H

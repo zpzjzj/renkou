@@ -13,6 +13,7 @@ class ParasManager : public QObject
     Q_OBJECT
 public:
     using AbstractSchemeList = std::vector<std::shared_ptr<AbstractScheme> >;
+
 public:
     ParasManager();
     void read(QString filename = PARA_PATH());
@@ -24,13 +25,16 @@ public:
         auto iter = mParentMap.find(const_cast<scheme::Para*>(child));
         return iter == mParentMap.end() ? nullptr : iter.value();
     }
+    const AbstractSchemeList& update();
+    const AbstractSchemeList& getAbstractSchemeList() const {
+        return mAbstractSchemeList;
+    }
 signals:
     void paraStateChanged(const scheme::Para*);
     void multiParaChanged(const scheme::Para*);
     void paraChanged(const scheme::Para*);
 public slots:
     bool saveToFile(QString fname = PARA_PATH());
-    AbstractSchemeList generate() const;
 private:
     typedef QMap<scheme::Para*, scheme::Para*> ParaMap;
 private:
@@ -41,6 +45,8 @@ private:
     scheme::Para* mMultiSelPara;
     //<!pointed at multiple selected para, when null means none
 
+    //shall not change until update() called
+    AbstractSchemeList mAbstractSchemeList;
     static const QString PARA_ORI_PATH;
 private:
     static const QString& PARA_PATH();

@@ -3,6 +3,7 @@
 #include "SchemeSel.hpp"
 #include "SchemeListManager.hpp"
 #include <algorithm>
+#include <iterator>
 #include <numeric>
 
 namespace {
@@ -41,8 +42,8 @@ namespace {
     }
 }
 
-SchemeListManager::SchemeListManager(ParasManager *parasManager, QListWidget *listWidget, QObject *parent) :
-    QObject(parent), mParasManager(parasManager), mListWidget(listWidget) {
+SchemeListManager::SchemeListManager(ParasManager *parasManager, QObject *parent) :
+    QObject(parent), mParasManager(parasManager) {
     for(auto paraPtr : mParasManager->getParaSet()) {
         auto strs = toStrings(*paraPtr);
         qDebug() << paraPtr->getName();
@@ -68,10 +69,11 @@ void SchemeListManager::updateSchemes(const scheme::Para* paraPtr) {
 }
 
 void SchemeListManager::updateList() {
-    mListWidget->clear();
+    QStringList list;
     for(auto str : combine(mParaStrsMap.values())) {
-        mListWidget->addItem(str);
+        list << str;
     }
+    model.setStringList(list);
 }
 
 /**

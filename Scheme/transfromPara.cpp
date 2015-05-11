@@ -56,8 +56,9 @@ namespace{
             else {
                 for(auto &step : option->getAndParas()) {
                     for(auto &part : step->getAndParas()) {
-                        if(part->getOrParas().empty())
-                            str += part->getVal();
+                        if(part->getOrParas().empty()) {//year number
+                            str += part->getVal().right(2);
+                        }
                         else {
                             str += (*util::getSelected(*part))->getVal();
                         }

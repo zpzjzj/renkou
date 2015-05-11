@@ -1,9 +1,9 @@
 #include "SelDispCombo.hpp"
-#include "ui_SelDispCombo.h"
+#include "ui_selSchemeWizardPage.h"
 
 SelDispCombo::SelDispCombo(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SelDispCombo)
+    QWizardPage(parent),
+    ui(new Ui::selSchemeWizardPage)
 {
     ui->setupUi(this);
     QObject::connect(ui->mParaListWidget, SIGNAL(currentRowChanged(int)),
@@ -30,6 +30,7 @@ QPushButton* SelDispCombo::getSaveToFileBtn() {
     return mSaveButton;
 }
 
-QListWidget* SelDispCombo::getSchemeListWidget() {
+QListView* SelDispCombo::getSchemeListWidget() {
     return ui->mSelectedSchemeWidget;
 }
+

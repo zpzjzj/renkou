@@ -14,29 +14,11 @@
 #include "SelDispCombo.hpp"
 #include "uimanager.h"
 #include "UiGenerator.hpp"
+#include "schemeDisplayWizard.hpp"
 
 UiManager::UiManager()
 {
     ptrCollection.fill(nullptr);
-}
-
-namespace {
-    QDialog* createSelDispCombo(UiManager* uiManager) {
-        QWizard* wizard = new QWizard;
-        auto derived_ptr = new SelDispCombo();
-        derived_ptr->setUiManager(uiManager);
-        auto parasManagerPtr = new ParasManager();
-        parasManagerPtr->read();
-        auto uiGenerator = new UiGenerator(UiGenerator::PanelPtr(derived_ptr), parasManagerPtr);
-        uiGenerator->generateUi();
-        derived_ptr->initIndicatorSel(parasManagerPtr);
-        QWizardPage *page = new QWizardPage(wizard);
-
-        wizard->addPage(new QWizardPage(derived_ptr));
-        wizard->setWindowTitle(QWizard::tr("方案演示"));
-        return derived_ptr;
-//        return wizard;
-    }
 }
 
 /** suppose the uiPage not existed before
@@ -53,8 +35,10 @@ UiManager::uiPtr UiManager::create_ui(page uiPage){
         derived_ptr->setUiManager(this);
         ptr = uiPtr(derived_ptr);}
         break;
-    case selDispCombo:
-        ptr = uiPtr(createSelDispCombo(this));
+    case selDispCombo: {
+        auto derived_ptr = std::make_shared<SchemeDisplayWizard>();
+        derived_ptr->setUiManager(this);
+        ptr = uiPtr(derived_ptr);}
         break;
     case enterCalculate:{
         auto derived_ptr = new EnterCalculate();

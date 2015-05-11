@@ -189,6 +189,9 @@ schString SchemeBuffer::toString(const Scheme* scheme, size_t row, size_t col) {
     }
     // set NULL
     buf[scheme->getMetadata()->colSize(col)] = 0;
+    qDebug() << "schString SchemeBuffer::toString(scheme, row, col)";
+    qDebug() << "colSize:" << scheme->getMetadata()->colSize(col);
+    qDebug() << "str:" << buf << QString(codec->toUnicode(buf));
     return schString(codec->toUnicode(buf));
 }
 

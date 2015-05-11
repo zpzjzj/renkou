@@ -55,7 +55,9 @@ SOURCES += main.cpp \
     Scheme.cpp \
     paraUtil.cpp \
     SchemeListManager.cpp \
-    IndicatorSel.cpp
+    IndicatorSel.cpp \
+    schemeDisplayWizard.cpp \
+    IndicatorSelTabWidget.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -104,7 +106,9 @@ HEADERS  += \
     iterate.hpp \
     paraUtil.hpp \
     SchemeListManager.hpp \
-    IndicatorSel.hpp
+    IndicatorSel.hpp \
+    schemeDisplayWizard.hpp \
+    IndicatorSelTabWidget.hpp
 
 FORMS += \
     customMadeArea.ui \
@@ -130,9 +134,11 @@ FORMS += \
     ui_wizard/newprojectionwizardpage.ui \
     ui_wizard/selectwizardpage.ui \
     openProject.ui \
-    SelDispCombo.ui \
     SchemeSel.ui \
-    IndicatorSel.ui
+    IndicatorSel.ui \
+    selSchemeWizardPage.ui \
+    selIndicatorWizardPage.ui \
+    schemeDisplaywizard.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \

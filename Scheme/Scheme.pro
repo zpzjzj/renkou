@@ -36,7 +36,8 @@ HEADERS += \
     add.hpp \
     has_mem.hpp \
     has_xxx.hpp \
-    is_container.hpp
+    is_container.hpp \
+    Category.hpp
 
 SOURCES += \
     SchemeParameter.cpp \
@@ -51,7 +52,8 @@ SOURCES += \
     transfromPara.cpp \
     Para.cpp \
     jsonUtil.cpp \
-    paraUtil.cpp
+    paraUtil.cpp \
+    Category.cpp
 
 RESOURCES += \
     config.qrc

@@ -32,6 +32,7 @@ void ParasManager::read(QString filename) {
 }
 
 bool ParasManager::saveToFile(QString fname) {
+    qDebug() << "ParasManager::saveToFile" << fname;
     QFile file(fname);
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning() << "Couldn't open save file" << fname
@@ -157,9 +158,10 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
     emit paraChanged(curr);
 }
 
-ParasManager::AbstractSchemeList ParasManager::generate() const{
+const ParasManager::AbstractSchemeList& ParasManager::update() {
     qDebug() << "AbstractScheme ParasManager::generate() const";
-    return scheme::map(mParaSet);
+    mAbstractSchemeList = scheme::map(mParaSet);
+    return getAbstractSchemeList();
 }
 
 const QString& ParasManager::PARA_PATH() {
