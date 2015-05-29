@@ -162,6 +162,7 @@ void SequenceStripViewItem::drawVolumeLabel(QPainter *painter)
 
 void SequenceStripViewItem::drawCurves(QPainter *painter)
 {
+    qDebug() << "void SequenceStripViewItem::drawCurves(QPainter *painter)";
     painter->save();
 
     for(int i=0; i<m_order.size(); ++i){
@@ -198,6 +199,7 @@ void SequenceStripViewItem::drawCurves(QPainter *painter)
 
 void SequenceStripViewItem::drawSelectedCurve(QPainter *painter, QString curve)
 {
+    qDebug() << "void SequenceStripViewItem::drawSelectedCurve(QPainter *painter, QString curve)";
     if(!m_model->m_datas.contains(curve))
         return ;
 

@@ -24,8 +24,9 @@ class SequenceController : public QWidget , Counted<SequenceController>
 public:
     using Counted<SequenceController>::objectCount;
     using Counted<SequenceController>::TooManyObjects;
+    using DataSources = SequenceModel::DataSources;
 
-    static SequenceController* createSequenceController(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey, QWidget *parent=0);
+    static SequenceController* createSequenceController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent=0);
 
     ~SequenceController();
 
@@ -48,8 +49,8 @@ private slots:
 
 private:
     explicit SequenceController(QWidget *parent = 0);
-    bool setup(QVector<QString> curves, QVector<FileInfo>files, int sy, int ey);
-    bool setupSequenceModel(QVector<QString> curves, QVector<FileInfo>files, int sy, int ey);
+    bool setup(QVector<QString> curves, DataSources files, int sy, int ey);
+    bool setupSequenceModel(QVector<QString> curves, DataSources files, int sy, int ey);
     bool setupWidgets();
     bool setupStateMachine();
 

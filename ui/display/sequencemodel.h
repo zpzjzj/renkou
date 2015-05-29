@@ -1,12 +1,13 @@
 #ifndef SEQUENCEMODEL_H
 #define SEQUENCEMODEL_H
 
-#include <QVector>
+#include <vector>
 #include <QMap>
 #include <QColor>
 #include <vector>
 #include <algorithm>
 #include "FileInfo.h"
+#include "../Scheme/Scheme.hpp"
 using namespace std;
 
 struct DataBlock
@@ -20,7 +21,8 @@ struct DataBlock
 
 struct SequenceModel
 {
-    SequenceModel(int sy, int ey, QVector<QString> curves, QVector<FileInfo> files);
+    using DataSources = std::vector<SchemeIndicator<schDouble> >;
+    SequenceModel(int sy, int ey, QVector<QString> curves, DataSources files);
     QMap<QString, DataBlock> m_datas;
     double m_minValue;
     double m_maxValue;

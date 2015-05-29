@@ -188,5 +188,3 @@ std::vector<std::shared_ptr<AbstractScheme> > map(const Para::ParaSet& paraSet) 
 }
 
 }
-
-

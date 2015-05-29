@@ -16,6 +16,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+#include <numeric>
 
 namespace {
     using Category = schememetadata::Category;
@@ -27,7 +28,7 @@ namespace {
         std::make_pair(Category::FuFuZiNv, "FuFuZiNv"),
         std::make_pair(Category::FenLingJiangFu, "FenLingJiangFu"),
         std::make_pair(Category::FenLingTeFu, "FenLingTeFu"),
-        std::make_pair(Category::FenLingHeJi, "FenLingHeji")
+        std::make_pair(Category::FenLingHeJi, "FenLingHeJi")
     };
 }
 
@@ -83,7 +84,7 @@ void schememetadata::readMetadata(const QString& filename)
     QFile file(QDir(Config::config.value("DATA_STRUCT_PATH")).filePath(Config::config.value(filename)));
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream mtdfile(&file);
-    qDebug() << "reading " << file.fileName() << "in schememetadata::readMetadata(filename)";
+    qDebug() << "reading " << file.fileName() << QString("in schememetadata::readMetadata(%1)").arg(filename);
     mtdfile.setCodec("GBK");
     QString tmpline;
     QStringList tmplines;
@@ -181,11 +182,11 @@ bool schememetadata::hasCol(const QString &filename)const
 
 size_t schememetadata::rowSize() const
 {
-    int tempRowCount = 0;
-    for (auto itr=mtdMap.begin() ; itr != mtdMap.end(); ++itr )
-        tempRowCount += itr.value().getfield_len();
-    return tempRowCount;
-
+    const QList<metadataItem> items = mtdMap.values();
+    return std::accumulate(items.begin(), items.end(), 0,
+                              [](int sum, const metadataItem& item){
+        return sum + item.getfield_len();
+    });
 }
 size_t schememetadata::colSize(const int index) const
 {
@@ -229,7 +230,8 @@ size_t schememetadata::colOffset(const QString& field_name ) const
 
 size_t schememetadata::colOffset(int index) const
 {
-    assert(index <= 116 && index > 0);
+//    assert(index <= 116 && index > 0);
+    assert(index > 0);
     auto itr = indexMap.find(index);
     if (itr == indexMap.end()) throw ColNotExist("coloumn not exist", index);
     return colOffset(itr.value());

@@ -9,6 +9,8 @@
 #include <QTreeView>
 #include <QMessageBox>
 
+const QString IndicatorSel::MAP_DISP_MODE = IndicatorSel::tr("地图式显示");
+
 IndicatorSel::IndicatorSel(SchemeListManager *schemeListManager, QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::IndicatorSel)
@@ -31,7 +33,6 @@ void IndicatorSel::bindListModel(SchemeListManager& manager) {
 
 void IndicatorSel::initializePage() {
     const static QString AREA_STR = "diqu";
-    const static QString MAP_DISP_MODE = IndicatorSel::tr("地图式显示");
     auto dispWizard = dynamic_cast<SchemeDisplayWizard*>(wizard());
     auto& abstractSchemes = dispWizard->getParasManager()->update();
     auto comboBox = ui->dispModeComboBox;

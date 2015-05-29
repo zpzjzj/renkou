@@ -3,20 +3,88 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QDebug>
+#include <QApplication>
 #include "sequencemodel.h"
 
-SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, QVector<FileInfo> files)
+#define NEW_IMPL
+SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, DataSources files)
 {
 //    QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
-
+#ifdef NEW_IMPL
+    auto& first = files.front();
+    sy = first.startYear();
+    ey = first.endYear();
     m_startYear = sy;
     m_endYear = ey;
-
     m_datas.clear();
-
     m_maxValue = 0;
     m_minValue = 0;
+    auto const size = ey - sy + 1;
+    QProgressDialog progress(QProgressDialog::tr("正在读取数据..."), QString(), 0, files.size() * size);
+    progress.setMinimumDuration(1000);//show after 1s
+    progress.setMinimumSize(200, 100);
+    progress.setModal(Qt::WindowModal);
 
+    int index = 0;
+    int count = 0;
+    qDebug() << "index" << first.getIndex();
+    for (SchemeIndicator<schDouble> &indicator : files) {
+        QString curvename = curves[index];
+        DataBlock& db = m_datas[curvename];
+        db.m_color = Qt::black;
+        db.m_averageValue.resize(size);
+        db.m_data.resize(size);
+        db.m_maxValueYear.resize(size);
+        db.m_minValueYear.resize(size);
+
+        for(size_t year = sy; year <= ey; ++year, ++count) {
+            size_t i = year - sy;
+            db.m_data[i] = indicator.get(year);
+            db.m_averageValue[i] = indicator.mean(sy, year);
+            db.m_minValueYear[i] = indicator.minYear(sy, year) - sy;
+            db.m_maxValueYear[i] = indicator.maxYear(sy, year) - sy;
+//            qDebug() << QString("minValueYear[%1]").arg(i) << db.m_minValueYear[i];
+//            qDebug() << QString("maxValueYear[%1]").arg(i) << db.m_maxValueYear[i];
+//            qDebug() << i << ":" <<
+//                        db.m_data[i] << db.m_averageValue[i] << db.m_minValueYear[i] << db.m_maxValueYear[i];
+            progress.setValue(count);
+        }
+        ++index;
+    }
+/*
+    for(auto &key : m_datas.keys()) {
+        qDebug() << key;
+        auto db = m_datas.value(key);
+        for(size_t i = 0; i < size; ++i) {
+            qDebug() << i << ":" <<
+                        db.m_data[i] << db.m_averageValue[i] << db.m_minValueYear[i] << db.m_maxValueYear[i];
+        }
+    }
+    */
+
+    {
+        std::vector<double> doubleArr (files.size());
+        std::transform(files.begin(), files.end(),doubleArr.begin(),
+                       [sy, ey](const SchemeIndicator<schDouble> &indicator) {
+            return indicator.min(sy, ey);
+        });
+        m_minValue = std::min(m_minValue, *std::min_element(doubleArr.begin(), doubleArr.end()));
+        qDebug() << "m_minValue" << m_minValue;
+
+        std::transform(files.begin(), files.end(), doubleArr.begin(),
+                       [sy, ey](const SchemeIndicator<schDouble> &indicator) {
+            return indicator.max(sy, ey);
+        });
+        m_maxValue = *std::max_element(doubleArr.begin(), doubleArr.end());
+        qDebug() << "m_maxValue" << m_maxValue;
+    }
+
+#else
+    m_startYear = sy;
+    m_endYear = ey;
+    m_datas.clear();
+    m_maxValue = 0;
+    m_minValue = 0;
     QProgressDialog *progress = new QProgressDialog;
     progress->setWindowTitle(QObject::tr("正在读取数据"));
     progress->setCancelButton(0);
@@ -35,16 +103,16 @@ SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, QVector<Fi
         db.m_minValueYear.resize(ey-sy+1);
 
         // Read data
-        QFile file(files[k].m_FileName);
+        QFile file(files[k].getScheme()->toInternalName());
         if(!file.open(QFile::ReadOnly | QFile::Text)){
             QMessageBox::warning(0, QObject::tr("错误！"),
                                  QObject::tr("未找到数据文件")+curvename,
                                  QMessageBox::Ok);
-            qDebug()<<files[k].m_FileName;
+            qDebug()<<files[k].getScheme()->toInternalName();
             continue;
         }
         QTextStream in(&file);
-        int index = files[k].m_index;
+        int index = files[k].getIndex() - 1;
         int year = sy;
 
         while(!in.atEnd()){
@@ -59,7 +127,7 @@ SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, QVector<Fi
             progress->update();
 
             QString datastr = line.section(",", index, index);
-//            qDebug()<<datastr;
+            qDebug()<<datastr;
             db.m_data[year-sy] = datastr.toDouble();
             if(m_maxValue < db.m_data[year-sy])
                 m_maxValue = db.m_data[year-sy];
@@ -67,7 +135,7 @@ SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, QVector<Fi
                 m_minValue = db.m_data[year-sy];
         }
 
-//        qDebug()<<m_minValue<<m_maxValue;
+        qDebug()<< "minValue" << m_minValue << "maxValue" << m_maxValue;
 
         // Calculate Key Parameters
         double sum = db.m_data[0];
@@ -108,4 +176,5 @@ SequenceModel::SequenceModel(int sy, int ey, QVector<QString> curves, QVector<Fi
 
     progress->hide();
     delete progress;
+#endif
 }

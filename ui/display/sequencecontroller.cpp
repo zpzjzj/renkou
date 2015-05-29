@@ -43,7 +43,7 @@ SequenceController::~SequenceController()
     delete m_timeLine;
 }
 
-SequenceController* SequenceController::createSequenceController(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey, QWidget *parent)
+SequenceController* SequenceController::createSequenceController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent)
 {
     SequenceController *sc = new SequenceController();
     if(sc->setup(curves, files, sy, ey))
@@ -54,7 +54,7 @@ SequenceController* SequenceController::createSequenceController(QVector<QString
     }
 }
 
-bool SequenceController::setup(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey)
+bool SequenceController::setup(QVector<QString> curves, DataSources files, int sy, int ey)
 {
     bool ret = true;
 
@@ -80,7 +80,7 @@ bool SequenceController::setup(QVector<QString> curves, QVector<FileInfo> files,
     return ret;
 }
 
-bool SequenceController::setupSequenceModel(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey)
+bool SequenceController::setupSequenceModel(QVector<QString> curves, DataSources files, int sy, int ey)
 {
     bool ret = true;
 

@@ -7,5 +7,6 @@
         <file>config/scheme.json</file>
         <file>config/para_ori.json</file>
         <file>config/indicator.json</file>
+        <file>data/mapData.txt</file>
     </qresource>
 </RCC>

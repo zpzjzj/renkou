@@ -21,3 +21,14 @@ QString scheme::toString(Category category) {
 Category scheme::fromString(const QString& str) {
     return map.key(str);
 }
+
+bool scheme::isFenLing(Category category) {
+    switch (category) {
+        case Category::FenLingHeJi:
+        case Category::FenLingJiangFu:
+        case Category::FenLingTeFu:
+            return true;
+        default:
+            return false;
+    }
+}

@@ -25,9 +25,10 @@ namespace Ui {
 class MapType1 : public QWidget
 {
     Q_OBJECT
-
 public:
-    static MapType1* makeMapType1(QVector<QString> curve, QVector<FileInfo> file, int sYear, int eYear, QWidget *parent=0)
+    using DataSources = DataProvider::DataSources;
+public:
+    static MapType1* makeMapType1(QVector<QString> curve, DataSources file, int sYear, int eYear, QWidget *parent=0)
     { return new MapType1(curve, file, sYear, eYear, parent);}
 
     ~MapType1();
@@ -50,7 +51,7 @@ private slots:
 
 private:
 //    explicit MapType1(QWidget *parent=0);
-    MapType1(QVector<QString> curve, QVector<FileInfo> file, int sYear, int eYear, QWidget *parent=0);
+    MapType1(QVector<QString> curve, DataSources file, int sYear, int eYear, QWidget *parent=0);
     QSlider *createSlider();
     void createStates();
     void createTransitions();
@@ -68,7 +69,7 @@ private:
     QSlider *zSlider;
 
     QVector<QString> curves_;
-    QVector<FileInfo> files_;
+    DataSources files_;
 //    QTimer *timer;
 
     QStateMachine stateMachine;

@@ -6,7 +6,7 @@
 #include "mapinformation.h"
 
 MapInformation *MapInformation::m_map = NULL;
-QString mapfile = "E:/Programs/Qt/2011415/output_v0.3.txt";
+QString mapfile = ":/display/data/mapData.txt";
 
 MapInformation::MapInformation()
 {
@@ -20,6 +20,7 @@ MapInformation::MapInformation()
     }
 
     QTextStream stream(&file);
+    stream.setCodec("GBK");
     QString pname;
     int n;
     m_provinces.clear();

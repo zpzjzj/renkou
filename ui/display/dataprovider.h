@@ -2,16 +2,17 @@
 #define DATAPROVIDER_H
 
 #include <QStringList>
-#include <QVector>
 #include <QMap>
 #include <vector>
 #include <algorithm>
 #include "FileInfo.h"
+#include "../Scheme/Scheme.hpp"
 using namespace std;
 
 struct DataProvider
 {
-    DataProvider(int sy, int ey, QStringList curve, QVector<FileInfo> files);
+    using DataSources = std::vector<SchemeIndicator<schDouble> >;
+    DataProvider(int sy, int ey, QStringList curve, DataSources files);
     QMap<QString, vector<double> > m_data;
     double m_minValue;
     double m_maxValue;

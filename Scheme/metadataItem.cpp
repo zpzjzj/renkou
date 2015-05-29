@@ -14,7 +14,7 @@ metadataItem::metadataItem(QString fname, QString ftype, int flen,
 
     if(ftype == "C"){
         field_type = STRING;
-        field_len = flen; //STRING
+        field_len = (flen + 1) * sizeof(CharType); //STRING
     }
 
     else if(ftype == "N" && fdec == 0)

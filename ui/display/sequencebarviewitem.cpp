@@ -160,6 +160,7 @@ void SequenceBarViewItem::drawVolumeLabel(QPainter *painter)
 
 void SequenceBarViewItem::drawCurves(QPainter *painter)
 {
+    qDebug() << "void SequenceBarViewItem::drawCurves(QPainter *painter)";
     painter->save();
 
     QPen pen(GRAY);
@@ -201,6 +202,7 @@ void SequenceBarViewItem::drawCurves(QPainter *painter)
 
 void SequenceBarViewItem::drawSelectedCurve(QPainter *painter, QString curvename)
 {
+    qDebug() << "void SequenceBarViewItem::drawSelectedCurve(QPainter *painter, QString curvename)";
     if(!m_model->m_datas.contains(curvename))
         return ;
 

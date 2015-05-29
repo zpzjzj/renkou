@@ -6,8 +6,9 @@
 #include <QMapIterator>
 #include <QDebug>
 #include "pyramidmodel.h"
+#include "../Scheme/SchemeInstance.hpp"
 
-PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, QVector<FileInfo> files)
+PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources files)
 {
 //    qDebug()<<"PyramidModel::PyramidModel"<<"begin";
 
@@ -34,25 +35,45 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, QVector<FileI
     progress->setMinimumSize(200, 100);
     progress->show();
 
-    for(int k=0; k<files.size(); ++k){
+    for(size_t k=0; k<files.size(); ++k){
+        qDebug() << "PyramidModel::PyramidModel" << "k" << k;
         QString curvename = curve.at(k);
         vector<vector<double> > v_male;
         vector<vector<double> > v_female;
         vector<double> v_total;
-
-        v_male.resize(ey - sy + 1);
-        v_female.resize(ey - sy + 1);
-        v_total.resize(ey-sy+1);
+        const int size = ey - sy + 1;
+        v_male.resize(size);
+        v_female.resize(size);
+        v_total.resize(size);
 
         fill(v_total.begin(), v_total.end(), 0.0);
+//        Scheme& scheme = *(files[k]);
+//        for(int y = sy; y < ey; ++y) {//for each instance
+//            SchemeInstance instance = scheme.getInstance(y);
+//            int yearCount = (scheme.getMetadata()->colCount() - 1) / 2;
+//            qDebug() << "yearCount" << yearCount << "colCount" << scheme.getMetadata()->colCount();
+//            for(int i = 0; i < yearCount; ++i) {
+//                double f = instance.getDouble(i * 2 + 1) / 10000;
+//                double m = instance.getDouble(i * 2 + 2) / 10000;
+//                v_male[i].push_back(m);
+//                v_female[i].push_back(f);
+//                v_total[i] = m + f;
+//                m_maxValue = qMax(m_maxValue, f);
+//                m_maxValue = qMax(m_maxValue, m);
+//            }
+//        }
+//        progress->setValue(k*110);
+//        progress->update();
+//        qDebug() << "PyramidModel::PyramidModel" << "k" << k << curvename;
 
-        // 读取数据
-        QFile file(files[k].m_FileName);
+        //TODO
+//        // 读取数据
+        QFile file(files[k]->toInternalName());
         if(!file.open(QFile::ReadOnly | QFile::Text)){
             QMessageBox::warning(0, QObject::tr("错误！"),
                                  QObject::tr("未找到数据文件")+curvename,
                                  QMessageBox::Ok);
-            qDebug()<<files[k].m_FileName;
+            qDebug()<<files[k]->toInternalName();
             continue;
         }
         QTextStream in(&file);
@@ -90,11 +111,11 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, QVector<FileI
         v_min.resize(v_male.size());
         v_max.resize(v_male.size());
 
-        for(int year=0; year<v_male.size(); ++year){
+        for(size_t year=0; year<v_male.size(); ++year){
             minIndex = maxIndex = 0;
             sum = 0;
             popu = 0;
-            for(int age=0; age<v_male[year].size(); ++age){
+            for(size_t age=0; age<v_male[year].size(); ++age){
                 if(v_male[year][age] + v_female[year][age] <
                    v_male[year][minIndex] + v_female[year][minIndex])
                     minIndex = age;

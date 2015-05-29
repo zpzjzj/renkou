@@ -16,6 +16,7 @@ namespace scheme {
 
     Category fromString(const QString& str);
     QString toString(Category category);
+    bool isFenLing(Category category);
 }
 
 #endif // CATEGORY_HPP

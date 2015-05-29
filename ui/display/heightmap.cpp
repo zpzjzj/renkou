@@ -479,7 +479,7 @@ QByteArray HeightMap::createFrame(const DataProvider &dp, int year)
 
             QMap<QString, vector<double> >::const_iterator dit = dp.m_data.find(it.key());
             if(dp.m_data.end() == dit){
-                qDebug()<<"HeightMap::createFrame"<<it.key();
+                qDebug()<<"HeightMap::createFrame" << it.key();
                 continue;
             }
 

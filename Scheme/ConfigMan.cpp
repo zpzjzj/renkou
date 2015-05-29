@@ -32,7 +32,7 @@ void ConfigMan::init() {
         std::make_pair("FenLingTeFu", "分龄类字段名和对应指标名.txt"),
         std::make_pair("FenLingJiangFu", "分龄类字段名和对应指标名.txt"),
         std::make_pair("FenLingHeJi", "分龄类字段名和对应指标名.txt"),
-        std::make_pair("START_YEAR", "2009"),
+        std::make_pair("START_YEAR", "2010"),
         std::make_pair("END_YEAR", "2130")
     };
     for(auto key : strMap.keys()) {

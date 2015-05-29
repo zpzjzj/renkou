@@ -8,11 +8,14 @@
 #include <vector>
 #include <algorithm>
 #include "FileInfo.h"
+#include "../Scheme/Scheme.hpp"
 using namespace std;
 
 struct PyramidModel
 {
-    PyramidModel(int sy, int ey, QVector<QString> curve, QVector<FileInfo> files);
+    using DataSources = std::vector<SchemePtr>;
+
+    PyramidModel(int sy, int ey, QVector<QString> curve, DataSources files);
     QMap<QString, vector<vector<double> > > m_maleData; // String表示曲线名，vector<vector<double>>表示每一年每个年龄的人数
     QMap<QString, vector<vector<double> > > m_femaleData;
     QMap<QString, vector<double> > m_totalPopulation;   // 每年的总人口

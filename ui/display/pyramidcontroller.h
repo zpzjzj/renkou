@@ -29,8 +29,9 @@ class PyramidController : public QWidget, private Counted<PyramidController>
 public:
     using Counted<PyramidController>::objectCount;
     using Counted<PyramidController>::TooManyObjects;
+    using DataSources = PyramidModel::DataSources;
 
-    static PyramidController* createPyramidController(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey, QWidget *parent=0);
+    static PyramidController* createPyramidController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent=0);
 
     ~PyramidController();
 
@@ -53,8 +54,8 @@ private slots:
 
 private:
     explicit PyramidController(QWidget *parent=0);
-    bool setup(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey);
-    bool setupPyramidModel(QVector<QString> curve, QVector<FileInfo> files, int sy, int ey);
+    bool setup(QVector<QString> curves, DataSources files, int sy, int ey);
+    bool setupPyramidModel(QVector<QString> curve, DataSources files, int sy, int ey);
     bool setupWidgets();
     bool setupStateMachine();
 

@@ -19,6 +19,9 @@ public:
     void bindListView(QListView* listView) {
         listView->setModel(&model);
     }
+    QVector<QString> getStrings() const {
+        return model.stringList().toVector();
+    }
 public slots:
     void updateSchemes(const scheme::Para* paraPtr);
 private:

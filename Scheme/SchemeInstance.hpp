@@ -30,4 +30,3 @@ class SchemeInstance {
         Scheme* scheme;
         const size_t year;
 };
-

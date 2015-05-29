@@ -4,13 +4,13 @@
 #include "maptype1.h"
 #include "ui_maptype1.h"
 
-MapType1::MapType1(QVector<QString> curve, QVector<FileInfo> file, int sYear, int eYear, QWidget *parent):
+MapType1::MapType1(QVector<QString> curve, DataSources file, int sYear, int eYear, QWidget *parent):
         QWidget(parent), m_startYear(sYear), m_endYear(eYear),
-        ui(new Ui::MapType1)
+        ui(new Ui::MapType1), files_(file)
 {
     ui->setupUi(this);
     this->curves_ = curve;
-    this->files_ = file;
+//    this->files_ = file;
     createGraphicsView(sYear, eYear);
     createStates();
     createTransitions();
@@ -94,6 +94,7 @@ void MapType1::createGraphicsView(int sYear, int eYear)
     for(int i=0; i<this->curves_.size(); ++i)
         cur<<this->curves_[i];
 
+    //TODO
     dp = new DataProvider(sYear, eYear, cur, files_);
     hm = new HeightMap(this);
     hm->init(sYear, eYear, *dp);

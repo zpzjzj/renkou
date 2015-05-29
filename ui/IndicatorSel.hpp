@@ -27,6 +27,8 @@ public:
      * @param manager
      */
     void bindListModel(SchemeListManager& manager);
+public:
+    const static QString MAP_DISP_MODE;
 private:
     Ui::IndicatorSel *ui;
 };

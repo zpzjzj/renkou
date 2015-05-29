@@ -43,7 +43,7 @@ PyramidController::~PyramidController()
     delete m_timeLine;
 }
 
-PyramidController* PyramidController::createPyramidController(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey, QWidget *parent)
+PyramidController* PyramidController::createPyramidController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent)
 {
     PyramidController *pc = new PyramidController();
     if(pc->setup(curves, files, sy, ey))
@@ -54,7 +54,7 @@ PyramidController* PyramidController::createPyramidController(QVector<QString> c
     }
 }
 
-bool PyramidController::setup(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey)
+bool PyramidController::setup(QVector<QString> curves, DataSources files, int sy, int ey)
 {
     bool ret = true;
 
@@ -83,7 +83,7 @@ bool PyramidController::setup(QVector<QString> curves, QVector<FileInfo> files, 
     return ret;
 }
 
-bool PyramidController::setupPyramidModel(QVector<QString> curves, QVector<FileInfo> files, int sy, int ey)
+bool PyramidController::setupPyramidModel(QVector<QString> curves, DataSources files, int sy, int ey)
 {
     bool ret = true;
 
