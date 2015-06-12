@@ -99,7 +99,7 @@ void schememetadata::readMetadata(const QString& filename)
     {
         tmpline = mtdfile.readLine();
         tmplines = tmpline.split("\t");
-//        qDebug() << tmpline;
+//        qDebug() << "tmpline" << tmpline;
 
         field_name	= tmplines[0].simplified();
         field_type	= tmplines[1].simplified();
@@ -119,7 +119,6 @@ void schememetadata::readMetadata(const QString& filename)
 
         mtdMap.insert(field_name, mtdItem);
         indexMap.insert(index.toInt(&ok3,10), field_name);
-
     }
 //    qDebug() << "indexMap" << indexMap;
     file.close();
@@ -230,8 +229,7 @@ size_t schememetadata::colOffset(const QString& field_name ) const
 
 size_t schememetadata::colOffset(int index) const
 {
-//    assert(index <= 116 && index > 0);
-    assert(index > 0);
+    assert(index <= colCount() && index > 0);
     auto itr = indexMap.find(index);
     if (itr == indexMap.end()) throw ColNotExist("coloumn not exist", index);
     return colOffset(itr.value());

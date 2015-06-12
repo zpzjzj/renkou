@@ -61,11 +61,11 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
 //    progress.setMinimumSize(200, 10);
 //    progress.setAcceptDrops(false);
 
-    m_maxValue = files[0].max();
-    m_minValue = files[0].min();
+    m_maxValue = 0;
+    m_minValue = 0;
     m_data.clear();
     //TODO
-
+#ifdef NEW_IMPL
 //    for(auto& indicator : files) {
 //        QString name = indicator.getScheme()->getName();
 //        int provinceId = 0;
@@ -89,7 +89,7 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
 
 //        progress.hide();
 //    }
-
+#else
     for(int i=0; i<files.size(); ++i){
         int j;
         for(j=0; j<34; ++j){
@@ -153,4 +153,5 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
             std::fill(qv.begin(), qv.end(), 0);
         }
     }
+#endif
 }

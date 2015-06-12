@@ -25,7 +25,7 @@ SchemeDisplayWizard::SchemeDisplayWizard(QWidget *parent) :
     uiGenerator->generateUi();
     addPage(selectSchemePage);
     addPage(new IndicatorSel(mSchemeListManager, this));
-    setWindowTitle(tr("方案演示"));
+    setWindowTitle(tr("仿真演示"));
     resize(selectSchemePage->sizeHint());
     QObject::connect(this, SIGNAL(accepted()), this, SLOT(accepted()));
 }

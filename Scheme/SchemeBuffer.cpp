@@ -33,17 +33,19 @@ namespace {
         schDouble f;
         // if year not exist
         // FIX: start year could be READ_START_YEAR or USER_SPECIFIC START_YEAR
-        if(!scheme::isFenLing(meta->category())) {
-            if (list[0].toInt()-(int)(meta->startYear()) > (int)(offset) ) {
-                // set all to zero
-                qDebug() << "greater than" << list[0].toInt() << meta->startYear() << offset;
-                memset(buffer, 0, meta->rowSize());
-                return false;
-            } else if (list[0].toInt()-(int)(meta->startYear()) < (int)(offset) ) {
-                qDebug() << "less than" << list[0].toInt() << meta->startYear() << offset;
-                --offset; // skip this one
-                return false;
-            }
+        auto index = list[0].toInt();
+        if(scheme::isFenLing(meta->category())) {
+            index += meta->startYear();
+        }
+        if (index-(int)(meta->startYear()) > (int)(offset) ) {
+            // set all to zero
+            qDebug() << "greater than" << index << meta->startYear() << offset;
+            memset(buffer, 0, meta->rowSize());
+            return false;
+        } else if (index-(int)(meta->startYear()) < (int)(offset) ) {
+            qDebug() << "less than" << index << meta->startYear() << offset;
+            --offset; // skip this one
+            return false;
         }
 
         for (unsigned j = 1; j <= meta->colCount(); ++j) {
@@ -263,6 +265,7 @@ bool SchemeBuffer::Buffer::allocateBuffer(size_t size) {
     delete [] buffer;
     buffer = new char[buffer_size];
     if (buffer==nullptr) return false; // note: may throw bad_alloc
+    memset(buffer, 0, buffer_size);
     return true;
 }
 
@@ -340,6 +343,7 @@ SchemeBuffer::Buffer::Buffer(void)
     :last_access(0), size(0), buffer_size(INIT_SIZE), name(""), meta(nullptr), buffer(nullptr)
 {
     buffer = new char[buffer_size];
+    memset(buffer, 0, buffer_size);
 }
 
 SchemeBuffer::Buffer::~Buffer(void) {

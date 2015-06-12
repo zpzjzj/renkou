@@ -15,6 +15,7 @@ int main(int argc, char *argv[]){
     QApplication app(argc, argv);
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
     MainWindow mainWindow;
+    mainWindow.setWindowTitle(MainWindow::tr("人口仿真模拟系统"));
     UiManager uiManager;
     mainWindow.setUiManager(&uiManager);
     mainWindow.show();

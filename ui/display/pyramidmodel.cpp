@@ -8,12 +8,11 @@
 #include "pyramidmodel.h"
 #include "../Scheme/SchemeInstance.hpp"
 
+#define NEW_IMPL
+
 PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources files)
 {
-//    qDebug()<<"PyramidModel::PyramidModel"<<"begin";
-
 //    QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
-
     m_startYear = sy;
     m_endYear = ey;
 
@@ -27,47 +26,40 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources f
     m_maxValue = 0;
     m_minValue = 0;
 
-    QProgressDialog *progress = new QProgressDialog;
-    progress->setWindowTitle(QObject::tr("读取数据中"));
-    progress->setCancelButton(0);
-    progress->setRange(0, files.size()*110);
-    progress->setMinimumDuration(0);
-    progress->setMinimumSize(200, 100);
-    progress->show();
+    const size_t MAX_AGE = 110;
+    const int size = ey - sy + 1;
+    QProgressDialog progress(QObject::tr("读取数据中"), QString(), 0, files.size() * (MAX_AGE + 1) * size);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setMinimumDuration(1000);
+    progress.setMinimumSize(200, 100);
 
     for(size_t k=0; k<files.size(); ++k){
-        qDebug() << "PyramidModel::PyramidModel" << "k" << k;
         QString curvename = curve.at(k);
-        vector<vector<double> > v_male;
-        vector<vector<double> > v_female;
-        vector<double> v_total;
-        const int size = ey - sy + 1;
-        v_male.resize(size);
-        v_female.resize(size);
-        v_total.resize(size);
-
-        fill(v_total.begin(), v_total.end(), 0.0);
-//        Scheme& scheme = *(files[k]);
-//        for(int y = sy; y < ey; ++y) {//for each instance
-//            SchemeInstance instance = scheme.getInstance(y);
-//            int yearCount = (scheme.getMetadata()->colCount() - 1) / 2;
-//            qDebug() << "yearCount" << yearCount << "colCount" << scheme.getMetadata()->colCount();
-//            for(int i = 0; i < yearCount; ++i) {
-//                double f = instance.getDouble(i * 2 + 1) / 10000;
-//                double m = instance.getDouble(i * 2 + 2) / 10000;
-//                v_male[i].push_back(m);
-//                v_female[i].push_back(f);
-//                v_total[i] = m + f;
-//                m_maxValue = qMax(m_maxValue, f);
-//                m_maxValue = qMax(m_maxValue, m);
-//            }
-//        }
-//        progress->setValue(k*110);
-//        progress->update();
-//        qDebug() << "PyramidModel::PyramidModel" << "k" << k << curvename;
-
-        //TODO
-//        // 读取数据
+        vector<vector<double> > v_male(size);
+        vector<vector<double> > v_female(size);
+        vector<double> v_total(size, 0);
+#ifdef NEW_IMPL
+        Scheme& scheme = *(files[k]);
+        for(size_t i = 2; i <= scheme.getMetadata()->colCount(); ++i) {//for each col
+            const int yearOffset = i / 2 - 1;
+            auto &arr = (i % 2 == 0) ? v_male[yearOffset] : v_female[yearOffset];
+            arr.resize(MAX_AGE + 1);
+            auto indicator = scheme.getIndicatorInt(i);
+            for(size_t index = 0; index <= MAX_AGE; ++index) {
+                double val = indicator.get(index + sy);
+                val /= 10000;
+                arr[index] = val;
+                v_total[index] += val;
+                m_maxValue = std::max(m_maxValue, val);
+                m_minValue = std::min(m_minValue, val);
+            }
+            if(i % 2 != 0) {
+                progress.setValue((MAX_AGE + 1) * (k * size + i / 2));
+            }
+        }
+#else
+        qDebug() << "PyramidModel::PyramidModel" << "k" << k << curvename;
+        // 读取数据
         QFile file(files[k]->toInternalName());
         if(!file.open(QFile::ReadOnly | QFile::Text)){
             QMessageBox::warning(0, QObject::tr("错误！"),
@@ -92,10 +84,10 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources f
                 m_maxValue = qMax(m_maxValue, f);
                 m_maxValue = qMax(m_maxValue, m);
             }
-            progress->setValue(k*110+age);
-            progress->update();
+            progress.setValue(k*110+age);
         }
         file.close();
+#endif
 
         m_maleData[curvename] = v_male;
         m_femaleData[curvename] = v_female;
@@ -143,9 +135,5 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources f
         m_minPopulationAge[curvename] = v_min;
         m_maxPopulationAge[curvename] = v_max;
     }
-
-    progress->hide();
-    delete progress;
-
 //    qDebug()<<"PyramidModel::PyramidModel"<<"finish";
 }
