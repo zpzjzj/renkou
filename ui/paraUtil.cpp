@@ -3,7 +3,7 @@
 #include <numeric>
 
 namespace util{
-    void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect) {
+    void selectPara(scheme::Para* dest, scheme::Para* selected, bool isMultiSelect) {
         using SelectedType = scheme::Para::SelectedType;
         scheme::Para::ParaSet& set = dest->getOrParas();
         int selCnt = 0;

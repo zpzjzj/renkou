@@ -4,6 +4,7 @@
 #include <QTabWidget>
 #include <QStandardItemModel>
 #include <QItemSelection>
+#include <memory>
 
 class IndicatorSelTabWidget : public QTabWidget
 {

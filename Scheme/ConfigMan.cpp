@@ -15,8 +15,8 @@ ConfigMan::ConfigMan() :
     QSettings("Demography Group", "scheme") {
     qDebug() << "ConfigMan::ConfigMan()";
     qDebug() << "settings path:" << QSettings::fileName();
-    if(!QFile(QSettings::fileName()).exists()) {
-        qDebug() << "file not exists";
+    if(!QSettings::contains("DATA_STRUCT_PATH")) {
+        qDebug() << "config not found";
         init();
     }
 }

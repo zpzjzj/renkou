@@ -22,7 +22,7 @@ namespace util {
      * @param selected
      * @param isMultiSelect
      */
-    void selectPara(scheme::Para::Para* dest, scheme::Para* selected, bool isMultiSelect = false);
+    void selectPara(scheme::Para* dest, scheme::Para* selected, bool isMultiSelect = false);
     bool isCheckBoxGroup(const scheme::Para& para);
     bool hasComboBox(const scheme::Para& para);
 }

@@ -120,7 +120,8 @@ void schememetadata::readMetadata(const QString& filename)
         mtdMap.insert(field_name, mtdItem);
         indexMap.insert(index.toInt(&ok3,10), field_name);
     }
-//    qDebug() << "indexMap" << indexMap;
+    qDebug() << "void schememetadata::readMetadata(const QString& filename)";
+    qDebug() << "indexMap" << indexMap;
     file.close();
 }
 
@@ -134,7 +135,7 @@ const metadataItem& schememetadata::operator[] (const int index) const
     auto itr = indexMap.find(index);
     if(itr==indexMap.end())
     {
-        throw ColNotExist("column not exit", index);
+        throw ColNotExist("column not exists", index);
     }
 
     else

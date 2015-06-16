@@ -170,7 +170,7 @@ const QString& ParasManager::PARA_PATH() {
             QDir(QApplication::applicationDirPath())
             .absoluteFilePath("../Resources/para.json");
 #else
-    const QString PATH = "path_under_win";//TODO
+    static const QString PATH = "para.json";//TODO
 #endif
     return PATH;
 }

@@ -10,7 +10,7 @@
 SchemeDisplayWizard::SchemeDisplayWizard(QWidget *parent) :
     QWizard(parent),
     ui(new Ui::schemeDisplayWizard),
-    mParasManager(std::make_unique<ParasManager>())
+    mParasManager(new ParasManager())
 {
     ui->setupUi(this);
     mParasManager->read();
@@ -79,21 +79,6 @@ using SchemeNames = QVector<QString>;
 
 inline SchemeNames getSchemeNames(const SchemeListManager& listManager) {
     return listManager.getStrings();
-}
-
-QWidget* mapDisplay() {
-//    return MapType1::makeMapType1(t_Curves, t_Files, t_StartYear, EndYear.toInt());
-    return nullptr;
-}
-
-QWidget* sequence() {
-//    return SequenceController::createSequenceController(t_Curves, t_Files, t_StartYear, EndYear.toInt());
-    return nullptr;
-}
-
-QWidget* pyramid() {
-//    return PyramidController::createPyramidController(t_Curves, t_Files, t_StartYear, EndYear.toInt());
-    return nullptr;
 }
 
 }

@@ -12,7 +12,6 @@
 
 PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources files)
 {
-//    QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
     m_startYear = sy;
     m_endYear = ey;
 
@@ -135,5 +134,4 @@ PyramidModel::PyramidModel(int sy, int ey, QVector<QString> curve, DataSources f
         m_minPopulationAge[curvename] = v_min;
         m_maxPopulationAge[curvename] = v_max;
     }
-//    qDebug()<<"PyramidModel::PyramidModel"<<"finish";
 }

@@ -7,7 +7,7 @@
 #include <QPainterPath>
 #include <QProgressDialog>
 #include <QQuaternion>
-#include <OpenGL/glu.h>
+#include <GL/glu.h>
 #include <qgl.h>
 #include <cstdlib>
 #include <cstring>

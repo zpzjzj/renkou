@@ -36,7 +36,7 @@ UiManager::uiPtr UiManager::create_ui(page uiPage){
         ptr = uiPtr(derived_ptr);}
         break;
     case selDispCombo: {
-        auto derived_ptr = std::make_shared<SchemeDisplayWizard>();
+        auto derived_ptr = std::make_shared<SchemeDisplayWizard>(nullptr);
         derived_ptr->setUiManager(this);
         ptr = uiPtr(derived_ptr);}
         break;

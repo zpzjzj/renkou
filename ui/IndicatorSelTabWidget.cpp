@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QTreeView>
 #include <tuple>
+#include <memory>
 
 namespace {
     const QString INDICATOR_STR = "indicator";
@@ -72,7 +73,7 @@ IndicatorSelTabWidget::IndicatorSelTabWidget(QWidget *parent) :
     QJsonDocument doc = jsonUtil::readFile(":/display/config/indicator.json");
     for(auto jsonValRef : doc.array()) {
         auto category = jsonValRef.toObject();
-        mModels.push_back(std::make_unique<QStandardItemModel>());
+        mModels.emplace_back(std::move(new QStandardItemModel()));
         QStandardItemModel* model = mModels.back().get();
         buildModel(model->invisibleRootItem(), category["groups"].toArray());
         QString name = getName(category);

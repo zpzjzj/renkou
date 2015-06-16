@@ -14,10 +14,10 @@ public:
 
     bool initFont();
 
-    void printText(QGLWidget *widget, const QString string, int x, int y, int z);
+    void printText(QGLWidget *, const QString &string, int x, int y, int z);
 
 protected:
-//    HFONT m_hFont;
+    HFONT m_hFont;
     QFont mFont;
 };
 

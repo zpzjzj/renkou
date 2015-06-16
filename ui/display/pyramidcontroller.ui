@@ -26,7 +26,7 @@
     <item>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="margin">
+	   <property name="margin">
         <number>10</number>
        </property>
        <item>
@@ -362,7 +362,7 @@
   <customwidget>
    <class>GraphView</class>
    <extends>QGraphicsView</extends>
-   <header>graphview.h</header>
+   <header>display/graphview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

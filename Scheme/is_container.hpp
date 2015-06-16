@@ -5,6 +5,9 @@
 template<bool T>
 using bool_ = boost::mpl::bool_<T>;
 
+template <class T>
+using rm_ref_t = typename std::remove_reference<T>::type;
+
 namespace detail {
 // a preprocess iteration will be better. I an not able to and not interested in making this done
 #define TNAME value_type // value type
@@ -37,34 +40,37 @@ namespace detail {
 #include "has_mem.hpp"
 }
 #include "and.hpp"
-//template <bool, class>
-//struct is_container_impl {
-//        static constexpr int value = false; // not a class
-//};
 
-//template <class T>
-//struct is_container_impl<true, T> {
-//    static constexpr int value =
-//        detail::has_value_type<T>::value
-//        && detail::has_reference<T>::value
-//        && detail::has_const_reference<T>::value
-//        && detail::has_const_iterator<T>::value
-//        && detail::has_difference_type<T>::value
-//        && detail::has_size_type<T>::value
-//        && detail::has_mem_begin<T>::value
-//        && detail::has_mem_cbegin<T>::value
-//        && detail::has_mem_end<T>::value
-//        && detail::has_mem_cend<T>::value
-//        && detail::has_mem_size<T>::value
-//        && detail::has_mem_max_size<T>::value
-//        && detail::has_mem_empty<T>::value;
-//    using type = boost::mpl::bool_<value>;
-//};
+#define TEST
+#ifdef TEST
+template <bool, class>
+struct is_container_impl {
+        static constexpr int value = false; // not a class
+};
 
-//template <class T>
-//struct is_container
-//    :is_container_impl<std::is_class<T>::value, T> {};
+template <class T>
+struct is_container_impl<true, T> {
+    static constexpr int value =
+        detail::has_value_type<T>::value
+        && detail::has_reference<T>::value
+        && detail::has_const_reference<T>::value
+        && detail::has_const_iterator<T>::value
+        && detail::has_difference_type<T>::value
+        && detail::has_size_type<T>::value
+        && detail::has_mem_begin<T>::value
+        && detail::has_mem_cbegin<T>::value
+        && detail::has_mem_end<T>::value
+        && detail::has_mem_cend<T>::value
+        && detail::has_mem_size<T>::value
+        && detail::has_mem_max_size<T>::value
+        && detail::has_mem_empty<T>::value;
+    using type = boost::mpl::bool_<value>;
+};
 
+template <class T>
+struct is_container
+    :is_container_impl<std::is_class<T>::value, T> {};
+#else
 template <typename T>
 struct is_container 
     : and_<
@@ -84,4 +90,5 @@ struct is_container
         detail::has_mem_empty<T> >{};
 
 template <class T>
-constexpr bool is_container_v = is_container<T>::value;
+constexpr bool is_container_v = is_contsainer<T>::value;
+#endif
