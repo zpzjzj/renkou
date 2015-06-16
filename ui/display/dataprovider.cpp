@@ -7,6 +7,7 @@
 #include <cstring>
 #include "dataprovider.h"
 
+#define NEW_IMPL
 DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
 {
 //    QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
@@ -55,40 +56,36 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
     memset(mark, 0, sizeof mark);
 
     const int size = ey - sy + 1;
-    QProgressDialog progress;
-//    progress.setRange(0, size);
-//    progress.setMinimumDuration(0);
-//    progress.setMinimumSize(200, 10);
-//    progress.setAcceptDrops(false);
+    QProgressDialog progress(QProgressDialog::tr("正在读取数据..."), QString(), 0, size);
+    progress.setMinimumDuration(1000);
+    progress.setMinimumSize(200, 10);
+    progress.setModal(Qt::WindowModal);
 
     m_maxValue = 0;
     m_minValue = 0;
     m_data.clear();
-    //TODO
 #ifdef NEW_IMPL
-//    for(auto& indicator : files) {
-//        QString name = indicator.getScheme()->getName();
-//        int provinceId = 0;
-//        for(; provinceId < 34; ++provinceId) {
-//            if(name.contains(province[provinceId]))
-//                break;
-//        }
-//        progress.setWindowTitle(QProgressDialog::tr("读取 %1 的数据").arg(province[provinceId]));
-//        progress.setValue(0);
-//        progress.show();
+    for(auto& indicator : files) {
+        QString name = indicator.getScheme()->getName();
+        size_t provinceId = 0;
+        for(; provinceId < 34; ++provinceId) {
+            if(name.contains(province[provinceId]))
+                break;
+        }
+        progress.setWindowTitle(QProgressDialog::tr("读取 %1 的数据").arg(province[provinceId]));
+        progress.setValue(0);
 
-//        auto& qv = m_data[province[provinceId]];
-//        qv.resize(size);
-//        for(int i = 0; i < size; ++i) {
-//            qv[i] = indicator[sy + i];
-//            progress.setValue(i+1);
-//        }
-//        m_minValue = std::min(m_minValue, indicator.min());
-//        m_maxValue = std::max(m_maxValue, indicator.max());
-//        mark[provinceId] = true;
-
-//        progress.hide();
-//    }
+        auto& qv = m_data[province[provinceId]];
+        qv.resize(size);
+        for(size_t i = 0; i < size; ++i) {
+            qv[i] = indicator[sy + i];
+            progress.setValue(i+1);
+        }
+        m_minValue = std::min(m_minValue, indicator.min(sy, ey));
+        m_maxValue = std::max(m_maxValue, indicator.max(sy, ey));
+        progress.hide();
+        mark[provinceId] = true;
+    }
 #else
     for(int i=0; i<files.size(); ++i){
         int j;
@@ -117,7 +114,7 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
             }
 
             QTextStream in(&file);
-            int index = files[0].getIndex();
+            int index = files[0].getIndex() + 1;
             int year = sy;
 
             vector<double> qv;
@@ -146,6 +143,7 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
         }//if(j == 34)
 
     }// for(int i=0; i<files.size(); ++i)
+#endif
     for(int i = 0; i < 34; ++i){
         if(!mark[i]){
             auto& qv = m_data[province[i]];
@@ -153,5 +151,16 @@ DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
             std::fill(qv.begin(), qv.end(), 0);
         }
     }
-#endif
+
+    for(size_t i = 0; i < 34; ++i) {
+        if(mark[i]) {
+            qDebug() << "province" << province[i];
+            auto& v = m_data[province[i]];
+            for(auto value : v) {
+                qDebug() << value;
+            }
+        }
+    }
+    qDebug() << "m_minValue" << m_minValue;
+    qDebug() << "m_maxValue" << m_maxValue;
 }

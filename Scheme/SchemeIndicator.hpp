@@ -73,7 +73,7 @@ class SchemeIndicator {
          * 			if no record on that year
          * 				throw RecordError("record not exist")
          */
-        T operator [] (size_t year) const {get(year);}
+        T operator [] (size_t year) const {return get(year);}
         T get(size_t year) const { return __SchemeIndicatorWrapper__::wrapper<T>::value(scheme, year, index); }
         size_t startYear(void) const {return scheme->startYear();}
         size_t endYear(void) const {return scheme->endYear();}
