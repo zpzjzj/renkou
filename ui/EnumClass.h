@@ -1,4 +1,4 @@
-#ifndef ENUMCLASS_H
+﻿#ifndef ENUMCLASS_H
 #define ENUMCLASS_H
 
 namespace EnumClass {

@@ -1,4 +1,4 @@
-#include <QDebug>
+﻿#include <QDebug>
 #include "newproject.h"
 #include "ui_newproject.h"
 

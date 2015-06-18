@@ -36,36 +36,7 @@ SOURCES += main.cpp \
     view/paramselectwidget.cpp \
     view/projectionbodywidget.cpp \
     model/paramvaluejsonobject.cpp \
-    model/paramitemjsonobject.cpp \
-    display/abstractpyramidview.cpp \
-    display/abstractsequenceview.cpp \
-    display/coloriconengine.cpp \
-    display/dataprovider.cpp \
-    display/glfont.cpp \
-    display/graphview.cpp \
-    display/heightmap.cpp \
-    display/labels.cpp \
-    display/mapgraphbase.cpp \
-    display/mapinformation.cpp \
-    display/maptype1.cpp \
-    display/myellipseitem.cpp \
-    display/mylineitem.cpp \
-    display/mytextitem.cpp \
-    display/mytimeline.cpp \
-    display/pyramidbarview.cpp \
-    display/pyramidcontroller.cpp \
-    display/pyramidmodel.cpp \
-    display/pyramidstripview.cpp \
-    display/pyramidviewbaritem.cpp \
-    display/pyramidviewstripitem.cpp \
-    display/sequencebarview.cpp \
-    display/sequencebarview3d.cpp \
-    display/sequencebarview3ditem.cpp \
-    display/sequencebarviewitem.cpp \
-    display/sequencecontroller.cpp \
-    display/sequencemodel.cpp \
-    display/sequencestriplineview.cpp \
-    display/sequencestripviewitem.cpp
+    model/paramitemjsonobject.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -92,39 +63,7 @@ HEADERS  += \
     view/paramselectwidget.h \
     view/projectionbodywidget.h \
     model/paramvaluejsonobject.h \
-    model/paramitemjsonobject.h \
-    display/abstractpyramidview.h \
-    display/abstractsequenceview.h \
-    display/coloriconengine.h \
-    display/Constants.h \
-    display/dataprovider.h \
-    display/FileInfo.h \
-    display/glfont.h \
-    display/graphview.h \
-    display/heightmap.h \
-    display/mapgraphbase.h \
-    display/mapinformation.h \
-    display/maptype1.h \
-    display/myellipseitem.h \
-    display/mylineitem.h \
-    display/mytextitem.h \
-    display/mytimeline.h \
-    display/MyUtility.h \
-    display/Objectcounter.h \
-    display/pyramidbarview.h \
-    display/pyramidcontroller.h \
-    display/pyramidmodel.h \
-    display/pyramidstripview.h \
-    display/pyramidviewbaritem.h \
-    display/pyramidviewstripitem.h \
-    display/sequencebarview.h \
-    display/sequencebarview3d.h \
-    display/sequencebarview3ditem.h \
-    display/sequencebarviewitem.h \
-    display/sequencecontroller.h \
-    display/sequencemodel.h \
-    display/sequencestriplineview.h \
-    display/sequencestripviewitem.h
+    model/paramitemjsonobject.h
 
 FORMS += \
     dia_accu_linetype1.ui \
@@ -142,10 +81,7 @@ FORMS += \
     paramselectiontabwidget.ui \
     projectionmanagement.ui \
     fileButtonGroupWidget.ui \
-    view/projectionbodywidget.ui \
-    display/maptype1.ui \
-    display/pyramidcontroller.ui \
-    display/sequencecontroller.ui
+    view/projectionbodywidget.ui
 
 OTHER_FILES += \
     qt_zh_CN.qm \
@@ -162,5 +98,4 @@ RESOURCES += \
     translator.qrc \
     resource.qrc
 
-DISTFILES += \
-    display/codecConvert.sh
+DISTFILES +=
