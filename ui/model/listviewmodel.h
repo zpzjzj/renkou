@@ -23,7 +23,7 @@ public:
 protected:
     QList<QVariant> listData;
 signals:
-
+    void valueChanged();
 public slots:
 
 

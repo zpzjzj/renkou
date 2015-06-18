@@ -2,21 +2,7 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <Qtwidgets/QPushButton>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
-#include <QtWidgets/QWidget>
-#include <Qtwidgets/QTableView>
-#include <Qtwidgets/QHeaderView>
+#include <QtWidgets>
 
 #include <QColor>
 #include <QStandardItemModel>
@@ -27,9 +13,9 @@ namespace Ui {
     class MainWindow;
 }
 
-class MainWindowRightWidget;
 class ObjectListModel;
 class QListView;
+class ProjectionBodyWidget;
 
 class MainWindow : public QMainWindow, public UiItem {
     Q_OBJECT
@@ -38,19 +24,23 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
-
+private:
+    void createMenus();
+    void createActions();
+    void createToolbars();
+    void enableActions();
+    void setActionsEnabled(QList<QAction *> actions, bool enabled);
+    bool save();
 private slots:
     //project menu
     void addProjectActionTriggered();
     void openProjectActionTriggered();
+    void saveProjection();
+    void closeProjection();
+
     void searchObjectActionTriggered();
     void addObjectAcionTriggered();
     void quitActionTriggered();
-    //data manage menu
-    void importDataActionTriggered();
-
-    //parameter menu
-    void importParaActionTriggered();
 
     //simulation menu
     void calculateSimActionTriggered();
@@ -63,14 +53,29 @@ private slots:
     //enable some actions after a project opened
 
     void newFileWizardFinished();
+    void ObjectCountChanged();
 
 private:
     Ui::MainWindow* ui;
-    void enableActions();
 
     QListView *leftListView;
     ObjectListModel *objListModel;
-    MainWindowRightWidget *rightWidget;
+    QStackedWidget *stackWidget;
+    ProjectionBodyWidget *bodyWidget;
+
+    QMenu *fileMenu;
+    QToolBar *fileToolBar;
+    QAction *newProj;
+    QAction *saveProj;
+    QAction *openProj;
+    QAction *closeProj;
+
+    QMenu *proMenu;
+    QToolBar *proToolbar;
+    QAction *importData;
+    QAction *importPara;
+    QAction *proCalculate;
+    QComboBox *activeProjection;
 //    void initLeftListView();
 };
 

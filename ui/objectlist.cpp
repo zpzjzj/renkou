@@ -1,4 +1,4 @@
-
+﻿
 #include "objectlist.h"
 #include <QList>
 #include <QtWidgets>

@@ -13,12 +13,13 @@ public:
     DemoObject(const DemoObject&other);
     DemoObject(const int year, const QString& area);
 
-    QString toString();
+    QString toString() const;
     QVariant toVariant();
     void setObject(const int year, const QString &area);
     QJsonObject toJsonObject();
     bool saveToFile(const QString& fileName);
 
+    QString filepath() const;
 private:
     int m_year;
     QString m_area;

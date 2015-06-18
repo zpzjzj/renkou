@@ -20,6 +20,8 @@ QVariant ListViewModel::data(const QModelIndex &index, int role) const{
 void ListViewModel::refrushModel(){
     this->beginResetModel();
     this->endResetModel();
+
+    emit(valueChanged());
 }
 
 //pubic slots

@@ -17,7 +17,10 @@ public:
 
     QList<DemoObject> getObjects() const;
     const DemoObject& at(int index);
+    const DemoObject& back();
+
     void addObject(DemoObject &obj);
+    void deleteObjectAt(int index);
 
     int objectCount() const;
 private:
