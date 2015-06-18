@@ -2,7 +2,6 @@
 #include "paraUtil.hpp"
 #include "stlUtil.hpp"
 #include "Select.hpp"
-#include "add.hpp"
 #include <numeric>
 #include <vector>
 #include <utility>
@@ -56,8 +55,9 @@ namespace{
             else {
                 for(auto &step : option->getAndParas()) {
                     for(auto &part : step->getAndParas()) {
-                        if(part->getOrParas().empty())
-                            str += part->getVal();
+                        if(part->getOrParas().empty()) {//year number
+                            str += part->getVal().right(2);
+                        }
                         else {
                             str += (*util::getSelected(*part))->getVal();
                         }
@@ -187,5 +187,3 @@ std::vector<std::shared_ptr<AbstractScheme> > map(const Para::ParaSet& paraSet) 
 }
 
 }
-
-

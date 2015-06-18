@@ -59,6 +59,9 @@ class SchemeIndicator {
     public:
         SchemeIndicator(const Scheme* _scheme, size_t _index) : scheme(_scheme), index(_index) {
         }
+//        SchemeIndicator(const SchemeIndicator& other): scheme(other.scheme), index(other.index) {}
+        SchemeIndicator(const SchemeIndicator<T>& other) = default;
+
         const Scheme* getScheme(void) const {return scheme;}
         size_t getIndex(void) const {return index;}
         /**
@@ -70,11 +73,11 @@ class SchemeIndicator {
          * 			if no record on that year
          * 				throw RecordError("record not exist")
          */
-        T operator [] (size_t year) const {get(year);}
+        T operator [] (size_t year) const {return get(year);}
         T get(size_t year) const { return __SchemeIndicatorWrapper__::wrapper<T>::value(scheme, year, index); }
         size_t startYear(void) const {return scheme->startYear();}
         size_t endYear(void) const {return scheme->endYear();}
-        size_t size(void) const {return scheme->endYear() - startYear();} // UNSCIENTIIC = =b
+        size_t size(void) const {return endYear() - startYear() + 1;} // UNSCIENTIIC = =b
     // some methematical statistics functions
     /**
      * 1, function type1: the value has an index (max, min)
@@ -86,12 +89,12 @@ class SchemeIndicator {
      */
     public:
         // type1 funtions
-        size_t maxYear		(size_t start_year= UINT_MAX, size_t end_year=UINT_MAX) {
+        size_t maxYear		(size_t start_year= UINT_MAX, size_t end_year=UINT_MAX) const {
             this->resetYear(start_year, end_year);
             if (start_year == end_year) return start_year;
             size_t year = start_year;
             T value = get(start_year);
-            for (size_t i = start_year+1; i != end_year; ++i) {
+            for (size_t i = start_year+1; i <= end_year; ++i) {
                 auto t = get(i);
                 if (t>value) {
                     value = t;
@@ -100,16 +103,16 @@ class SchemeIndicator {
             }
             return year;
         }
-        T max(size_t start_year = UINT_MAX, size_t end_year = UINT_MAX) {
+        T max(size_t start_year = UINT_MAX, size_t end_year = UINT_MAX) const {
             return get(maxYear(start_year, end_year));
         }
 
-        size_t minYear		(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) {
+        size_t minYear		(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) const {
             this->resetYear(start_year, end_year);
             if (start_year == end_year) return start_year;
             size_t year = start_year;
             T value = get(start_year);
-            for (size_t i = start_year+1; i != end_year; ++i) {
+            for (size_t i = start_year+1; i <= end_year; ++i) {
                 auto t = get(i);
                 if (t<value) {
                     value = t;
@@ -118,39 +121,37 @@ class SchemeIndicator {
             }
             return year;
         }
-        T min(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) {
+        T min(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) const {
             return get(minYear(start_year, end_year));
         }
 
 
         // type2 functions
-        double mean		    (size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) {
+        double mean		    (size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) const {
             resetYear(start_year, end_year);
             if (start_year==end_year) return get(start_year);
             double res = 0.0;
-            for (size_t i = start_year; i != end_year; ++i) {
+            for (size_t i = start_year; i <= end_year; ++i) {
                 res += get(i);
             }
-            res = res/(size());
-
-            return res;
+            return res / (end_year - start_year + 1);
         }
-        double variance		(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) {
+        double variance		(size_t start_year=UINT_MAX, size_t end_year=UINT_MAX) const {
             resetYear(start_year, end_year);
             if (start_year == end_year) return 0;
             double _mean= mean(start_year, end_year);
 
             double res = 0.0;
-            for (size_t i = start_year; i != end_year; ++i)
-                res += (get(i)-_mean)*(get(i)-_mean);
+            for (size_t i = start_year; i <= end_year; ++i)
+                res += (get(i)-_mean) * (get(i)-_mean);
 
-            return res/(size()-1);
+            return res / (end_year - start_year + 1);
         }
 
         // double& expectation	(size_t start_year=-1, size_t end_year=-1);
     private:
         // reset start year and end year if needed(year == -1)
-        void resetYear(size_t& start_year, size_t& end_year) {
+        void resetYear(size_t& start_year, size_t& end_year) const {
             if (start_year>end_year) { // swap
                 size_t t = start_year;
                 start_year = end_year;

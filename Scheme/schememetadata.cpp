@@ -1,19 +1,22 @@
 #include "schememetadata.h"
 #include "configMan.hpp"
 #include "exceptions/ColumnNotExist.hpp"
+#include <QDir>
 #include <QFile>
 #include <QString>
 #include <QTextCodec>
 #include <QObject>
 #include <QSet>
 #include <QStringList>
+#include <QTextStream>
+#include <QDebug>
+#include <functional>
 #include <map>
 #include <iterator>
 #include <string>
 #include <cassert>
 #include <iostream>
-#include <QTextStream>
-#include <QDebug>
+#include <numeric>
 
 namespace {
     using Category = schememetadata::Category;
@@ -25,9 +28,7 @@ namespace {
         std::make_pair(Category::FuFuZiNv, "FuFuZiNv"),
         std::make_pair(Category::FenLingJiangFu, "FenLingJiangFu"),
         std::make_pair(Category::FenLingTeFu, "FenLingTeFu"),
-        std::make_pair(Category::FenLingNongYe, "FenLingNongYe"),
-        std::make_pair(Category::FenLingFeiNong, "FenLingFeiNong"),
-        std::make_pair(Category::FenLingHeJi, "FenLingHeji")
+        std::make_pair(Category::FenLingHeJi, "FenLingHeJi")
     };
 }
 
@@ -43,8 +44,6 @@ bool schememetadata::isFenLingCategory(const schememetadata& meta) {
     const static QSet<Category> fenLingSet = {
         Category::FenLingTeFu,
         Category::FenLingJiangFu,
-        Category::FenLingNongYe,
-        Category::FenLingFeiNong,
         Category::FenLingHeJi
     };
     return fenLingSet.contains(meta.category());
@@ -82,10 +81,11 @@ void schememetadata::readMetadata(const QString& filename)
 {
 //	QFile file(filepath[0]);
     //To owensss : 正确使用方式
-    QFile file(Config::config.value("DATA_STRUCT_PATH")+Config::config.value(filename));
+    QFile file(QDir(Config::config.value("DATA_STRUCT_PATH")).filePath(Config::config.value(filename)));
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream mtdfile(&file);
-    qDebug() << "reading " << Config::config.value("DATA_STRUCT_PATH")+Config::config.value(filename);
+    qDebug() << "reading " << file.fileName() << QString("in schememetadata::readMetadata(%1)").arg(filename);
+    mtdfile.setCodec("GBK");
     QString tmpline;
     QStringList tmplines;
     QString field_name,
@@ -99,14 +99,14 @@ void schememetadata::readMetadata(const QString& filename)
     {
         tmpline = mtdfile.readLine();
         tmplines = tmpline.split("\t");
-        qDebug() << tmpline;
+//        qDebug() << "tmpline" << tmpline;
 
         field_name	= tmplines[0].simplified();
         field_type	= tmplines[1].simplified();
         field_len	= tmplines[2].simplified();
         field_dec	= tmplines[3].simplified();
         index		= tmplines[4].simplified();
-        indicator	= tmplines[5].simplified();
+        indicator	= tmplines.value(5).simplified(); //optional
 
 
         bool ok1,ok2,ok3;
@@ -119,9 +119,9 @@ void schememetadata::readMetadata(const QString& filename)
 
         mtdMap.insert(field_name, mtdItem);
         indexMap.insert(index.toInt(&ok3,10), field_name);
-
     }
-    qDebug() << indexMap;
+    qDebug() << "void schememetadata::readMetadata(const QString& filename)";
+    qDebug() << "indexMap" << indexMap;
     file.close();
 }
 
@@ -135,7 +135,7 @@ const metadataItem& schememetadata::operator[] (const int index) const
     auto itr = indexMap.find(index);
     if(itr==indexMap.end())
     {
-        throw ColNotExist("column not exit", index);
+        throw ColNotExist("column not exists", index);
     }
 
     else
@@ -182,11 +182,11 @@ bool schememetadata::hasCol(const QString &filename)const
 
 size_t schememetadata::rowSize() const
 {
-    int tempRowCount = 0;
-    for (auto itr=mtdMap.begin() ; itr != mtdMap.end(); ++itr )
-        tempRowCount += itr.value().getfield_len();
-    return tempRowCount;
-
+    const QList<metadataItem> items = mtdMap.values();
+    return std::accumulate(items.begin(), items.end(), 0,
+                              [](int sum, const metadataItem& item){
+        return sum + item.getfield_len();
+    });
 }
 size_t schememetadata::colSize(const int index) const
 {
@@ -230,7 +230,7 @@ size_t schememetadata::colOffset(const QString& field_name ) const
 
 size_t schememetadata::colOffset(int index) const
 {
-    assert(index <= 116 && index > 0);
+    assert(index <= colCount() && index > 0);
     auto itr = indexMap.find(index);
     if (itr == indexMap.end()) throw ColNotExist("coloumn not exist", index);
     return colOffset(itr.value());

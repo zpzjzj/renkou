@@ -22,8 +22,5 @@ struct BOOST_PP_CAT(has_mem_, TNAME) {
     static constexpr bool value = test<D>(nullptr);
     using type = ::bool_<value>;
 };
-
-template <class T>
-constexpr bool BOOST_PP_CAT(BOOST_PP_CAT(has_mem_, TNAME), _v) = BOOST_PP_CAT(has_mem_, TNAME)<T>::value;//has_mem_TNAME_v = has_mem_TNAME<T>::value
 #undef TNAME
 #endif

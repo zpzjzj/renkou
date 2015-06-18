@@ -37,6 +37,4 @@ void ParaTest::testPara()
     }
 }
 
-QTEST_MAIN(ParaTest)
-
 #include "paraTest.moc"

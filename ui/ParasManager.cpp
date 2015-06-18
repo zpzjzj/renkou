@@ -3,22 +3,21 @@
 #include "ParasManager.hpp"
 #include "paraUtil.hpp"
 #include <numeric>
+#include <QDir>
 #include <QFile>
+#include <QApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDebug>
 #include <utility>
 
-//const QString ParasManager::PARA_PATH = ":/display/config/para.json";
-const QString ParasManager::PARA_PATH = "/Users/zhaoping/default.json";
+const QString ParasManager::PARA_ORI_PATH = ":/display/config/para_ori.json";
 
-ParasManager::ParasManager() : mMultiSelPara(nullptr)
-{
-}
+ParasManager::ParasManager() : mMultiSelPara(nullptr) {}
 
-void ParasManager::read() {
-    auto doc = jsonUtil::readFile(PARA_PATH);
+void ParasManager::read(QString filename) {
+    auto doc = jsonUtil::readFile(filename);
     mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray(), true);
     for(auto& paraPtr : mParaSet) {
         buildMap(*paraPtr);
@@ -32,18 +31,20 @@ void ParasManager::read() {
     }
 }
 
-bool ParasManager::saveToFile(const QString fname) {
-    qDebug() << "ParasManager::saveToFile(const QString fname)";
-    qDebug() << "fname" << fname;
+bool ParasManager::saveToFile(QString fname) {
+    qDebug() << "ParasManager::saveToFile" << fname;
     QFile file(fname);
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << "Couldn't open save file" << fname;
+        qWarning() << "Couldn't open save file" << fname
+                   << "in ParasManager::saveToFile(const QString fname)";
+        qWarning() << "err: " << file.errorString();
         return false;
     }
     QJsonObject object;
     object["paras"] = scheme::Para::writeParas(mParaSet);
     QJsonDocument doc(object);
     file.write(doc.toJson());
+    file.close();
     return true;
 }
 
@@ -157,7 +158,19 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
     emit paraChanged(curr);
 }
 
-ParasManager::AbstractSchemeList ParasManager::generate() const{
+const ParasManager::AbstractSchemeList& ParasManager::update() {
     qDebug() << "AbstractScheme ParasManager::generate() const";
-    return scheme::map(mParaSet);
+    mAbstractSchemeList = scheme::map(mParaSet);
+    return getAbstractSchemeList();
+}
+
+const QString& ParasManager::PARA_PATH() {
+#ifdef __APPLE__
+    static const QString PATH =
+            QDir(QApplication::applicationDirPath())
+            .absoluteFilePath("../Resources/para.json");
+#else
+    static const QString PATH = "para.json";//TODO
+#endif
+    return PATH;
 }

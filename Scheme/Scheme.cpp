@@ -80,8 +80,9 @@ QString Scheme::toInternalName() const {
     using namespace toInternalNameHelper;
     QString tmp = name;
 
-    if (isRelativePath(tmp))
-        tmp = Config::config.value("DATA_PATH")+"\\"+tmp;
+    if (isRelativePath(tmp)) {
+        tmp = QDir(Config::config.value("DATA_PATH")).filePath(tmp);
+    }
 
     if (! hasTxTSuffix(tmp))
         tmp += ".txt";

@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QTextCodec>
 #include <utility> // std::swap
+#include "Category.hpp"
 // #define _DEBUG_
 #ifdef _DEBUG_
 
@@ -32,17 +33,20 @@ namespace {
         schDouble f;
         // if year not exist
         // FIX: start year could be READ_START_YEAR or USER_SPECIFIC START_YEAR
-        if (list[0].toInt()-(int)(meta->startYear()) > (int)(offset) ) {
+        auto index = list[0].toInt();
+        if(scheme::isFenLing(meta->category())) {
+            index += meta->startYear();
+        }
+        if (index-(int)(meta->startYear()) > (int)(offset) ) {
             // set all to zero
-            qDebug() << "greater than" << list[0].toInt() << meta->startYear() << offset;
+            qDebug() << "greater than" << index << meta->startYear() << offset;
             memset(buffer, 0, meta->rowSize());
             return false;
-        } else if (list[0].toInt()-(int)(meta->startYear()) < (int)(offset) ) {
-            qDebug() << "less than" << list[0].toInt() << meta->startYear() << offset;
+        } else if (index-(int)(meta->startYear()) < (int)(offset) ) {
+            qDebug() << "less than" << index << meta->startYear() << offset;
             --offset; // skip this one
             return false;
         }
-
 
         for (unsigned j = 1; j <= meta->colCount(); ++j) {
             switch (meta->colAt(j).getfield_type()) {
@@ -57,7 +61,13 @@ namespace {
                     memcpy(buffer+meta->colOffset(j), &f, meta->colSize(j));
                     break;
                 case metadataItem::STRING:
-                    memcpy(buffer+meta->colOffset(j), (list[j-1].toStdString().c_str()), meta->colSize(j));
+                {
+                    const QString& str = list[j-1];
+                    wchar_t* start = reinterpret_cast<wchar_t*>(buffer + meta->colOffset(j));
+                    auto length = str.toWCharArray(start);
+                    start[length] = 0;
+//                    memcpy(buffer+meta->colOffset(j), (list[j-1].toStdString().c_str()), meta->colSize(j));
+                }
                     break;
                 default:
                     break;
@@ -178,18 +188,22 @@ schDouble SchemeBuffer::toDouble(const Scheme* scheme, size_t row, size_t col) {
 }
 
 schString SchemeBuffer::toString(const Scheme* scheme, size_t row, size_t col) {
-    static const unsigned BUF_SIZE = 100;
-    char buf[BUF_SIZE];
-    strncpy(buf, readData(scheme, row, col), BUF_SIZE);
-    // note: convert from GBK to utf8
-    // if, in the future, the database provides utf8 encoding data, remove this line.
-    auto codec = QTextCodec::codecForName("GBK");
-    if (codec == nullptr) {
-        qDebug() << "Codec GBK not exist, why?";
-    }
-    // set NULL
-    buf[scheme->getMetadata()->colSize(col)] = 0;
-    return schString(codec->toUnicode(buf));
+    return QString::fromWCharArray(reinterpret_cast<wchar_t*>(readData(scheme, row, col)));
+//    static const unsigned BUF_SIZE = 100;
+//    char buf[BUF_SIZE];
+//    strncpy(buf, readData(scheme, row, col), BUF_SIZE);
+//    // note: convert from GBK to utf8
+//    // if, in the future, the database provides utf8 encoding data, remove this line.
+////    auto codec = QTextCodec::codecForName("GBK");
+////    if (codec == nullptr) {
+////        qDebug() << "Codec GBK not exist, why?";
+////    }
+//    // set NULL
+//    buf[scheme->getMetadata()->colSize(col)] = 0;
+//    qDebug() << "schString SchemeBuffer::toString(scheme, row, col)";
+//    qDebug() << "colSize:" << scheme->getMetadata()->colSize(col);
+//    qDebug() << "str:" << buf << QString(codec->toUnicode(buf));
+//    return schString(codec->toUnicode(buf));
 }
 
 void SchemeBuffer::forceRead(const Scheme* scheme) {
@@ -251,6 +265,7 @@ bool SchemeBuffer::Buffer::allocateBuffer(size_t size) {
     delete [] buffer;
     buffer = new char[buffer_size];
     if (buffer==nullptr) return false; // note: may throw bad_alloc
+    memset(buffer, 0, buffer_size);
     return true;
 }
 
@@ -260,9 +275,12 @@ bool SchemeBuffer::Buffer::allocateBuffer(size_t size) {
 bool SchemeBuffer::Buffer::setData(const QString& name, schememetadataPtr meta) {
     QFile fs(name);
     if (! fs.open(QIODevice::ReadOnly)) {
+        qDebug() << "SchemeBuffer::Buffer::setData(name, meta)";
+        qDebug() << "cannot open file" << name;
         throw RecordNotExist(name);
     }
     QTextStream in(&fs);
+    in.setCodec("GBK");
     // csv (comma sep)
     for (size_t i = 0; i < meta->rowCount(); ++i) {
         processLine(in, buffer+i*meta->rowSize(), meta, i);
@@ -325,6 +343,7 @@ SchemeBuffer::Buffer::Buffer(void)
     :last_access(0), size(0), buffer_size(INIT_SIZE), name(""), meta(nullptr), buffer(nullptr)
 {
     buffer = new char[buffer_size];
+    memset(buffer, 0, buffer_size);
 }
 
 SchemeBuffer::Buffer::~Buffer(void) {

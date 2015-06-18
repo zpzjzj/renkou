@@ -10,7 +10,7 @@
 namespace util {
 
 template <class T>
-using rm_ref_t = std::remove_reference_t<T>;
+using rm_ref_t = typename std::remove_reference<T>::type;
 
 #define is_both_container(C1_t, C2_t) \
         is_container<C1_t>::value \
@@ -18,12 +18,12 @@ using rm_ref_t = std::remove_reference_t<T>;
         && std::is_convertible< \
             typename boost::mpl::if_< \
                 std::is_array<C2_t>, \
-                std::remove_extent_t<C2_t>, \
+                typename std::remove_extent<C2_t>::type, \
                 typename C2_t::value_type>::type, \
             typename C1_t::value_type>::value
 
 template <class C1, class C2>
-std::enable_if_t<is_both_container(rm_ref_t<C1>, rm_ref_t<C2>), rm_ref_t<C1>>
+typename std::enable_if<is_both_container(rm_ref_t<C1>, rm_ref_t<C2>), rm_ref_t<C1>>::type
 add(C1&& c1, const C2& c2) {
     auto res(std::forward<C1>(c1));
     std::copy(begin(c2), end(c2), back_inserter(res));
@@ -31,11 +31,11 @@ add(C1&& c1, const C2& c2) {
 }
 
 template <class C, class ... Args>
-        std::enable_if_t<
+        typename std::enable_if<
             boost::mpl::and_<
                 is_container<rm_ref_t<C>>,
                 std::is_convertible<rm_ref_t<Args>, typename rm_ref_t<C>::value_type>...
-            >::value, rm_ref_t<C>>
+            >::value, rm_ref_t<C>>::type
 add(C&& c1, Args&& ... args) {
     using Container = rm_ref_t<C>;
     Container c2 = {static_cast<typename Container::value_type>(args)...};

@@ -17,7 +17,7 @@ TEMPLATE = app
 SOURCES += tst_testtest.cpp \
     paraTest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
-INCLUDEPATH += E:\code\renkou\Scheme
-LIBS += -LE:\code\renkou\lib -lScheme
+#INCLUDEPATH += E:\code\renkou\Scheme
+LIBS += -L../lib -lScheme
 DEPENDPATH += ..\Scheme
 PRE_TARGETDEPS += ..\lib\libscheme.a

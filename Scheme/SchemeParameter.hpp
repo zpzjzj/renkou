@@ -5,6 +5,7 @@
 #include "SchemeDef.hpp"
 #include "parasetter.hpp"
 #include "paraholder.hpp"
+#include "Category.hpp"
 
 /* this class provide an interface the set the scheme parameter &
  * translate it into a true scheme name

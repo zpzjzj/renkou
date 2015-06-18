@@ -1,16 +1,16 @@
 #include "SelDispCombo.hpp"
-#include "ui_SelDispCombo.h"
+#include "ui_selSchemeWizardPage.h"
 
 SelDispCombo::SelDispCombo(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SelDispCombo)
+    QWizardPage(parent),
+    ui(new Ui::selSchemeWizardPage)
 {
     ui->setupUi(this);
     QObject::connect(ui->mParaListWidget, SIGNAL(currentRowChanged(int)),
                      ui->mStackedWidget, SLOT(setCurrentIndex(int)));
     ui->mParaListWidget->setCurrentRow(0);
     ui->mSelectedSchemeWidget->setMinimumHeight(80);
-    QObject::connect(this, SIGNAL(accepted()), this, SLOT(afterSelect()));
+    mSaveButton = ui->buttonBox->addButton(tr("保存设置"), QDialogButtonBox::ActionRole);
 }
 
 SelDispCombo::~SelDispCombo()
@@ -27,9 +27,10 @@ QStackedWidget* SelDispCombo::getStackedWidget() {
 }
 
 QPushButton* SelDispCombo::getSaveToFileBtn() {
-    return ui->mSaveToFileBtn;
+    return mSaveButton;
 }
 
-QListWidget* SelDispCombo::getSchemeListWidget() {
+QListView* SelDispCombo::getSchemeListWidget() {
     return ui->mSelectedSchemeWidget;
 }
+

@@ -3,6 +3,7 @@
 
 #include <uiitem.h>
 #include <QDialog>
+#include <QWizardPage>
 #include <QListWidget>
 #include <QStackedWidget>
 #include <QPushButton>
@@ -10,10 +11,10 @@
 #include "ParasManager.hpp"
 
 namespace Ui {
-class SelDispCombo;
+    class selSchemeWizardPage;
 }
 
-class SelDispCombo : public QDialog, public UiItem
+class SelDispCombo : public QWizardPage, public UiItem
 {
     Q_OBJECT
 
@@ -24,18 +25,12 @@ public:
     QListWidget* getParaListWidget();
     QStackedWidget* getStackedWidget();
     QPushButton* getSaveToFileBtn();
-    QListWidget* getSchemeListWidget();
+    QListView *getSchemeListWidget();
 
-    void initIndicatorSel(ParasManager* parasManager) {
-        mIndicatorSel = new IndicatorSel(parasManager, this);
-        QObject::connect(this, &SelDispCombo::accepted, [this, parasManager]() {
-            mIndicatorSel->setAbstractSchemes(parasManager->generate());
-            mIndicatorSel->show();
-        });
-    }
 private:
-    Ui::SelDispCombo *ui;
+    Ui::selSchemeWizardPage* ui;
     IndicatorSel* mIndicatorSel;
+    QPushButton* mSaveButton;
 };
 
 #endif // SELDISPCOMBO_HPP

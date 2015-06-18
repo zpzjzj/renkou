@@ -17,6 +17,9 @@ namespace scheme{
 class metadataItem
 {
 public:
+    //!< string stored: null ended str
+    using CharType = wchar_t;
+
     enum TYPE {NONE, STRING, INT, DOUBLE};
 
     metadataItem(QString fname = "",
@@ -28,6 +31,10 @@ public:
     //字段名 类型 长度 小数 指标index 指标描述 起始年份 结束年份
     inline QString getfield_name() const {return field_name;}
     inline TYPE getfield_type() 	const {return field_type;}
+    /**
+     * @brief getfield_len
+     * @return size of this field
+     */
     inline int getfield_len() 	const {return field_len;}
     inline int getfield_dec() 	const {return field_dec;}
     inline int getindex() 		const {return index;}

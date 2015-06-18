@@ -14,23 +14,11 @@
 #include "SelDispCombo.hpp"
 #include "uimanager.h"
 #include "UiGenerator.hpp"
+#include "schemeDisplayWizard.hpp"
 
 UiManager::UiManager()
 {
     ptrCollection.fill(nullptr);
-}
-
-namespace {
-    QDialog* createSelDispCombo(UiManager* uiManager) {
-        auto derived_ptr = new SelDispCombo();
-        derived_ptr->setUiManager(uiManager);
-        auto parasManagerPtr = new ParasManager();
-        parasManagerPtr->read();
-        auto uiGenerator = new UiGenerator(UiGenerator::PanelPtr(derived_ptr), parasManagerPtr);
-        uiGenerator->generateUi();
-        derived_ptr->initIndicatorSel(parasManagerPtr);
-        return derived_ptr;
-    }
 }
 
 /** suppose the uiPage not existed before
@@ -47,8 +35,10 @@ UiManager::uiPtr UiManager::create_ui(page uiPage){
         derived_ptr->setUiManager(this);
         ptr = uiPtr(derived_ptr);}
         break;
-    case selDispCombo:
-        ptr = uiPtr(createSelDispCombo(this));
+    case selDispCombo: {
+        auto derived_ptr = std::make_shared<SchemeDisplayWizard>(nullptr);
+        derived_ptr->setUiManager(this);
+        ptr = uiPtr(derived_ptr);}
         break;
     case enterCalculate:{
         auto derived_ptr = new EnterCalculate();
@@ -116,5 +106,5 @@ void UiManager::disactive(UiManager::page uiPage)
 
 void UiManager::makeFront(UiManager::page uiPage)
 {
-    get_ui(uiPage)->exec();
+    get_ui(uiPage)->raise();
 }

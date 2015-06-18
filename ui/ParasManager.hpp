@@ -2,6 +2,9 @@
 #define PARASMANAGER_HPP
 #include "../Scheme/Para.hpp"
 #include "../Scheme/AbstractScheme.hpp"
+#include "../Scheme/Singleton.hpp"
+#include <QApplication>
+#include <QDir>
 #include <QMap>
 #include <QObject>
 
@@ -10,9 +13,10 @@ class ParasManager : public QObject
     Q_OBJECT
 public:
     using AbstractSchemeList = std::vector<std::shared_ptr<AbstractScheme> >;
+
 public:
     ParasManager();
-    void read();
+    void read(QString filename = PARA_PATH());
     const scheme::Para::ParaSet& getParaSet() const {return mParaSet;}
     const scheme::Para* getMultiSelPara() const {return mMultiSelPara;}
     void setVal(bool val, scheme::Para* dest);
@@ -21,14 +25,16 @@ public:
         auto iter = mParentMap.find(const_cast<scheme::Para*>(child));
         return iter == mParentMap.end() ? nullptr : iter.value();
     }
+    const AbstractSchemeList& update();
+    const AbstractSchemeList& getAbstractSchemeList() const {
+        return mAbstractSchemeList;
+    }
 signals:
     void paraStateChanged(const scheme::Para*);
     void multiParaChanged(const scheme::Para*);
     void paraChanged(const scheme::Para*);
 public slots:
-    //TODO
-    bool saveToFile(const QString fname = "/Users/zhaoping/default.json");
-    AbstractSchemeList generate() const;
+    bool saveToFile(QString fname = PARA_PATH());
 private:
     typedef QMap<scheme::Para*, scheme::Para*> ParaMap;
 private:
@@ -38,7 +44,12 @@ private:
     ParaMap mParentMap;//<!(child, parent) map, for parent lookup
     scheme::Para* mMultiSelPara;
     //<!pointed at multiple selected para, when null means none
-    static const QString PARA_PATH;
+
+    //shall not change until update() called
+    AbstractSchemeList mAbstractSchemeList;
+    static const QString PARA_ORI_PATH;
+private:
+    static const QString& PARA_PATH();
 };
 
 #endif // PARASMANAGER_HPP
