@@ -30,10 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->SearchObject, SIGNAL(triggered()), this, SLOT(searchObjectActionTriggered()));
     connect(ui->AddObject, SIGNAL(triggered()), this, SLOT(addObjectAcionTriggered()));
     connect(ui->Quit, SIGNAL(triggered()), this, SLOT(quitActionTriggered()));
-    //data manage menu
-    connect(ui->ImportData, SIGNAL(triggered()), this, SLOT(importDataActionTriggered()));
-    //parameter menu
-    connect(ui->ImportPara, SIGNAL(triggered()), this, SLOT(importParaActionTriggered()));
     //simulation menu
     connect(ui->CalculateSim, SIGNAL(triggered()), this, SLOT(calculateSimActionTriggered()));
     connect(ui->ShowSim, SIGNAL(triggered()), this, SLOT(showSimActionTriggered()));
