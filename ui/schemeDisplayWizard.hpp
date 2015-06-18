@@ -5,7 +5,6 @@
 #include "uiitem.h"
 #include "SelDispCombo.hpp"
 #include "UiGenerator.hpp"
-#include "SchemeListManager.hpp"
 #include <memory>
 
 namespace Ui {

@@ -4,6 +4,7 @@
 #include "schememetadata.h"
 #include "Scheme.hpp"
 #include "SchemeBuffer.hpp"
+#include <QDebug>
 
 /**
  * @brief this class provide an interface between outer name & internal name

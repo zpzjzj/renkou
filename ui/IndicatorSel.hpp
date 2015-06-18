@@ -2,10 +2,10 @@
 #define INDICATORSEL_HPP
 
 #include <QWizardPage>
-#include "SchemeListManager.hpp"
 #include "../Scheme/AbstractScheme.hpp"
 #include <vector>
 #include <QStandardItem>
+#include <QStringListModel>
 
 namespace Ui {
 class IndicatorSel;
@@ -21,12 +21,6 @@ public:
      * @brief disable mapDisp mode for same area disp
      */
     virtual void initializePage() override;
-
-    /**
-     * @brief bind view to model
-     * @param manager
-     */
-    void bindListModel(SchemeListManager& manager);
 public:
     const static QString MAP_DISP_MODE;
 private:

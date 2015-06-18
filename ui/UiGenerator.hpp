@@ -1,7 +1,6 @@
 #ifndef UIGENERATOR_HPP
 #define UIGENERATOR_HPP
 #include "ParasManager.hpp"
-#include "SchemeListManager.hpp"
 #include "SchemeSel.hpp"
 #include "SelDispCombo.hpp"
 #include "Singleton.hpp"
@@ -20,7 +19,6 @@ class UiGenerator : public QObject
 {
     Q_OBJECT
 public:
-    typedef std::shared_ptr<SchemeListManager> SchemeListManagerPtr;
     typedef std::unique_ptr<ParasManager> ParasManagerPtr;
     typedef std::shared_ptr<SelDispCombo> PanelPtr;
     typedef std::function<QWidget* (scheme::Para& para, QWidget* parent)> GenerateFunc;

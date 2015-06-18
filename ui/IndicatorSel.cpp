@@ -27,10 +27,6 @@ IndicatorSel::~IndicatorSel()
     delete ui;
 }
 
-void IndicatorSel::bindListModel(SchemeListManager& manager) {
-    manager.bindListView(ui->listView);
-}
-
 void IndicatorSel::initializePage() {
     const static QString AREA_STR = "diqu";
     auto dispWizard = dynamic_cast<SchemeDisplayWizard*>(wizard());
