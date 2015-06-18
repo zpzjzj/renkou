@@ -25,7 +25,7 @@ public:
     typedef std::shared_ptr<SelDispCombo> PanelPtr;
     typedef std::function<QWidget* (scheme::Para& para, QWidget* parent)> GenerateFunc;
 public:
-    UiGenerator(PanelPtr panel, ParasManager* ptr, SchemeListManager* manager);
+    UiGenerator(PanelPtr panel, ParasManager* ptr);
     void generateUi();
 private:
     typedef QMap<const scheme::Para*, QListWidgetItem*> ListWidgetItemMap;

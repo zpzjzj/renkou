@@ -43,7 +43,7 @@ PyramidController::~PyramidController()
     delete m_timeLine;
 }
 
-PyramidController* PyramidController::createPyramidController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent)
+PyramidController* PyramidController::createPyramidController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *)
 {
     PyramidController *pc = new PyramidController();
     if(pc->setup(curves, files, sy, ey))
@@ -238,7 +238,7 @@ bool PyramidController::setupStateMachine()
     return ret;
 }
 
-void PyramidController::setViewMode(int chosen)
+void PyramidController::setViewMode(int)
 {
 }
 

@@ -11,7 +11,6 @@
 #include "../Scheme/ConfigMan.hpp"
 
 int main(int argc, char *argv[]){
-//    QApplication::setStyle(QStyleFactory::create("Windows"));
     QApplication app(argc, argv);
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
     MainWindow mainWindow;

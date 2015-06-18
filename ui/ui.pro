@@ -54,7 +54,6 @@ SOURCES += main.cpp \
     SchemeSel.cpp \
     Scheme.cpp \
     paraUtil.cpp \
-    SchemeListManager.cpp \
     IndicatorSel.cpp \
     schemeDisplayWizard.cpp \
     IndicatorSelTabWidget.cpp \
@@ -134,7 +133,6 @@ HEADERS  += \
     Select.hpp \
     iterate.hpp \
     paraUtil.hpp \
-    SchemeListManager.hpp \
     IndicatorSel.hpp \
     schemeDisplayWizard.hpp \
     IndicatorSelTabWidget.hpp \

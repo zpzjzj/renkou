@@ -1,11 +1,11 @@
 #include "listviewmodel.h"
 
-ListViewModel::ListViewModel(QObject *parent)
+ListViewModel::ListViewModel(QObject *)
 {
 
 }
 
-int ListViewModel::rowCount(const QModelIndex &parent) const{
+int ListViewModel::rowCount(const QModelIndex &) const{
     return listData.count();
 }
 

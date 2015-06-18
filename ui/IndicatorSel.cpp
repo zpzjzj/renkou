@@ -11,12 +11,12 @@
 
 const QString IndicatorSel::MAP_DISP_MODE = IndicatorSel::tr("地图式显示");
 
-IndicatorSel::IndicatorSel(SchemeListManager *schemeListManager, QWidget *parent) :
+IndicatorSel::IndicatorSel(QStringListModel *model, QWidget *parent) :
     QWizardPage(parent),
     ui(new Ui::IndicatorSel)
 {
     ui->setupUi(this);
-    schemeListManager->bindListView(ui->listView);
+    ui->listView->setModel(model);
     registerField("indicator", ui->tabWidget, "indicator", SIGNAL(indicatorChanged(QString)));
     registerField("category*", ui->tabWidget, "category", SIGNAL(categoryChanged(QString)));
     registerField("dispMode", ui->dispModeComboBox, "currentText", SIGNAL(currentIndexChanged(const QString)));

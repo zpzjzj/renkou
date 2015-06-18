@@ -68,7 +68,7 @@ void XMLManager::parseTitleElement(const QDomElement &element, DataTreeWidgetIte
     }
 }
 
-DataTreeWidgetItem *XMLManager::createChildItem(const QDomElement &element, DataTreeWidgetItem *parentItem){
+DataTreeWidgetItem *XMLManager::createChildItem(const QDomElement &, DataTreeWidgetItem *parentItem){
     DataTreeWidgetItem *item;
     if (parentItem != nullptr){
         item = new DataTreeWidgetItem(parentItem);

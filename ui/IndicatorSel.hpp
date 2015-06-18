@@ -15,7 +15,7 @@ class IndicatorSel : public QWizardPage
 {
     Q_OBJECT
 public:
-    IndicatorSel(SchemeListManager* schemeListManager, QWidget *parent = 0);
+    IndicatorSel(QStringListModel *model, QWidget *parent = 0);
     ~IndicatorSel();
     /**
      * @brief disable mapDisp mode for same area disp

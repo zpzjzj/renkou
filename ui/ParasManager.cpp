@@ -1,5 +1,5 @@
 #include "../Scheme/jsonUtil.hpp"
-#include "../Scheme/transfromPara.hpp"
+#include "../Scheme/stlUtil.hpp"
 #include "ParasManager.hpp"
 #include "paraUtil.hpp"
 #include <numeric>
@@ -14,21 +14,8 @@
 
 const QString ParasManager::PARA_ORI_PATH = ":/display/config/para_ori.json";
 
-ParasManager::ParasManager() : mMultiSelPara(nullptr) {}
-
-void ParasManager::read(QString filename) {
-    auto doc = jsonUtil::readFile(filename);
-    mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray(), true);
-    for(auto& paraPtr : mParaSet) {
-        buildMap(*paraPtr);
-        if(util::isMultiSelected(*paraPtr)) {
-            if(mMultiSelPara == nullptr)
-                mMultiSelPara = paraPtr.get();
-            else {
-                qWarning() << "multiple multi-selected para";
-            }
-        }
-    }
+ParasManager::ParasManager() : mMultiSelPara(nullptr) {
+    connect(this, SIGNAL(paraChanged(const scheme::Para*)), this, SLOT(updateParasList(const scheme::Para*)));
 }
 
 bool ParasManager::saveToFile(QString fname) {
@@ -117,6 +104,130 @@ namespace {
                 return SelectedType::SINGLE;
         });
     }
+
+namespace map {
+    using ParaRepre = ParasManager::ParaRepre;
+    using Map = ParasManager::ParaValueMap;
+    /**
+     * @brief getValue
+     * @param para
+     * @param map
+     * @param key
+     *      put para's value into map
+     */
+    void getValue(const scheme::Para& para, Map& map, const ParaRepre& key) {
+        if(!util::isSelected(para))
+            return;
+        if(!para.getVal().isEmpty()) {
+            qDebug() << "void getValue(const scheme::Para& para, Map& map, const ParaRepre& key)";
+            qDebug() << "value :" << QString("(%1, %2)").arg(para.getName(), para.getVal());
+            map.insertMulti(key, std::make_pair(para.getName(), para.getVal()));
+        } else {
+            for(auto& paraPtr : para.getOrParas()) {
+                getValue(*paraPtr, map, key);
+            }
+        }
+    }
+
+    void produceMap_helper(const scheme::Para::ParaSet& paras, Map& map);
+    void produceMap_helper(const scheme::Para& para, Map& map) {
+        if(!para.getKey().isEmpty()) {//if has key
+            auto key = std::make_pair(para.getName(), para.getKey());
+            map.remove(key);//clear former res
+            qDebug() << "void produceMap_helper(const scheme::Para& para, Map& map)";
+            qDebug() << "key :" << QString("(%1, %2)").arg(key.first, key.second);
+            getValue(para, map, key);
+        } else {
+            produceMap_helper(para.getAndParas(), map);//find subparts
+        }
+    }
+
+    void produceMap_helper(const scheme::Para::ParaSet& paras, Map& map) {
+        for(auto& paraPtr : paras) {
+            produceMap_helper(*paraPtr, map);
+        }
+    }
+}
+    map::Map produceMap(const scheme::Para::ParaSet& paras) {
+        map::Map res;
+        map::produceMap_helper(paras, res);
+        return res;
+    }
+#ifdef TRANSFORM_DEBUG
+    void debugMap(map::Map map) {
+        for(auto key : map.uniqueKeys()) {
+            qDebug() << QString("(%1, %2):").arg(key.first, key.second);
+            for(auto value : map.values(key)) {
+                qDebug() << "-----"<< QString("(%1, %2)").arg(value.first, value.second);
+            }
+        }
+    }
+#endif
+
+namespace transform {
+    using ParaPair = ParasManager::ParaPair;
+    std::vector<std::vector<ParaPair>> collect(const ::map::Map& map) {
+        std::vector<std::vector<ParaPair>> res;
+        for(auto key : map.uniqueKeys()) {
+            std::vector<ParaPair> temp;
+            auto values = map.values(key);
+            temp.reserve(values.size());
+            std::transform(values.begin(), values.end(), std::back_inserter(temp),
+                           [&key](ParasManager::ParaRepre& value){
+                return std::make_pair(key, value);
+            });
+            res.push_back(std::move(temp));
+        }
+        return res;
+    }
+
+    std::vector<std::vector<ParaPair>> combine(const std::vector<std::vector<ParaPair>>& paras) {
+        using PairsSet = std::vector<std::vector<ParaPair>>;
+        auto res = std::accumulate(paras.begin(), paras.end(),
+                                   PairsSet{std::vector<ParaPair>()},
+                                   [](PairsSet& set_x, const std::vector<ParaPair>& set_y){
+            PairsSet res;
+            for(auto &x : set_x) {
+                for(auto &y : set_y) {
+                    res.push_back(util::add(x, y));
+                }
+            }//combine every two collection
+            return res;
+        });
+        return res;
+    }
+
+    QStringList toList(const std::vector<std::vector<ParaPair>>& paras) {
+        QStringList res;
+        res.reserve(paras.size());
+        for(const std::vector<ParaPair>& set : paras) {//for each scheme
+            QString str = std::accumulate(set.begin(), set.end(), QString(),
+                            [](const QString& a, const ParaPair& b){
+                auto str = b.second.first;
+                return a.isEmpty() ? str : QString("%1/%2").arg(a).arg(str);
+            });
+            res.push_back(str);
+        }
+        return res;
+    }
+}
+}
+
+void ParasManager::read(QString filename) {
+    auto doc = jsonUtil::readFile(filename);
+    mParaSet = scheme::Para::readParas(doc.object()["paras"].toArray(), true);
+    for(auto& paraPtr : mParaSet) {
+        buildMap(*paraPtr);
+        if(util::isMultiSelected(*paraPtr)) {
+            if(mMultiSelPara == nullptr)
+                mMultiSelPara = paraPtr.get();
+            else {
+                qWarning() << "multiple multi-selected para";
+            }
+        }
+    }
+    mResMap = produceMap(mParaSet);
+    updateSchemeList();
 }
 
 scheme::Para* ParasManager::addOrPara(scheme::Para* para, const scheme::Para& orPara) {
@@ -160,7 +271,17 @@ void ParasManager::setVal(bool val, scheme::Para* dest) {
 
 const ParasManager::AbstractSchemeList& ParasManager::update() {
     qDebug() << "AbstractScheme ParasManager::generate() const";
-    mAbstractSchemeList = scheme::map(mParaSet);
+    static auto buffer = std::make_shared<SchemeBuffer>();
+    AbstractSchemeList res;
+    std::transform(mResList.begin(), mResList.end(), std::back_inserter(res),
+                   [](std::vector<ParaPair> paras){
+        std::shared_ptr<SchemeParameter> paraPtr = std::make_shared<SchemeParameterDefault>();
+        for(const ParaPair& pair : paras) {
+            paraPtr->set(pair.first.second, pair.second.second);
+        }
+        return std::make_shared<AbstractScheme>(paraPtr, buffer);
+    });
+    mAbstractSchemeList = std::move(res);
     return getAbstractSchemeList();
 }
 
@@ -170,7 +291,27 @@ const QString& ParasManager::PARA_PATH() {
             QDir(QApplication::applicationDirPath())
             .absoluteFilePath("../Resources/para.json");
 #else
-    static const QString PATH = "para.json";//TODO
+    static const QString PATH = "config/para.json";//TODO
 #endif
     return PATH;
 }
+
+/**
+ * @brief ParasManager::updateParasList
+ *          update map for the changed para
+ * @param start
+ */
+void ParasManager::updateParasList(const scheme::Para* start) {
+    auto changed = start;
+    for(; changed != nullptr && changed->getKey().isEmpty(); changed = getParent(start)) {}
+    if(changed == nullptr) {
+        return;
+    }//find key
+    map::produceMap_helper(*changed, mResMap);//update
+    updateSchemeList();
+}
+void ParasManager::updateSchemeList() {
+    mResList = transform::combine(transform::collect(mResMap));
+    mListModel.setStringList(transform::toList(mResList));
+}
+

@@ -329,7 +329,7 @@ void HeightMap::wheelEvent(QWheelEvent *event)
     update();
 }
 
-void HeightMap::showEvent(QShowEvent *event)
+void HeightMap::showEvent(QShowEvent *)
 {
 
 }

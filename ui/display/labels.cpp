@@ -59,7 +59,7 @@ void loose_label(int ntick, double minv, double maxv, double ans[3])
 {
         double d;						/* tick mark spacing */
         double graphmin, graphmax;		/* graph range min and max */
-        double range, x;
+        double range;
 
         /* we expect min != max */
         range = nicenum(maxv-minv, 0);

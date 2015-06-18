@@ -5,8 +5,9 @@
 #include "ui_maptype1.h"
 
 MapType1::MapType1(QVector<QString> curve, DataSources file, int sYear, int eYear, QWidget *parent):
-        QWidget(parent), m_startYear(sYear), m_endYear(eYear),
-        ui(new Ui::MapType1), files_(file)
+        QWidget(parent),
+        ui(new Ui::MapType1), files_(file),
+        m_startYear(sYear), m_endYear(eYear)
 {
     ui->setupUi(this);
     this->curves_ = curve;

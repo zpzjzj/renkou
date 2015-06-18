@@ -43,7 +43,7 @@ SequenceController::~SequenceController()
     delete m_timeLine;
 }
 
-SequenceController* SequenceController::createSequenceController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *parent)
+SequenceController* SequenceController::createSequenceController(QVector<QString> curves, DataSources files, int sy, int ey, QWidget *)
 {
     SequenceController *sc = new SequenceController();
     if(sc->setup(curves, files, sy, ey))

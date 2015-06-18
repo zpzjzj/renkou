@@ -7,7 +7,6 @@
 #include <QStringList>
 #include <QObject>
 #include <QRadioButton>
-#include "paraUtil.hpp"
 
 const QString SCHEME_PATH = ":/display/config/scheme.json";
 
@@ -51,18 +50,6 @@ namespace {
     }
 }
 
-/**
- * @brief toString
- * @param scheme
- * @return string representation
- */
-QString SchemeSel::toString(const scheme::Para &scheme) {
-    QStringList strList;
-    for(auto &ptr : scheme.getAndParas())
-        strList << toString_partScheme(*ptr);
-    return strList.join(';');
-}
-
 SchemeSel::SchemeSel(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SchemeSel)
@@ -78,17 +65,61 @@ void SchemeSel::build() {
     QObject::connect(ui->mSyncButton, SIGNAL(clicked()), this, SLOT(synchronizeScheme()));
 }
 
-void SchemeSel::addScheme() {
-    QString val = toString(mCurrScheme);
-    if(std::none_of(mSchemeList.begin(), mSchemeList.end(),
-                   [val](QCheckBox* ptr){
-                        return ptr->text() == val;})) {
-        emit addScheme(mCurrScheme, createSchemeWidget(val));
+namespace {
+
+/**
+ * @brief getValue for scheme
+ *          eg. 方案选择: 农d11p15_非d11p15
+ * @param para
+ * @return str representation for scheme
+ */
+QString getValue_scheme(const scheme::Para& para) {
+    QStringList strList;
+    for(const auto& scheme : para.getAndParas()) {
+        QString str = scheme->getVal();
+        auto& option = *(util::getSelected(*scheme));
+        if(option->getAndParas().empty())
+            str += option->getVal();
+        else {
+            for(auto &step : option->getAndParas()) {
+                for(auto &part : step->getAndParas()) {
+                    if(part->getOrParas().empty()) {//year number
+                        str += part->getVal().right(2);
+                    }
+                    else {
+                        str += (*util::getSelected(*part))->getVal();
+                    }
+                }
+            }
+        }
+        strList.append(str);
     }
+    return strList.join('_');
 }
 
-SchemeSel::SchemeWidgetPtr SchemeSel::createSchemeWidget(const scheme::Para &para) {
-    return createSchemeWidget(toString(para), util::isSelected(para));
+/**
+ * @brief toString
+ * @param scheme
+ * @return string representation
+ */
+QString toString(const scheme::Para &scheme) {
+    QStringList strList;
+    for(auto &ptr : scheme.getAndParas())
+        strList << toString_partScheme(*ptr);
+    return strList.join(';');
+}
+
+}
+
+void SchemeSel::addScheme() {
+    QString name = toString(mCurrScheme);
+    QString key = getValue_scheme(mCurrScheme);
+    if(std::none_of(mSchemeList.begin(), mSchemeList.end(),
+                   [&name](QCheckBox* ptr){
+                        return ptr->text() == name;})) {//not in list
+        scheme::Para para(name, "", key);
+        emit addScheme(para, createSchemeWidget(name));
+    }
 }
 
 SchemeSel::SchemeWidgetPtr SchemeSel::createSchemeWidget(const QString& text, bool isChecked) {

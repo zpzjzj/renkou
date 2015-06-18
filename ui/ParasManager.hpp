@@ -7,13 +7,16 @@
 #include <QDir>
 #include <QMap>
 #include <QObject>
+#include <QStringListModel>
 
 class ParasManager : public QObject
 {
     Q_OBJECT
 public:
     using AbstractSchemeList = std::vector<std::shared_ptr<AbstractScheme> >;
-
+    using ParaRepre = std::pair<QString, QString>;//<!(outer representation, inner representation)
+    using ParaValueMap = QMap<ParaRepre, ParaRepre>;
+    using ParaPair = std::pair<ParaRepre, ParaRepre>;
 public:
     ParasManager();
     void read(QString filename = PARA_PATH());
@@ -22,34 +25,39 @@ public:
     void setVal(bool val, scheme::Para* dest);
     scheme::Para* addOrPara(scheme::Para* para, const scheme::Para& orPara);
     const scheme::Para* getParent(const scheme::Para* child) const {
-        auto iter = mParentMap.find(const_cast<scheme::Para*>(child));
-        return iter == mParentMap.end() ? nullptr : iter.value();
+        return mParentMap.value(const_cast<scheme::Para*>(child), nullptr);
     }
     const AbstractSchemeList& update();
     const AbstractSchemeList& getAbstractSchemeList() const {
         return mAbstractSchemeList;
     }
+    QStringListModel* getModel() {return &mListModel;}
 signals:
     void paraStateChanged(const scheme::Para*);
     void multiParaChanged(const scheme::Para*);
     void paraChanged(const scheme::Para*);
 public slots:
     bool saveToFile(QString fname = PARA_PATH());
+    void updateParasList(const scheme::Para *changed);
 private:
     typedef QMap<scheme::Para*, scheme::Para*> ParaMap;
 private:
     void buildMap(scheme::Para& para);//<!build mParentMap
+    void updateSchemeList();
+    static const QString& PARA_PATH();
 private:
     scheme::Para::ParaSet mParaSet;
-    ParaMap mParentMap;//<!(child, parent) map, for parent lookup
+    ParaMap mParentMap;//!<(child, parent) map, for parent lookup
     scheme::Para* mMultiSelPara;
-    //<!pointed at multiple selected para, when null means none
+    //!<pointed at multiple selected para, when null means none
 
+    ParaValueMap mResMap;//!<key - value map
+    std::vector<std::vector<ParaPair>> mResList;//!<list<scheme>, scheme consists of list of pair
+    QStringListModel mListModel;//!<model for display compairing schemes
     //shall not change until update() called
     AbstractSchemeList mAbstractSchemeList;
+
     static const QString PARA_ORI_PATH;
-private:
-    static const QString& PARA_PATH();
 };
 
 #endif // PARASMANAGER_HPP

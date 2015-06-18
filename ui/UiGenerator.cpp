@@ -19,7 +19,7 @@ const QString COMPLETE_ICON_NAME = "single.gif";
 const QString MULTIPLE_SELECTED_ICON_NAME = "lampMulti.gif";
 const QString INIT_ICON_NAME = "lampYellow.gif";
 
-UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr, SchemeListManager *manager) :
+UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr) :
     mPanel(panel), mParasManager(ptr), mIconMapOwner([](){
         return SelectedTypeIconMap{
             std::make_pair(scheme::Para::SelectedType::INCOMPLETE, new QIcon(ICON_PATH + ICOMPLETE_ICON_NAME)),
@@ -29,7 +29,7 @@ UiGenerator::UiGenerator(PanelPtr panel, ParasManager* ptr, SchemeListManager *m
     }), mInitIcon([](){
         return QIcon(ICON_PATH + INIT_ICON_NAME);
     }){
-    manager->bindListView(panel->getSchemeListWidget());
+    panel->getSchemeListWidget()->setModel(ptr->getModel());
     QObject::connect(mParasManager.get(), SIGNAL(paraStateChanged(const scheme::Para*)),
                      this, SLOT(changeIcon(const scheme::Para*)));
     QObject::connect(mParasManager.get(), SIGNAL(multiParaChanged(const scheme::Para*)),
@@ -91,7 +91,7 @@ SchemeSel* UiGenerator::createSchemeSelWidget(scheme::Para& para, QWidget* paren
     }
 
     QObject::connect(schemeSel,
-                     util::Select<const scheme::Para&, SchemeSel::SchemeWidgetPtr>
+                     util::Select<const scheme::Para, SchemeSel::SchemeWidgetPtr>
                         ::overload_of(&SchemeSel::addScheme),
                      [this, &para, buttonGroupPtr, bindFunc]
                         (const scheme::Para& scheme, SchemeSel::SchemeWidgetPtr btnPtr) {

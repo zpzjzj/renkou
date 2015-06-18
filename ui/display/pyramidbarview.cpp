@@ -19,7 +19,7 @@ void PyramidBarView::showPoints(bool flag)
     m_showPoint = flag;
 }
 
-void PyramidBarView::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void PyramidBarView::mouseMoveEvent(QGraphicsSceneMouseEvent *)
 {
 //    qDebug()<<event->pos();
 }

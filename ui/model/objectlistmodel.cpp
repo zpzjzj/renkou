@@ -24,7 +24,7 @@ QVariant ObjectListModel::data(const QModelIndex &index, int role) const{
     return QVariant();
 }
 
-int ObjectListModel::rowCount(const QModelIndex &parent) const{
+int ObjectListModel::rowCount(const QModelIndex &) const{
     return objManager->objectCount();
 }
 

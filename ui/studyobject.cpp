@@ -21,7 +21,7 @@ StudyObject::StudyObject(int year, const QString &area, QObject *parent) :
     xmlFilename->append(".xml");
 }
 
-StudyObject::StudyObject(const StudyObject &rhs){
+StudyObject::StudyObject(const StudyObject &rhs):QObject(){
     *this = rhs;
 }
 

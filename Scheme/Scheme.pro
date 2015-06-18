@@ -26,7 +26,6 @@ HEADERS += \
     exceptions/IndicatorIndexOutOfRange.hpp \
     exceptions/ExceptionNoParaName.hpp \
     exceptions/ColumnNotExist.hpp \
-    transfromPara.hpp \
     Para.hpp \
     Singleton.hpp \
     jsonUtil.hpp \
@@ -49,7 +48,6 @@ SOURCES += \
     paraholder.cpp \
     metadataItem.cpp \
     ConfigMan.cpp \
-    transfromPara.cpp \
     Para.cpp \
     jsonUtil.cpp \
     paraUtil.cpp \

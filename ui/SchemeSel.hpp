@@ -3,6 +3,7 @@
 #include "../Scheme/Para.hpp"
 #include "ParasManager.hpp"
 #include "Scheme.hpp"
+#include "paraUtil.hpp"
 #include <QCheckBox>
 #include <QDialog>
 #include <QMap>
@@ -12,6 +13,11 @@ namespace Ui {
 class SchemeSel;
 }
 
+/**
+ * @brief The SchemeSel class
+ *        for scheme para in para selection
+ *        responsible for add para to list
+ */
 class SchemeSel : public QDialog
 {
     Q_OBJECT
@@ -21,17 +27,26 @@ public:
 public:
     explicit SchemeSel(QWidget *parent = 0);
     ~SchemeSel();
-    const scheme::Para& getScheme() {return mCurrScheme;}
+    /**
+     * @brief build
+     *          init, bind logic
+     */
     void build();
-public:
-    SchemeWidgetPtr createSchemeWidget(const scheme::Para &para);
-    static QString toString(const scheme::Para &para);
+    /**
+     * @brief createSchemeWidget
+     * @param para
+     * @return created checkbox ptr for para
+     */
+    SchemeWidgetPtr createSchemeWidget(const scheme::Para &para) {
+        return createSchemeWidget(para.getName(), util::isSelected(para));
+    }
 public slots:
     void addScheme();//!<check existance and emit signal
 signals:
-    void addScheme(const scheme::Para &scheme, SchemeWidgetPtr checkBoxPtr);
+    void addScheme(const scheme::Para scheme, SchemeWidgetPtr checkBoxPtr);
 private:
-    void read();
+    const scheme::Para& getScheme() {return mCurrScheme;}
+    void read();//!<read in scheme para data
     /**
      * @brief buildScheme
      *      put all widgets into container(mAgriScheme, mNonAgriScheme)

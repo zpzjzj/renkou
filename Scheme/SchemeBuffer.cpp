@@ -189,21 +189,6 @@ schDouble SchemeBuffer::toDouble(const Scheme* scheme, size_t row, size_t col) {
 
 schString SchemeBuffer::toString(const Scheme* scheme, size_t row, size_t col) {
     return QString::fromWCharArray(reinterpret_cast<wchar_t*>(readData(scheme, row, col)));
-//    static const unsigned BUF_SIZE = 100;
-//    char buf[BUF_SIZE];
-//    strncpy(buf, readData(scheme, row, col), BUF_SIZE);
-//    // note: convert from GBK to utf8
-//    // if, in the future, the database provides utf8 encoding data, remove this line.
-////    auto codec = QTextCodec::codecForName("GBK");
-////    if (codec == nullptr) {
-////        qDebug() << "Codec GBK not exist, why?";
-////    }
-//    // set NULL
-//    buf[scheme->getMetadata()->colSize(col)] = 0;
-//    qDebug() << "schString SchemeBuffer::toString(scheme, row, col)";
-//    qDebug() << "colSize:" << scheme->getMetadata()->colSize(col);
-//    qDebug() << "str:" << buf << QString(codec->toUnicode(buf));
-//    return schString(codec->toUnicode(buf));
 }
 
 void SchemeBuffer::forceRead(const Scheme* scheme) {

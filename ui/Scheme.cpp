@@ -12,7 +12,7 @@ display::Policy::Policy(PolicyWidget policyWidgetPtr, TimeWidget timeWidgetPtr)
     : mPolicy(policyWidgetPtr), mTime(timeWidgetPtr){}
 
 display::Policy::Policy(const Policy& policy)
-    : mPolicy(policy.mPolicy), mTime(policy.mTime), mParaPtr(policy.mParaPtr),
+    : QObject(), mPolicy(policy.mPolicy), mTime(policy.mTime), mParaPtr(policy.mParaPtr),
         mPolicyParaPtr(policy.mPolicyParaPtr), mTimeParaPtr(policy.mTimeParaPtr){}
 
 void display::Policy::bind(ParaPtr paraPtr) {

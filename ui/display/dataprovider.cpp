@@ -8,7 +8,7 @@
 #include "dataprovider.h"
 
 #define NEW_IMPL
-DataProvider::DataProvider(int sy, int ey, QStringList curve, DataSources files)
+DataProvider::DataProvider(int sy, int ey, QStringList , DataSources files)
 {
 //    QTextCodec::setCodecForTr(QTextCodec::codecForLocale());
 
