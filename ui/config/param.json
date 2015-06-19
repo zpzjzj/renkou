@@ -1,20 +1,101 @@
-﻿[
+[
+{
+    "name": "生育参数",
+            "items": [
+                {
+                    "name": "生育模式预测模型",
+                    "type": "options",
+                    "value": ["回归模型法","生育模式预测模型二","生育模式预测模型三"]
+                }
+            ]
+},
     {
-        "name"  : "婚配模式参数",
-        "option" : [
+        "name": "婚配模式参数",
+        "items": [
             {
-                "name":"夫妻婚配模式地区",
-                "option":[
-                    {
-                        "name":"value 1"
-                    },
-                    {
-                        "name":"value 2"
-                    }
-                   ]
+                "name": "夫妻婚配模式地区",
+                "type": "options",
+                "value": ["地区","城乡"]
             },
             {
-                "name":"subparam 2"
+                "name": "按丈夫年龄分的妻子年龄分布",
+                "type": "data"
+            },
+            {
+                "name": "按妻子年龄分的丈夫年龄分布",
+                "type": "data"
+            }
+        ]
+    },
+    {
+        "name": "迁移参数",
+        "items": [
+            {
+                "name": "迁移强度",
+                "type": "options",
+                "value": ["高","中","低","无"]
+            },
+            {
+                "name": "分年龄、性别、地区迁移概率",
+                "type": "data"
+            },
+            {
+                "name": "迁移修正系数",
+                "type": "data"
+            }
+        ]
+    },
+    {
+        "name": "生育参数",
+        "items": [
+            {
+                "name": "各地区终生政策生育率",
+                "type": "data"
+            },
+            {
+                "name": "分年龄、地区生育模式",
+                "type": "options",
+                "value": [
+                    {
+                        "name": "生育模式A"
+                    },
+                    {
+                        "name": "生育模式B"
+                    }
+                ]
+            },
+            {
+                "name": "出生性别比",
+                "type": "data"
+            },
+            {
+                "name": "堆积释放模式",
+                "type": "options",
+                "value": [
+                    {
+                        "name": "堆积释放模式A"
+                    },
+                    {
+                        "name": "堆积释放模式B"
+                    }
+                ]
+            },
+            {
+                "name": "政策实现比率",
+                "type": "data"
+            }
+        ]
+    },
+    {
+        "name": "死亡参数",
+        "items": [
+            {
+                "name": "分年龄、性别、地区死亡概率",
+                "type": "data"
+            },
+            {
+                "name": "死亡概率修正系数",
+                "type": "data"
             }
         ]
     }

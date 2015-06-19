@@ -20,21 +20,12 @@ SOURCES += main.cpp \
     newproject.cpp \
     openproject.cpp \
     searchobject.cpp \
-    importbasicdata.cpp \
-    importbasicpara.cpp \
     entercalculate.cpp \
     evaluate.cpp \
     display.cpp \
     uiitem.cpp \
-    datapage.cpp \
-    datatreewidget.cpp \
-    datatreewidgetinner.cpp \
-    datatreewidgetitem.cpp \
-    datatreewidgetleaf.cpp \
-    newprojectionwizard.cpp \
     objectlist.cpp \
     studyobject.cpp \
-    xmlmanager.cpp \
     controller/objectlistmanager.cpp \
     model/areaitemmodel.cpp \
     model/demoobject.cpp \
@@ -43,11 +34,11 @@ SOURCES += main.cpp \
     model/objectlistmodel.cpp \
     model/projectionlistmodel.cpp \
     model/yearitemmodel.cpp \
-    view/newfilewizard.cpp \
-    view/newobjectwizardpage.cpp \
-    view/newprojectionwizardpage.cpp \
-    view/selectwizardpage.cpp \
-    view/mainwindowrightwidget.cpp \
+    view/projectionmanagement.cpp \
+    view/paramselectwidget.cpp \
+    view/projectionbodywidget.cpp \
+    model/paramvaluejsonobject.cpp \
+    model/paramitemjsonobject.cpp \
     ParasManager.cpp \
     UiGenerator.cpp \
     SelDispCombo.cpp \
@@ -93,23 +84,13 @@ HEADERS  += \
     newproject.h \
     openproject.h \
     searchobject.h \
-    importbasicdata.h \
-    importbasicpara.h \
     entercalculate.h \
     evaluate.h \
     display.h \
     uiitem.h \
-    datapage.h \
-    datatreewidget.h \
-    datatreewidgetinner.h \
-    datatreewidgetitem.h \
-    datatreewidgetleaf.h \
     EnumClass.h \
-    newprojectionwizard.hpp \
     objectlist.h \
     studyobject.h \
-    wizardpages.h \
-    xmlmanager.hpp \
     controller/objectlistmanager.h \
     model/areaitemmodel.h \
     model/demoobject.h \
@@ -118,12 +99,11 @@ HEADERS  += \
     model/objectlistmodel.h \
     model/projectionlistmodel.h \
     model/yearitemmodel.h \
-    view/newfilewizard.h \
-    view/newobjectwizardpage.h \
-    view/newprojectionwizardpage.h \
-    view/selectwizardpage.h \
-    view/wizardpages.h \
-    view/mainwindowrightwidget.h \
+    view/projectionmanagement.h \
+    view/paramselectwidget.h \
+    view/projectionbodywidget.h \
+    model/paramvaluejsonobject.h \
+    model/paramitemjsonobject.h \
     ParasManager.hpp \
     UiGenerator.hpp \
     SelDispCombo.hpp \
@@ -170,15 +150,10 @@ HEADERS  += \
     display/MyUtility.h
 
 FORMS += \
-    customMadeArea.ui \
     dia_accu_linetype1.ui \
     dia_accu_linetype2.ui \
-    display.ui \
-    doingCalcProgress.ui \
     entercalculate.ui \
     evaluate.ui \
-    importBasicData.ui \
-    importBasicPara.ui \
     linetype1.ui \
     linetype2.ui \
     mainwindow.ui \
@@ -186,12 +161,10 @@ FORMS += \
     openProject.ui \
     progress_bar.ui \
     searchobject.ui \
-    custommadearea.ui \
-    newprojectionwizard.ui \
-    ui_wizard/newfilewizard.ui \
-    ui_wizard/newobjectwizardpage.ui \
-    ui_wizard/newprojectionwizardpage.ui \
-    ui_wizard/selectwizardpage.ui \
+    paramselectiontabwidget.ui \
+    projectionmanagement.ui \
+    fileButtonGroupWidget.ui \
+    view/projectionbodywidget.ui \
     openProject.ui \
     SchemeSel.ui \
     IndicatorSel.ui \
@@ -210,6 +183,8 @@ OTHER_FILES += \
 
 SUBDIRS += \
     newprojection.pro
+
+TRANSLATIONS += ui_zh_CN.ts
 
 RESOURCES += \
     translator.qrc \

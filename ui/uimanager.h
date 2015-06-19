@@ -13,19 +13,21 @@ public:
    * So That PAGE_SIZE == number of enum items could work
    */
     enum page {
-        display,
         selDispCombo,
+//        dia_accu_linetype1,
+//        dia_accu_linetype2,
+//        linetype1,
+//        linetype2,
+//        doingCalcProgress,
         enterCalculate,
         evaluate,
-        importBasicData,
-        importBasicPara,
         newProject,
         openProject,
+//        progress_bar,
         searchObject,
         newprojectionwizard,
         PAGE_SIZE
     };
-
 public:
     UiManager();
     ~UiManager();
@@ -48,8 +50,7 @@ public:
      */
     void makeFront(page uiPage);
 private:
-//    typedef std::shared_ptr<QDialog> uiPtr;
-    typedef std::shared_ptr<QWidget> uiPtr;
+    typedef std::shared_ptr<QDialog> uiPtr;
 
     /*
      * suppose one ui enum only has one instance

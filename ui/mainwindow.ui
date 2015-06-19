@@ -11,12 +11,26 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Demography Projection</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="hLayout"/>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>891</width>
+         <height>454</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -26,21 +40,27 @@
      <x>0</x>
      <y>0</y>
      <width>911</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="File">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>文件</string>
     </property>
     <addaction name="NewProject"/>
     <addaction name="OpenProject"/>
     <addaction name="separator"/>
+    <addaction name="actionSaveProject"/>
+    <addaction name="actionCloseProject"/>
     <addaction name="SearchObject"/>
     <addaction name="AddObject"/>
     <addaction name="separator"/>
     <addaction name="CloseProject"/>
     <addaction name="Quit"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="DataManage">
     <property name="title">
@@ -86,23 +106,15 @@
    <addaction name="Simulation"/>
    <addaction name="Help"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="NewProject">
    <property name="text">
-    <string>新建预测工程或对象</string>
+    <string>新建预测或对象</string>
    </property>
   </action>
   <action name="OpenProject">
    <property name="text">
-    <string>打开预测工程或对象</string>
+    <string>打开预测或对象</string>
    </property>
   </action>
   <action name="SearchObject">
@@ -241,6 +253,16 @@
    </property>
    <property name="text">
     <string>关于</string>
+   </property>
+  </action>
+  <action name="actionCloseProject">
+   <property name="text">
+    <string>closeProject</string>
+   </property>
+  </action>
+  <action name="actionSaveProject">
+   <property name="text">
+    <string>saveProject</string>
    </property>
   </action>
  </widget>

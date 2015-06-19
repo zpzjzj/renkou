@@ -1,6 +1,6 @@
 #include "paraUtil.hpp"
 #include "SchemeSel.hpp"
-#include "Select.hpp"
+#include "../Scheme/Select.hpp"
 #include "UiGenerator.hpp"
 #include <QButtonGroup>
 #include <QCheckBox>

@@ -3,7 +3,7 @@
 #include "ParasManager.hpp"
 #include "SchemeSel.hpp"
 #include "SelDispCombo.hpp"
-#include "Singleton.hpp"
+#include "../Scheme/Singleton.hpp"
 #include <functional>
 #include <memory>
 #include <QButtonGroup>

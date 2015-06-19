@@ -2,11 +2,24 @@
     <qresource prefix="/json">
         <file>config/area.json</file>
         <file>config/param.json</file>
+        <file>config/dataImport.json</file>
     </qresource>
-    <qresource prefix="/display">
-        <file>config/scheme.json</file>
-        <file>config/para_ori.json</file>
-        <file>config/indicator.json</file>
-        <file>data/mapData.txt</file>
+	<qresource prefix="/display">
+		<file>config/scheme.json</file>
+		<file>config/para_ori.json</file>
+		<file>config/indicator.json</file>
+		<file>data/mapData.txt</file>
+	</qresource>
+    <qresource prefix="/icon">
+        <file>icon/accept.png</file>
+        <file>icon/close.png</file>
+        <file>icon/folder_vertical_open.png</file>
+        <file>icon/importData.png</file>
+        <file>icon/importPara.png</file>
+        <file>icon/new.png</file>
+        <file>icon/open.png</file>
+        <file>icon/save.png</file>
+        <file>icon/setting_tools.png</file>
+        <file>icon/calculator.png</file>
     </qresource>
 </RCC>
